@@ -16,24 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Print Current Directory
-        run: pwd && ls -al  # 현재 디렉토리 구조 출력
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Print Frontend Directory (추가 확인)
-        run: ls -al frontend/frontend  # frontend/frontend 폴더 내부 확인
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'  # npm 캐싱
-
-      - name: Install dependencies
-
-        working-directory: frontend/frontend  # package-lock.json이 있는 폴더 설정
-        run: npm ci
+      - name: Build
+        run: npm run build
 
 
-      - name: Build project
-        working-directory: frontend/frontend
-        run: npm run build  # Vite 프로젝트 빌드
