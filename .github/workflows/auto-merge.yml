@@ -1,0 +1,31 @@
+name: Auto Merge Develop to Main
+
+on:
+  pull_request:
+    types:
+      - closed  # PR이 닫혔을 때 실행
+    branches:
+      - develop  # develop 브랜치로 병합된 경우 실행
+
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true  # PR이 merge된 경우에만 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 모든 브랜치 가져오기
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge Develop into Main
+        run: |
+          git checkout main
+          git pull origin main
+          git merge --no-ff develop -m "Auto-merge develop into main after PR"
+          git push origin main
