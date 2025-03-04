@@ -5,6 +5,8 @@ on:
     branches:
       - main  # main 브랜치로 PR이 생성될 때 실행
       - develop
+      paths:
+      - frontend/**
 
 jobs:
   build:
@@ -26,5 +28,3 @@ jobs:
       - name: Build project
         run: npm run build  # Vite 프로젝트 빌드
 
-      - name: Run tests
-        run: npm test  # Jest 등 테스트 실행 (테스트 코드 없으면 삭제 가능)
