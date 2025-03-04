@@ -1,0 +1,30 @@
+name: CI Build
+
+on:
+  pull_request:
+    branches:
+      - main  # main 브랜치로 PR이 생성될 때 실행
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'  # npm 캐싱
+
+      - name: Install dependencies
+        run: npm ci  # npm install 대신 npm ci 사용 (lockfile 기반 설치)
+
+      - name: Build project
+        run: npm run build  # Vite 프로젝트 빌드
+
+      - name: Run tests
+        run: npm test  # Jest 등 테스트 실행 (테스트 코드 없으면 삭제 가능)
