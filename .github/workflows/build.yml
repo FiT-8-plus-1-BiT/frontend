@@ -3,11 +3,10 @@ name: build check
 on:
   pull_request:
     branches:
-      - main  # main 브랜치로 PR이 생성될 때 실행
+      - main
       - develop
-    workflow_dispatch:  # 수동 실행 허용
-
-    
+    paths:
+      - frontend/**
 
 jobs:
   build:
@@ -17,15 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'  # npm 캐싱
+      - name: Install Dependencies
+        run: npm install
+        working-directory: frontend  # <--- 서브 폴더(frontend) 안에서 실행
 
-      - name: Install dependencies
-        run: npm ci  # npm install 대신 npm ci 사용 (lockfile 기반 설치)
-
-      - name: Build project
-        run: npm run build  # Vite 프로젝트 빌드
+      - name: Build
+        run: npm run build
+        working-directory: frontend
 
