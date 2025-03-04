@@ -5,8 +5,9 @@ on:
     branches:
       - main  # main 브랜치로 PR이 생성될 때 실행
       - develop
-      paths:
-      - frontend/**
+    workflow_dispatch:  # 수동 실행 허용
+
+    
 
 jobs:
   build:
