@@ -31,3 +31,9 @@ jobs:
       - name: Build project
         run: npm run build  # Vite 프로젝트 빌드
 
+
+
+
+      - name: Build project
+        run: npm run build  # Vite 프로젝트 빌드
+
