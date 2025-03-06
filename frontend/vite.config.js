@@ -5,9 +5,6 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  css: {
-    postcss: './postcss.config.mjs', // 변경된 파일명으로 수정
-  },
   resolve: {
     alias: {
       // `src`를 절대 경로로 설정
