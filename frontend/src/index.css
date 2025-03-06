@@ -3,19 +3,28 @@
 @tailwind utilities;
 
 @layer components {
-    .btn {
-      @apply py-2 px-4 rounded-md text-black;
-    }
-  
-    .btn-kakao {
-      @apply bg-yellow-400;
-    }
-  
-    .btn-naver {
-      @apply bg-green-500;
-    }
-  
-    .btn-google {
-      @apply bg-blue-500;
-    }
+  .btn {
+    @apply w-full h-16 flex items-center justify-center gap-3
+           py-3 px-5 rounded-lg shadow-md transition-all duration-300
+           text-lg font-semibold text-center;
   }
+
+  .btn-google {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white 
+           hover:from-blue-600 hover:to-blue-700 hover:scale-105;
+  }
+
+  .btn-kakao {
+    @apply bg-yellow-400 text-white hover:bg-yellow-300 hover:scale-105;
+  }
+
+  .btn-naver {
+    @apply bg-gradient-to-r from-green-500 to-green-600 text-white 
+           hover:from-green-600 hover:to-green-700 hover:scale-105;
+  }
+
+  /* 텍스트와 아이콘 간의 간격 및 아이콘 크기 조정 */
+  .ml-2 {
+    margin-left: 0.5rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/redux/auth-slice";
+import "@/index.css";
 
 const KakaoLogin = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,16 @@ const KakaoLogin = () => {
     });
   };
 
-  return <button onClick={handleKakaoLogin} className="btn-kakao">카카오로 로그인</button>;
+  return (
+    <button onClick={handleKakaoLogin} className="btn btn-kakao">
+      <img
+        src="/images/kakao-logo.png"
+        alt="카카오 로고"
+        className="w-10 h-10"
+      />
+      <span className="ml-2">카카오로 로그인</span>
+    </button>
+  );
 };
 
 export default KakaoLogin;
