@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 function InputWithSelect() {
-  const [selected, setSelected] = useState("질문하기");
+  const [selected, setSelected] = useState('질문하기');
   const [isOpen, setIsOpen] = useState(false);
-  const options = ["질문하기", "채팅하기"];
+  const options = ['질문하기', '채팅하기'];
 
   return (
     <div className="relative flex items-center w-full p-2 border rounded-lg bg-white">
@@ -60,25 +60,92 @@ function StreamingChatBox() {
   const [isChatOpen, setIsChatOpen] = useState(true);
 
   const questions = [
-    { id: 1, username: "username1", time: "TT:MM", content: "texttexttext1", isActive: true, rating: "n.nn" },
-    { id: 2, username: "username2", time: "TT:MM", content: "texttexttext2", isActive: false, rating: "n.nn" },
-    { id: 3, username: "username3", time: "TT:MM", content: "texttexttext3", isActive: false, rating: "n.nn" },
-    { id: 4, username: "username4", time: "TT:MM", content: "texttexttext4", isActive: false, rating: "n.nn" },
+    {
+      id: 1,
+      username: 'username1',
+      time: 'TT:MM',
+      content: 'texttexttext1',
+      isActive: true,
+      rating: 'n.nn',
+    },
+    {
+      id: 2,
+      username: 'username2',
+      time: 'TT:MM',
+      content: 'texttexttext2',
+      isActive: false,
+      rating: 'n.nn',
+    },
+    {
+      id: 3,
+      username: 'username3',
+      time: 'TT:MM',
+      content: 'texttexttext3',
+      isActive: false,
+      rating: 'n.nn',
+    },
+    {
+      id: 4,
+      username: 'username4',
+      time: 'TT:MM',
+      content: 'texttexttext4',
+      isActive: false,
+      rating: 'n.nn',
+    },
     // 추가 데이터...
   ];
 
   const chatRecords = [
-    { id: 1, time: "TT:MM", username: "userA", content: "chat message A", rating: "n.nn" },
-    { id: 2, time: "TT:MM", username: "userB", content: "chat message B", rating: "n.nn" },
-    { id: 3, time: "TT:MM", username: "userC", content: "chat message C", rating: "n.nn" },
-    { id: 4, time: "TT:MM", username: "userD", content: "chat message D", rating: "n.nn" },
+    {
+      id: 1,
+      time: 'TT:MM',
+      username: 'userA',
+      content: 'chat message A',
+      rating: 'n.nn',
+    },
+    {
+      id: 2,
+      time: 'TT:MM',
+      username: 'userB',
+      content: 'chat message B',
+      rating: 'n.nn',
+    },
+    {
+      id: 3,
+      time: 'TT:MM',
+      username: 'userC',
+      content: 'chat message C',
+      rating: 'n.nn',
+    },
+    {
+      id: 4,
+      time: 'TT:MM',
+      username: 'userD',
+      content: 'chat message D',
+      rating: 'n.nn',
+    },
+    {
+      id: 3,
+      time: 'TT:MM',
+      username: 'userC',
+      content: 'chat message C',
+      rating: 'n.nn',
+    },
+    {
+      id: 4,
+      time: 'TT:MM',
+      username: 'userD',
+      content: 'chat message D',
+      rating: 'n.nn',
+    },
     // 추가 데이터...
   ];
 
   return (
     <div
-      className={`flex flex-col  h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${isChatOpen ? "w-[404px]" : "w-16 ml-auto"
-        }`}
+      className={`flex flex-col  h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${
+        isChatOpen ? 'w-[404px]' : 'w-16 ml-auto'
+      }`}
     >
       {/* 상단 바 (항상 보임) */}
       <div className="flex items-center h-[54px] p-3 border-b-2 border-[#e0e1e4] justify-between">
@@ -93,8 +160,9 @@ function StreamingChatBox() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={`text-black transition-transform duration-300  ${isChatOpen ? "scale-x-[-1]" : "scale-x-100"
-              }`}
+            className={`text-black transition-transform duration-300  ${
+              isChatOpen ? 'scale-x-[-1]' : 'scale-x-100'
+            }`}
           >
             <path
               d="M13.0332 17.9999L7.1999 11.9999M7.1999 11.9999L13.0332 5.9999M7.1999 11.9999H21.5999M2.3999 2.3999V21.5999"
@@ -108,12 +176,13 @@ function StreamingChatBox() {
 
         {/* 중앙 제목 (보이는 경우에만 렌더링) */}
         {isChatOpen && (
-          <div className="text-[#0d0d0d] text-xl font-bold leading-[30px]">채팅</div>
+          <div className="text-[#0d0d0d] text-xl font-bold leading-[30px]">
+            채팅
+          </div>
         )}
 
         {/* 추가 기능 버튼 (항상 보임) */}
         {isChatOpen && (
-
           <button className="w-10 h-10 flex items-center justify-center">
             <svg
               width="24"
@@ -129,9 +198,7 @@ function StreamingChatBox() {
             </svg>
           </button>
         )}
-
       </div>
-
 
       {/* 내부 콘텐츠: 인기질문, 채팅기록, 입력창 */}
       {isChatOpen && (
@@ -140,7 +207,7 @@ function StreamingChatBox() {
           <div className="flex-1 p-4 flex flex-col overflow-hidden">
             {/* 인기질문 영역 (최대 220px 높이, 스크롤) */}
             <div className="mb-3 font-semibold text-[#131212]">인기질문</div>
-            <div className="flex flex-col gap-2 max-h-[220px] overflow-y-auto">
+            <div className="flex flex-col gap-2 max-h-[220px] overflow-y-auto scrollbar-hide">
               {questions.map((q) => (
                 <div
                   key={q.id}
@@ -148,10 +215,14 @@ function StreamingChatBox() {
                 >
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-700">{q.username}</span>
+                      <span className="text-sm font-medium text-gray-700">
+                        {q.username}
+                      </span>
                       <span className="text-xs text-gray-500">{q.time}</span>
                     </div>
-                    <span className="text-xl font-medium text-blue-600">{q.content}</span>
+                    <span className="text-xl font-medium text-blue-600">
+                      {q.content}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <svg
@@ -179,7 +250,7 @@ function StreamingChatBox() {
 
             {/* 채팅기록 영역 (남은 공간, 스크롤) */}
             <div className="mt-4 font-semibold text-[#131212]">채팅기록</div>
-            <div className="flex-1 mt-2 overflow-y-auto flex flex-col gap-2">
+            <div className="flex-1 mt-2 overflow-y-auto flex flex-col gap-2 scrollbar-hide">
               {chatRecords.map((record) => (
                 <div
                   key={record.id}
@@ -188,11 +259,19 @@ function StreamingChatBox() {
                   {/* 왼쪽 메시지 */}
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">{record.time}</span>
-                      <span className="text-base font-semibold text-gray-800">{record.username}</span>
-                      <span className="text-base font-medium text-gray-800">:</span>
+                      <span className="text-xs text-gray-500">
+                        {record.time}
+                      </span>
+                      <span className="text-base font-semibold text-gray-800">
+                        {record.username}
+                      </span>
+                      <span className="text-base font-medium text-gray-800">
+                        :
+                      </span>
                     </div>
-                    <span className="text-base text-gray-800">{record.content}</span>
+                    <span className="text-base text-gray-800">
+                      {record.content}
+                    </span>
                   </div>
                   {/* 오른쪽 좋아요 표시 */}
                   <div className="flex items-center gap-1">
@@ -213,7 +292,9 @@ function StreamingChatBox() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span className="text-xs text-gray-500">{record.rating}</span>
+                    <span className="text-xs text-gray-500">
+                      {record.rating}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -230,4 +311,3 @@ function StreamingChatBox() {
 }
 
 export { StreamingChatBox };
-
