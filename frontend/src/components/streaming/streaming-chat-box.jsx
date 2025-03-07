@@ -77,7 +77,7 @@ function StreamingChatBox() {
 
   return (
     <div
-      className={`flex flex-col h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${isChatOpen ? "max-w-[404px]" : "w-16 ml-auto"
+      className={`flex flex-col  h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${isChatOpen ? "w-[404px]" : "w-16 ml-auto"
         }`}
     >
       {/* 상단 바 (항상 보임) */}
@@ -230,3 +230,4 @@ function StreamingChatBox() {
 }
 
 export { StreamingChatBox };
+

@@ -17,7 +17,7 @@ const StreamingSwitchButton = () => {
   const [activeButton, setActiveButton] = useState("live");
 
   return (
-    <div className="pt-6 pb-3 ml-48 flex gap-2">
+    <div className="mt-[28px] flex gap-2">
       <SwitchButton 
         label="오디오 청취" 
         active={activeButton === "audio"} 

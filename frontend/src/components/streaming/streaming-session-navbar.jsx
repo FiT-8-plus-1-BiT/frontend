@@ -30,6 +30,20 @@ const StreamingSessionNavbar = () => {
     "인기세션": [
       { sessionName: "인기 세션 1", speakerName: "스피커 C" },
       { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
+      { sessionName: "인기 세션 1", speakerName: "스피커 C" },
+      { sessionName: "인기 세션 2", speakerName: "스피커 D" },
     ],
     "추천세션": [
       { sessionName: "추천 세션 1", speakerName: "스피커 E" },
@@ -38,13 +52,13 @@ const StreamingSessionNavbar = () => {
   };
 
   return (
-    <div className="py-3 px-1 bg-white border-b border-gray-300 min-w-[152px]">
+    <div className="mt-[28px] flex flex-col bg-white border-b border-gray-300 h-[768px] min-w-[152px]  ">
       {/* 세션 선택 Navbar */}
-      <div className="flex flex-col items-center gap-3 bg-white">
+      <div className="flex flex-col  bg-white ">
         {sessionList.map((session) => (
           <button
             key={session}
-            className={`flex items-center gap-3 py-3 px-4 rounded-md transition 
+            className={`flex items-center py-[16px] pl-[16px] pr-[24px] gap-[12px] rounded-md transition 
                         ${selectedSession === session ? "text-blue-600" : "text-gray-700"}`}
             onClick={() => setSelectedSession(session)}
           >
@@ -55,12 +69,12 @@ const StreamingSessionNavbar = () => {
       </div>
 
       {/* 선택된 세션 표시 */}
-      <div className="state-layer flex items-center gap-3 pt-4 pb-2 pl-4 pr-6 border-t border-gray-300 text-[#797677] text-sm font-semibold">
+      <div className="state-layer flex  gap-3 pt-4 pb-2 pl-4 pr-6 border-t border-gray-300 text-[#797677] text-sm font-semibold">
         {selectedSession}
       </div>
 
       {/* Mock Data 세로 출력 */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-[8px] px-[12px] overflow-y-auto">
         {mockData[selectedSession].map((session, index) => (
           <SessionItem key={index} sessionName={session.sessionName} speakerName={session.speakerName} />
         ))}
