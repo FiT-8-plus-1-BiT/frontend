@@ -29,9 +29,8 @@ const NaverLogin = () => {
       <img
         src="/images/naver-logo.png"
         alt="네이버 로고"
-        className="w-10 h-10"
       />
-      <span className="ml-2">네이버로 로그인</span>
+      <span>네이버로 로그인</span>
     </button>
   );
 };
