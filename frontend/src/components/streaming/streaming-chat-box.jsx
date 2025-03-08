@@ -56,7 +56,7 @@ function InputWithSelect() {
   );
 }
 
-function StreamingChatBox() {
+function StreamingChatBox({ mode }) {
   const [isChatOpen, setIsChatOpen] = useState(true);
 
   const questions = [
@@ -143,10 +143,14 @@ function StreamingChatBox() {
 
   return (
     <div
-      className={`flex flex-col  h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${
-        isChatOpen ? 'w-[404px]' : 'w-16 ml-auto'
-      }`}
+      className={`flex flex-col h-[768px] border border-gray-300 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${mode
+          ? "w-[50%]"
+          : isChatOpen
+            ? "w-[404px]"
+            : "w-16 ml-auto"
+        }`}
     >
+
       {/* 상단 바 (항상 보임) */}
       <div className="flex items-center h-[54px] p-3 border-b-2 border-[#e0e1e4] justify-between">
         {/* 접기/펼치기 버튼 */}
@@ -160,9 +164,8 @@ function StreamingChatBox() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={`text-black transition-transform duration-300  ${
-              isChatOpen ? 'scale-x-[-1]' : 'scale-x-100'
-            }`}
+            className={`text-black transition-transform duration-300  ${isChatOpen ? 'scale-x-[-1]' : 'scale-x-100'
+              }`}
           >
             <path
               d="M13.0332 17.9999L7.1999 11.9999M7.1999 11.9999L13.0332 5.9999M7.1999 11.9999H21.5999M2.3999 2.3999V21.5999"

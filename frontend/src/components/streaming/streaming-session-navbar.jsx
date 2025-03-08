@@ -28,33 +28,31 @@ const StreamingSessionNavbar = () => {
 
   const mockData = {
     전체세션: [
-      { sessionName: '세션 1', speakerName: '스피커 A' },
-      { sessionName: '세션 2', speakerName: '스피커 B' },
+      { id: "1", sessionName: '세션 1', speakerName: '스피커 A' },
+      { id: "2", sessionName: '세션 2', speakerName: '스피커 B' },
     ],
     인기세션: [
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
-      { sessionName: '인기 세션 1', speakerName: '스피커 C' },
-      { sessionName: '인기 세션 2', speakerName: '스피커 D' },
+      { id: "3", sessionName: '인기 세션 1', speakerName: '스피커 C' },
+      { id: "4", sessionName: '인기 세션 2', speakerName: '스피커 D' },
+      { id: "5", sessionName: '인기 세션 3', speakerName: '스피커 E' },
+      { id: "6", sessionName: '인기 세션 4', speakerName: '스피커 F' },
+      { id: "7", sessionName: '인기 세션 5', speakerName: '스피커 G' },
+      { id: "8", sessionName: '인기 세션 6', speakerName: '스피커 H' },
+      { id: "9", sessionName: '인기 세션 7', speakerName: '스피커 I' },
+      { id: "10", sessionName: '인기 세션 8', speakerName: '스피커 J' },
+      { id: "11", sessionName: '인기 세션 9', speakerName: '스피커 K' },
+      { id: "12", sessionName: '인기 세션 10', speakerName: '스피커 L' },
+      { id: "13", sessionName: '인기 세션 11', speakerName: '스피커 M' },
+      { id: "14", sessionName: '인기 세션 12', speakerName: '스피커 N' },
+      { id: "15", sessionName: '인기 세션 13', speakerName: '스피커 O' },
+      { id: "16", sessionName: '인기 세션 14', speakerName: '스피커 P' },
     ],
     추천세션: [
-      { sessionName: '추천 세션 1', speakerName: '스피커 E' },
-      { sessionName: '추천 세션 2', speakerName: '스피커 F' },
+      { id: "17", sessionName: '추천 세션 1', speakerName: '스피커 E' },
+      { id: "18", sessionName: '추천 세션 2', speakerName: '스피커 F' },
     ],
   };
-
+  
   return (
     <div className="mt-[28px] flex flex-col bg-white border-b border-gray-300 h-[768px] min-w-[152px]  ">
       {/* 세션 선택 Navbar */}
