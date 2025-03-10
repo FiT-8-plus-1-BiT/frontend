@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from '@/pages/login-page.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Main from "@/main-page.jsx";
-import GoogleLoginComponent from "./components/social-login/google-login";
+import GoogleLoginComponent from "@/components/social-login/google-login.jsx";
+import Header from "@/components/layout/header.jsx";
+import SignUpPage from "@/pages/signup-page.jsx";
 
 function App() {
 
@@ -14,8 +16,11 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<Header />}>
+            <Route index element={<Main />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Route>
         </Routes>
       </Router>
       <GoogleLoginComponent />
