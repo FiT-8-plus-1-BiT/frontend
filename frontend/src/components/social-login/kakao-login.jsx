@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/redux/auth-slice";
-import "@/index.css";
 
 const KakaoLogin = () => {
   const dispatch = useDispatch();
@@ -10,18 +9,14 @@ const KakaoLogin = () => {
     const script = document.createElement("script");
     script.src = "https://developers.kakao.com/sdk/js/kakao.js";
     script.async = true;
-    script.onload = () => {
-      if (window.Kakao) {
-        window.Kakao.init("YOUR_KAKAO_APP_KEY");
-      }
-    };
+    script.onload = () => window.Kakao.init(import.meta.env.VITE_KAKAO_APP_KEY);
     document.head.appendChild(script);
   }, []);
 
   const handleKakaoLogin = () => {
     window.Kakao.Auth.login({
       success: async (authObj) => {
-        const res = await fetch("YOUR_BACKEND_URL/auth/kakao", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/auth/kakao`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: authObj.access_token }),
@@ -38,9 +33,8 @@ const KakaoLogin = () => {
       <img
         src="/images/kakao-logo.png"
         alt="카카오 로고"
-        className="w-10 h-10"
       />
-      <span className="ml-2">카카오로 로그인</span>
+      <span>카카오로 로그인</span>
     </button>
   );
 };
