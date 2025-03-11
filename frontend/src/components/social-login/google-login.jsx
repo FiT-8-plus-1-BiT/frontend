@@ -1,67 +1,72 @@
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
+import "~/index.css";
 import { useNavigate } from "react-router-dom";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
   const navigate = useNavigate(); // React Router 훅 (리디렉션 용)
 
-  const handleGoogleLoginSuccess = async (response) => {
-    try {
-      // 구글 로그인 후 받은 토큰을 백엔드로 전송
-      const res = await fetch("http://localhost:8080/api/v1/auth/google", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: response.credential }),
-      });
-  
-      if (!res.ok) throw new Error('Failed to fetch'); // 응답 실패 시 에러 처리
-      const data = await res.json(); // 백엔드에서 받은 데이터
+  useEffect(() => {
+    const exchangeToken = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // 쿠키 포함
+          }
+        );
 
-      // Redux 스토어에 사용자 정보와 토큰을 저장
-      dispatch(loginSuccess({ user: data.user, token: data.token }));
-
-      // 신규 사용자면 회원가입 페이지로, 기존 사용자면 메인 페이지로 리디렉션
-      if (data.isNewUser) {
-        navigate('/signup');
-      } else {
-        navigate('/main');
+        if (response.ok) {
+          const accessToken = response.headers.get("Authorization");
+          if (accessToken) {
+            localStorage.setItem("access-token", accessToken);
+            dispatch(loginSuccess({ accessToken }));
+            navigate("/main"); // 메인 페이지로 이동
+          }
+        } else {
+          console.error("Token exchange failed");
+        }
+      } catch (error) {
+        console.error("Error during token exchange:", error);
       }
+    };
 
-      console.log('Login Success:', data);
-    } catch (error) {
-      console.error('Google Login Failed:', error);
+    // 에러 발생 시 회원가입 페이지 유지
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+
+    if (error) {
+      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
+      navigate("/signup");
+    } else {
+      exchangeToken(); // 로그인 성공 시 토큰 교환
     }
+  }, [navigate, dispatch]);
+
+  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
+  const onGoogleLogin = (provider) => {
+    const redirectUri = "http://localhost:5173/main"; // 로그인 후 리디렉션할 URI
+    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   };
 
-  useEffect(() => {
-    // 구글 로그인 SDK 로드
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.onload = () => {
-      // 구글 로그인 초기화
-      window.google.accounts.id.initialize({
-        // 환경 변수에서 구글 클라이언트 ID 가져오기
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        callback: handleGoogleLoginSuccess, // 로그인 성공 후 호출될 함수
-      });
-
-      // 로그인 버튼을 렌더링
-      window.google.accounts.id.renderButton(
-        document.getElementById("google-login-button"),
-        {
-          theme: "outline", // 버튼 스타일 (outline, light, dark 등)
-          size: "large",    // 버튼 크기 (small, medium, large 등)
-          shape: "pill",    // 버튼 모양 (rectangular, pill, circle 등)
-        }
-      );
-    };
-    document.head.appendChild(script); // 스크립트 태그 문서에 추가
-  }, []); // 페이지 로드 시 한 번만 실행
-
-  return <div id="google-login-button" className="flex justify-center"></div>;
+  return (
+    <button onClick={onGoogleLogin} className="btn btn-google flex items-center 
+      justify-start gap-10 bg-blue-700 text-black py-2 px-4 rounded-full
+      hover:bg-blue-600 transition-colors duration-200">
+      <img
+        src="/images/google-logo.png"
+        alt="구글 로고"
+        className="w-8 h-8"
+      />
+      <span className="ml-20">구글로 로그인</span>
+    </button>
+  );
 };
 
 export default GoogleLoginComponent;

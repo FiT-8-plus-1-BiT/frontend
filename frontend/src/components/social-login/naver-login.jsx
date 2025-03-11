@@ -6,64 +6,57 @@ import { useNavigate } from "react-router-dom";
 
 const NaverLogin = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // React Router 훅 (리디렉션 용)
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk.v2.js";
-    script.async = true;
-    script.onload = () => {
-      new window.naver.LoginWithNaverId({
-        clientId: import.meta.env.VITE_NAVER_CLIENT_ID,
-        callbackUrl: handleNaverLogin,
-        isPopup: false,
-      }).init();
+    const exchangeToken = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // 쿠키 포함
+          }
+        );
+
+        if (response.ok) {
+          const accessToken = response.headers.get("Authorization");
+          if (accessToken) {
+            localStorage.setItem("access-token", accessToken);
+            dispatch(loginSuccess({ accessToken }));
+            navigate("/main"); // 메인 페이지로 이동
+          }
+        } else {
+          console.error("Token exchange failed");
+        }
+      } catch (error) {
+        console.error("Error during token exchange:", error);
+      }
     };
-    document.head.appendChild(script);
-  }, []);
 
-  // const handleNaverLogin = () => {
-  //   window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=YOUR_NAVER_CLIENT_ID&redirect_uri=YOUR_CALLBACK_URL`;
-  // };
+    // 에러 발생 시 회원가입 페이지 유지
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
 
-  const handleNaverLogin = async () => {
-    try {
-      // 네이버 로그인 후 인증 코드 받아오기
-      const { code } = window.location;
-
-      if (!code) {
-        console.error("No authorization code found.");
-        return;
-      }
-
-      // 인증 코드로 백엔드에서 토큰 요청
-      const res = await fetch("http://localhost:8080/api/v1/auth/naver", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-
-      if (!res.ok) throw new Error("Failed to fetch");
-      const data = await res.json(); // 백엔드에서 받은 데이터
-
-      // Redux 스토어에 사용자 정보와 토큰을 저장
-      dispatch(loginSuccess({ user: data.user, token: data.token }));
-
-      // 신규 사용자면 회원가입 페이지로, 기존 사용자면 메인 페이지로 리디렉션
-      if (data.isNewUser) {
-        navigate("/signup");
-      } else {
-        navigate("/main");
-      }
-
-      console.log("Login Success:", data);
-    } catch (error) {
-      console.error("Naver Login Failed:", error);
+    if (error) {
+      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
+      navigate("/signup");
+    } else {
+      exchangeToken(); // 로그인 성공 시 토큰 교환
     }
+  }, [navigate, dispatch]);
+
+  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
+  const onNaverLogin = (provider) => {
+    const redirectUri = "http://localhost:5173/main"; // 로그인 후 리디렉션할 URI
+    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   };
   
   return (
-    <button onClick={handleNaverLogin} className="btn btn-naver">
+    <button onClick={onNaverLogin} className="btn btn-naver">
       <img
         src="/images/naver-logo.png"
         alt="네이버 로고"

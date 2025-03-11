@@ -5,7 +5,7 @@
 @layer components {
   .btn {
     @apply w-full h-16 flex items-center relative py-3 px-5 
-    rounded-3xl shadow-md transition-all duration-300 text-lg font-semibold;
+    rounded-full shadow-md transition-all duration-300 text-lg font-semibold;
   }
 
   .btn-kakao {

@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 import SocialLoginButtons from '~/components/social-login/social-login-buttons';
 import LogoutButton from '~/components/logout-button';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Main from '~/main-page.jsx';
 import { useNavigate } from 'react-router-dom';
+=======
+import SocialLoginButtons from "~/components/social-login/social-login-buttons";
+import LogoutButton from "~/components/logout-button";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import Main from "~/main-page.jsx"
+import { useNavigate } from "react-router-dom";
+>>>>>>> 094f654 (로그인 구글 버튼 UI 통일 & src/ @->~로 변경)
 
 function LoginPage() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

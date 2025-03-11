@@ -1,9 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from '~/pages/login-page.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
+<<<<<<< HEAD
 import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
+=======
+import Main from "~/main-page.jsx";
+// import GoogleLoginComponent from "~/components/social-login/google-login";
+
+>>>>>>> 094f654 (로그인 구글 버튼 UI 통일 & src/ @->~로 변경)
 function App() {
 
   return (
@@ -11,7 +17,7 @@ function App() {
       GoogleOAuthProvider는 Google 로그인 기능을 전역에서 사용할 수 있도록 설정하는 컨텍스트
       이걸 감싸야 GoogleLogin과 useOneTap이 정상적으로 작동함
     */
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -21,8 +27,6 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           
         </Routes>
-        
-        <GoogleLoginComponent />
       </Router>
     </GoogleOAuthProvider>
   )
