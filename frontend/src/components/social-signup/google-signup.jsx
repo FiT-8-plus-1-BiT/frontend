@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { signupSuccess } from "@/redux/auth-slice";
+import { signupSuccess } from "~/redux/auth-slice";
 import { GoogleLogin } from "@react-oauth/google";
 
 const GoogleSignup = () => {

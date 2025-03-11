@@ -1,6 +1,6 @@
-import KakaoLogin from "@/components/social-login/kakao-login.jsx";
-import NaverLogin from "@/components/social-login/naver-login.jsx";
-import GoogleLogin from "@/components/social-login/google-login.jsx";
+import KakaoLogin from "~/components/social-login/kakao-login.jsx";
+import NaverLogin from "~/components/social-login/naver-login.jsx";
+import GoogleLogin from "~/components/social-login/google-login.jsx";
 
 const SocialLoginButtons = () => {
   return (
