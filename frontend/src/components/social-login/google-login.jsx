@@ -57,7 +57,7 @@ const GoogleLoginComponent = () => {
 
   return (
     <button onClick={onGoogleLogin} className="btn btn-google flex items-center 
-      justify-start gap-10 bg-blue-700 text-black py-2 px-4 rounded-full
+      justify-start gap-8 bg-blue-700 text-black py-2 px-6 rounded-full
       hover:bg-blue-600 transition-colors duration-200">
       <img
         src="/images/google-logo.png"
