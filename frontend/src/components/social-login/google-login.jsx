@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/redux/auth-slice";
+import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
 
 const GoogleLoginComponent = () => {

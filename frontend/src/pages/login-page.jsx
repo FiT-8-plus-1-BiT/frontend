@@ -1,8 +1,8 @@
-import SocialLoginButtons from '@/components/social-login/social-login-buttons';
-import LogoutButton from '@/components/logout-button';
+import SocialLoginButtons from '~/components/social-login/social-login-buttons';
+import LogoutButton from '~/components/logout-button';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import Main from '@/main-page.jsx';
+import Main from '~/main-page.jsx';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {

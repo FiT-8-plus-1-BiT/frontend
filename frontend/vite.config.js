@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // `src`를 절대 경로로 설정
-      "@": path.resolve(__dirname, "src"), // 이제 @를 src로 설정
+      "~": path.resolve(__dirname, "src"), // 이제 @를 src로 설정
     },
   },
 });

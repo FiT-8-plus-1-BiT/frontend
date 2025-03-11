@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/redux/auth-slice";
+import { loginSuccess } from "~/redux/auth-slice";
 
 const KakaoLogin = () => {
   const dispatch = useDispatch();
