@@ -65,7 +65,7 @@ const GoogleSignup = () => {
         alt="구글 로고"
         className="w-8 h-8"
       />
-      <span className="ml-20">구글로 로그인</span>
+      <span className="ml-20">구글로 회원가입</span>
     </button>
   );
 };
