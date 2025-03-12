@@ -55,16 +55,17 @@ const GoogleLoginComponent = () => {
   };
 
   return (
-    <button onClick={onGoogleLogin} className="btn btn-google flex items-center 
-      justify-start gap-8 bg-blue-700 text-black py-2 px-6 rounded-full
-      hover:bg-blue-600 transition-colors duration-200 
-      hover:scale-105 transition-all duration-200 ">
-      <img
-        src="/images/google-logo.png"
-        alt="구글 로고"
-        className="w-8 h-8"
+    <button onClick={onGoogleLogin} className="btn btn-google bg-blue-400 text-black 
+       rounded-full hover:bg-blue-500 transition-colors duration-200 
+       hover:scale-105 transition-all duration-200"
+    >
+      <img 
+        src="/images/google-logo.png" 
+        alt="구글 로고" className="w-8 h-8 absolute left-5" 
       />
-      <span className="ml-20">구글로 로그인</span>
+      <span className="flex-1 text-center text-black">
+        구글로 로그인
+      </span>
     </button>
   );
 };
