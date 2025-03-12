@@ -50,9 +50,8 @@ const GoogleLoginComponent = () => {
   }, [navigate, dispatch]);
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
-  const onGoogleLogin = (provider) => {
-    const redirectUri = "http://localhost:5173/main"; // 로그인 후 리디렉션할 URI
-    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+  const onGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   return (
