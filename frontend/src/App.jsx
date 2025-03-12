@@ -1,15 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from '~/pages/login-page.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
-<<<<<<< HEAD
 import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
-=======
-import Main from "~/main-page.jsx";
-// import GoogleLoginComponent from "~/components/social-login/google-login";
 
->>>>>>> 094f654 (로그인 구글 버튼 UI 통일 & src/ @->~로 변경)
 function App() {
 
   return (

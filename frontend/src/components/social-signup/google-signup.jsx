@@ -57,14 +57,15 @@ const GoogleSignup = () => {
 
   return (
     <button onClick={onGoogleSignup} className="btn btn-google flex items-center 
-      justify-start gap-10 bg-blue-700 text-black py-2 px-4 rounded-full
-      hover:bg-blue-600 transition-colors duration-200">
+      justify-start gap-8 bg-blue-700 text-black py-2 px-6 rounded-full
+      hover:bg-blue-600 transition-colors duration-200 
+      hover:scale-105 transition-all duration-200 ">
       <img
         src="/images/google-logo.png"
         alt="구글 로고"
         className="w-8 h-8"
       />
-      <span className="ml-20">구글로 회원가입</span>
+      <span className="ml-20">구글로 로그인</span>
     </button>
   );
 };
