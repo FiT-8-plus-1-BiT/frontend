@@ -4,6 +4,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
+import SessionList from "~/pages/session-list";
+
 function App() {
 
   return (
@@ -16,6 +18,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/streaming" element={<Streaming />} />
+            <Route path="/session" element={<SessionList />} />
+
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
