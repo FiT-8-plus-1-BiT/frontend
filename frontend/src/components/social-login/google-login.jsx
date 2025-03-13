@@ -2,11 +2,11 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
 import "~/index.css";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
-  const navigate = useNavigate(); // React Router 훅 (리디렉션 용)
+  // const navigate = useNavigate(); // React Router 훅 (리디렉션 용)
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -27,7 +27,7 @@ const GoogleLoginComponent = () => {
           if (accessToken) {
             localStorage.setItem("access-token", accessToken);
             dispatch(loginSuccess({ accessToken }));
-            navigate("/main"); // 메인 페이지로 이동
+            // navigate("/main"); // 메인 페이지로 이동
           }
         } else {
           console.error("Token exchange failed");
@@ -43,11 +43,11 @@ const GoogleLoginComponent = () => {
 
     if (error) {
       alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
-      navigate("/signup");
+      // navigate("/signup");
     } else {
       exchangeToken(); // 로그인 성공 시 토큰 교환
     }
-  }, [navigate, dispatch]);
+  }, [dispatch]);
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
   const onGoogleLogin = () => {
