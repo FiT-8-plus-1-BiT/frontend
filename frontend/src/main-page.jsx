@@ -62,22 +62,24 @@ const MainPage = () => {
         </div>
       </div>
 
-      <div className="flex justify-center px-[220px] mb-[40px] mt-[40px]">
+      <div className="flex justify-center px-[220px] h-[812px] mb-[40px]">
         {/* 왼쪽: 이미지 */}
-        <div className="w-[812px] max-w-[812px] h-[692px] bg-gray-300 py-[60px] px-0">
+        <div className="w-[740px] h-full bg-gray-300">
           {/* 이미지가 들어갈 부분 */}
         </div>
 
         {/* 오른쪽: 텍스트 */}
-        <div className="flex flex-col justify-center w-[812px] pl-[40px]">
+        <div className="flex flex-col justify-center w-[740px] 
+          h-full px-[40px]">
           {/* 첫 번째 텍스트 */}
-          <h1 className="text-[40px] font-[700] leading-[150%] tracking-[-0.2px] text-left mb-[60px]">
-            {/* 첫 번째 텍스트 내용 */}
+          <h1 className="text-[40px] font-[700] leading-[150%] 
+            tracking-[-0.2px] text-left pt-[237px] pb-[60px]">
             나를 찾아와요
           </h1>
 
           {/* 두 번째 텍스트 */}
-          <p className="text-[24px] font-[500] leading-[150%] tracking-[-0.12px] text-left pl-0 pb-[214px]">
+          <p className="text-[24px] font-[500] leading-[150%] 
+            tracking-[-0.12px] text-left block w-full pl-0 px-[40px] pb-[237px]">
             {/* 두 번째 텍스트 내용 */}
             길안내 토스 레퍼런스
             나에게 창조는 없다.
@@ -87,6 +89,153 @@ const MainPage = () => {
         </div>
       </div>
 
+      <div className="w-full max-w-[1480px] bg-[#E0E1E4] mx-auto mt-[90px]">
+        {/* 세션정보 및 타임테이블 */}
+        <h1 className="text-black text-[52px] font-bold leading-[150%] 
+          tracking-[-0.26px] mb-[80px] text-left">
+          세션정보 및 타임테이블
+        </h1>
+        
+        {/* 메인 세션 */}
+        <h2 className="text-black text-[44px] font-bold leading-[150%] 
+          tracking-[-0.22px] mb-[20px] text-left">
+          메인 세션
+        </h2>
+        
+        {/* 세션 설명 */}
+        <p className="text-black text-[24px] font-medium leading-[150%] 
+          tracking-[-0.12px] mb-[71px] text-left">
+          핀테크 금융동맹의 확장과 글로벌 진출 전략이 한국 시장의 스타트업들에게 어떤 기회와 도전을 제공할 수 있을까요?<br />
+          핀테크 금융동맹의 한국 시장에 미치는 영향을 살펴보고, 글로벌 진출 전략을 통해 스타트업들이 맞닥뜨릴 기회와 도전을 분석하며,<br />
+          핀테크 혁신을 이끌어갈 스타트업들의 비전과 피칭을 공유합니다.
+        </p>
+        
+        {/* 강연자 정보 컨테이너 */}
+        <div className="flex flex-nowrap justify-between gap-[20px]">
+          {[1, 2, 3].map((_, index) => (
+            <div key={index} className="bg-white p-[40px] h-[440px] w-[440px] flex flex-col items-start">
+              {/* 시간 */}
+              <p className="text-[#45464A] h-[26px] w-full mb-[20px]">
+                time:time ~ time:time
+              </p>
+              
+              {/* 강연 제목 */}
+              <h3 className="text-black text-[36px] font-bold leading-[150%] tracking-[-0.18px] w-full mb-[20px]">
+                강연 제목
+              </h3>
+              
+              {/* 구분선 */}
+              <hr className="w-full mb-[60px] border-gray-300" />
+              
+              {/* 추가 정보 */}
+              <p className="text-black text-[16px] font-medium leading-[150%] tracking-[-0.5px] w-full h-[24px] mb-[20px]">
+                more info
+              </p>
+              
+              {/* 라벨 3개 */}
+              <div className="flex space-x-[8px] mb-auto">
+                {["Label 1", "Label 2", "Label 3"].map((label, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-[#45464A] text-white text-[14px] font-semibold leading-[140%] tracking-[-0.5px] px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+              
+              {/* 강연자 프로필 */}
+              <div className="flex items-center mt-[20px]">
+                <div className="w-[40px] h-[40px] bg-gray-400 rounded-full mr-[12px]"></div>
+                <p className="text-[#131212] text-[20px] font-medium leading-[150%]">강연자 이름</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-[#E0E1E4] flex flex-col py-[127px]">
+          <h2 className="text-black text-[44px] font-bold leading-[150%] tracking-[-0.22px] mb-[20px]">
+            타임테이블
+          </h2>
+          <p className="text-black text-[24px] font-medium leading-[150%] tracking-[-0.12px] mb-[40px] pb-[52px]">
+            sub text
+          </p>
+          {/* 타임테이블 목록 */}
+          <div className="flex flex-col items-center space-y-[40px]">
+            {[...Array(5)].map((_, rowIndex) => (
+              <div key={rowIndex} className="flex">
+                {[...Array(5)].map((_, colIndex) => (
+                  <div key={colIndex} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                    {/* Label 헤더 */}
+                    <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
+                      tracking-[-0.12px] flex items-center justify-center h-[60px]">
+                      Label
+                    </div>
+                    {/* Title */}
+                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
+                      tracking-[-0.12px] pt-[106px] pl-[16px] pr-[58px]">
+                      Title
+                    </h3>
+                    {/* Labels */}
+                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
+                      {[...Array(3)].map((_, labelIndex) => (
+                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
+                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
+                          rounded-[4px] flex items-center justify-center">
+                          Label
+                        </span>
+                      ))}
+                    </div>
+                    {/* 강연자 프로필 및 이름 */}
+                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
+                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
+                      <span className="text-black text-[20px] font-medium leading-[150%]">
+                        강연자 이름
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="w-[1480px] h-[1288px] bg-white mx-auto mt-[50px]">
+        {/* <!-- 세션정보 및 타임테이블 텍스트 --> */}
+        <h1 class="text-black text-[52px] font-bold leading-[150%] tracking-[-0.26px] mb-[80px] text-left">
+          세션정보 및 타임테이블
+        </h1>
+
+        {/* <!-- 메인 세션 텍스트 --> */}
+        <h2 class="text-black text-[44px] font-bold leading-[150%] tracking-[-0.22px] mb-[20px] text-left">
+          메인 세션
+        </h2>
+
+        {/* <!-- 세션 설명 --> */}
+        <p class="text-black text-[24px] font-medium leading-[150%] tracking-[-0.12px] mb-[101px]">
+          핀테크 금융동맹의 확장과 글로벌 진출 전략이 한국 시장의 스타트업들에게 어떤 기회와 도전을 제공할 수 있을까요?<br />
+          핀테크 금융동맹의 한국 시장에 미치는 영향을 살펴보고,<br /> 글로벌 진출 전략을 통해 스타트업들이 맞닥뜨릴 기회와 도전을 분석하며,<br />
+          핀테크 혁신을 이끌어갈 스타트업들의 비전과 피칭을 공유합니다.
+        </p>
+
+        {/* <!-- 버튼들 --> */}
+        <div class="flex space-x-[20px] mb-[28px]">
+          {/* <!-- 첫 번째 버튼 --> */}
+          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
+            1층
+          </button>
+          {/* <!-- 두 번째 버튼 --> */}
+          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
+            2층
+          </button>
+        </div>
+
+        {/* <!-- 이미지 --> */}
+        <img src="path-to-your-image.jpg" alt="Image" class="w-[1480px] h-[737px]" />
+      </div>
+
+      
     </>
   );
 };
