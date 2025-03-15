@@ -36,24 +36,24 @@ const MainPage = () => {
         />
       </div>
 
-      <div className="flex justify-center px-[220px] h-[812px] mb-[40px]">
+      <div className="flex justify-center px-4 lg:px-[220px] h-[812px] mb-[40px]">
         {/* 왼쪽: 이미지 */}
-        <div className="w-[740px] h-full bg-gray-300">
+        <div className="w-full lg:w-[740px] h-full bg-gray-300">
           {/* 이미지가 들어갈 부분 */}
         </div>
 
         {/* 오른쪽: 텍스트 */}
-        <div className="flex flex-col justify-center w-[740px] 
-          h-full px-[40px]">
+        <div className="flex flex-col justify-center w-full lg:w-[740px] 
+          h-full px-4 lg:px-[40px]">
           {/* 첫 번째 텍스트 */}
-          <h1 className="text-[40px] font-[700] leading-[150%] 
-            tracking-[-0.2px] text-left pt-[237px] pb-[60px]">
+          <h1 className="text-[24px] lg:text-[40px] font-[700] leading-[150%] 
+            tracking-[-0.2px] text-left pt-[20px] lg:pt-[237px] pb-[60px] lg:pb-[60px]">
             8 + 1 그 이상의 기술력
           </h1>
 
           {/* 두 번째 텍스트 */}
-          <p className="text-[24px] font-[500] leading-[150%] 
-            tracking-[-0.12px] text-left block w-full pl-0 px-[40px] pb-[237px]">
+          <p className="text-[16px] lg:text-[24px] font-[500] leading-[150%] 
+            tracking-[-0.12px] text-left w-full pb-[40px] lg:pb-[237px]">
             핀테크는 금융의 미래를 열어갑니다.<br />
             최신 기술을 통한 혁신적 접근으로<br /> 
             사용자에게 딱 맞는 금융 경험을 창출합니다.
@@ -64,24 +64,24 @@ const MainPage = () => {
         </div>
       </div>
 
-      <div className="flex justify-center px-[220px] h-[812px] mb-[40px]">
+      <div className="flex justify-center px-4 lg:px-[220px] h-[812px] mb-[40px]">
         {/* 왼쪽: 이미지 */}
-        <div className="w-[740px] h-full bg-gray-300">
+        <div className="w-full lg:w-[740px] h-full bg-gray-300">
           {/* 이미지가 들어갈 부분 */}
         </div>
 
         {/* 오른쪽: 텍스트 */}
-        <div className="flex flex-col justify-center w-[740px] 
-          h-full px-[40px]">
+        <div className="flex flex-col justify-center w-full lg:w-[740px] 
+          h-full px-4 lg:px-[40px]">
           {/* 첫 번째 텍스트 */}
-          <h1 className="text-[40px] font-[700] leading-[150%] 
-            tracking-[-0.2px] text-left pt-[237px] pb-[60px]">
+          <h1 className="text-[24px] lg:text-[40px] font-[700] leading-[150%] 
+            tracking-[-0.2px] text-left pt-[20px] lg:pt-[237px] pb-[40px] lg:pb-[60px]">
             나를 찾아와요
           </h1>
 
           {/* 두 번째 텍스트 */}
-          <p className="text-[24px] font-[500] leading-[150%] 
-            tracking-[-0.12px] text-left block w-full pl-0 px-[40px] pb-[237px]">
+          <p className="text-[16px] lg:text-[24px] font-[500] leading-[150%] 
+            tracking-[-0.12px] text-left w-full pb-[40px] lg:pb-[237px]">
             {/* 두 번째 텍스트 내용 */}
             길안내 토스 레퍼런스
             나에게 창조는 없다.
