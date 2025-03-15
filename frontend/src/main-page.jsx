@@ -9,6 +9,8 @@ const MainPage = () => {
   // 화면에 요소가 보이는지 감지하는 훅 (threshold: 0.2 = 20% 보이면 트리거)
   const { ref, inView } = useInView({ threshold: 0.2 });
 
+  const items = ["Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6"];
+
   useEffect(() => {
     if (inView) {
       controls.start("visible");
@@ -137,7 +139,8 @@ const MainPage = () => {
                 {["Label 1", "Label 2", "Label 3"].map((label, idx) => (
                   <span
                     key={idx}
-                    className="bg-[#45464A] text-white text-[14px] font-semibold leading-[140%] tracking-[-0.5px] px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
+                    className="bg-[#45464A] text-white text-[14px] font-semibold leading-[140%] tracking-[-0.5px] 
+                    px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
                   >
                     {label}
                   </span>
@@ -147,21 +150,23 @@ const MainPage = () => {
               {/* 강연자 프로필 */}
               <div className="flex items-center mt-[20px]">
                 <div className="w-[40px] h-[40px] bg-gray-400 rounded-full mr-[12px]"></div>
-                <p className="text-[#131212] text-[20px] font-medium leading-[150%]">강연자 이름</p>
+                <p className="text-[#131212] text-[20px] font-medium leading-[150%]">
+                  강연자 이름
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="bg-[#E0E1E4] flex flex-col py-[127px]">
-          <h2 className="text-black text-[44px] font-bold leading-[150%] tracking-[-0.22px] mb-[20px]">
+        <div className="bg-[#E0E1E4] flex flex-col">
+          <h2 className="text-black text-[44px] font-bold leading-[150%] tracking-[-0.22px] mb-[20px] pt-[127px]">
             타임테이블
           </h2>
           <p className="text-black text-[24px] font-medium leading-[150%] tracking-[-0.12px] mb-[40px] pb-[52px]">
             sub text
           </p>
           {/* 타임테이블 목록 */}
-          <div className="flex flex-col items-center space-y-[40px]">
+          <div className="flex flex-col items-center space-y-[40px] pb-[40px]">
             {[...Array(5)].map((_, rowIndex) => (
               <div key={rowIndex} className="flex">
                 {[...Array(5)].map((_, colIndex) => (
@@ -222,20 +227,97 @@ const MainPage = () => {
         {/* <!-- 버튼들 --> */}
         <div class="flex space-x-[20px] mb-[28px]">
           {/* <!-- 첫 번째 버튼 --> */}
-          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
+          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium 
+            leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
             1층
           </button>
           {/* <!-- 두 번째 버튼 --> */}
-          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
+          <button class="w-[128px] h-[70px] py-0 px-[20px] text-[36px] font-medium 
+            leading-[150%] tracking-[-0.18px] bg-[#45464A] text-white">
             2층
           </button>
         </div>
 
         {/* <!-- 이미지 --> */}
-        <img src="path-to-your-image.jpg" alt="Image" class="w-[1480px] h-[737px]" />
+        <img src="/public/images/image 67.png" alt="Image" class="w-[1480px] h-[737px]" />
       </div>
 
-      
+      <div class="w-[1480px] h-[942px] bg-gray-300 mx-auto mt-[220px] pr-[0] pl-[0] pt-[0] pb-[0]">
+        {/* <!-- 세션정보 및 타임테이블 텍스트 --> */}
+        <h1 class="text-black text-[52px] font-bold leading-[150%] tracking-[-0.26px] text-left">
+          세션정보 및 타임테이블
+        </h1>
+
+        {/* <!-- 설명 텍스트 --> */}
+        <p class="text-black text-[24px] font-medium leading-[150%] tracking-[-0.12px] mt-[80px] mb-[60px]">
+          핀테크 금융동맹의 확장과 글로벌 진출 전략이 한국 시장의 스타트업들에게 어떤 기회와 도전을 제공할 수 있을까요?<br />
+          핀테크 혁신을 이끌어갈 스타트업들의 비전과 피칭을 공유합니다.
+        </p>
+
+        {/* <!-- 화이트 컨테이너 --> */}
+        <div class="bg-white px-[100px] py-[64px]">
+          {/* <!-- 첫 번째 블록 --> */}
+          <div class="flex items-start mb-[64px]">
+            {/* <!-- 왼쪽 텍스트 --> */}
+            <div class="w-[620px]">
+              <h2 class="text-[36px] font-bold leading-[150%] tracking-[-0.18px] mb-[32px]">
+                현장에서 자유롭게 세션을 이동하며 들을 수 있어요
+              </h2>
+              <p class="text-[20px] font-medium leading-[150%]">
+                국회의원이 회기 전에 체포 또는 구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기 중 석방된다.<br /> 
+                대한민국의 영토는 한반도와 그 부속도서로 한다.
+              </p>
+            </div>
+            {/* <!-- 오른쪽 이미지 박스 --> */}
+            <div class="w-[560px] h-[220px] bg-[#D9D9D9] ml-[100px]"></div>
+          </div>
+
+          {/* <!-- 두 번째 블록 (반복) --> */}
+          <div class="flex items-start">
+            {/* <!-- 왼쪽 텍스트 --> */}
+            <div class="w-[620px]">
+              <h2 class="text-[36px] font-bold leading-[150%] tracking-[-0.18px] mb-[32px]">
+                오프라인 참가자에게<br />
+                온라인 스트리밍을 지원해요
+              </h2>
+              <p class="text-[20px] font-medium leading-[150%]">
+                국회의원이 회기 전에 체포 또는 구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기 중 석방된다.<br /> 
+                대한민국의 영토는 한반도와 그 부속도서로 한다.
+              </p>
+            </div>
+            {/* <!-- 오른쪽 이미지 박스 --> */}
+            <div class="w-[560px] h-[220px] bg-[#D9D9D9] ml-[100px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-[1480px] bg-[gray] mx-auto mt-[100px] pb-[0] mb-[313px]">
+        {/* 헤더 영역 */}
+        <h1 className="text-black text-[44px] font-bold leading-[150%] tracking-[-0.22px] p-[80px_0] pt-[0]">
+          헤더 영역입니다
+        </h1>
+
+        {/* 리스트 아이템 반복 */}
+        {items.map((title, index) => (
+          <div key={index} className="border-t border-black">
+            <div className="border-b border-black p-[32px] flex items-center justify-between cursor-pointer group">
+              {/* 왼쪽 아이콘 + 텍스트 */}
+              <div className="flex items-center gap-[10px]">
+                <img src="/public/images/icon.png" alt="아이콘" className="w-[32px] h-[32px]" />
+                <span className="text-[28px] font-medium leading-[150%] tracking-[-0.14px] text-white">
+                  {title}
+                </span>
+              </div>
+              {/* 오른쪽 아이콘 */}
+              <img src="/public/images/show-icon.png" alt="펼치기" className="w-[16px] h-[16px] group-hover:rotate-180 transition-transform" />
+            </div>
+            {/* 숨겨진 Sub Text */}
+            <div className="hidden group-hover:block border-t border-black p-[32px] text-[#45464A] text-[20px] font-medium leading-[150%]">
+              Sub Text
+            </div>
+          </div>
+        ))}
+      </div>
     </>
   );
 };
