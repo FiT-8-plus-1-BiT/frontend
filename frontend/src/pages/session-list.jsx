@@ -118,21 +118,24 @@ export default function SessionList() {
   });
 
   return (
-    <div className="flex flex-col items-center min-h-screen py-8">
+    <div className="flex flex-col min-h-screen py-8 mx-[160px]">
       {/* 필터 UI */}
       <div className="flex">
         <SessionFilter onFilterChange={handleFilterChange} />
       </div>
 
       {/* 필터링된 세션 리스트 */}
-      <div
-        className="grid grid-cols-2 gap-x-[8px] gap-y-[40px]"
-        style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}
-      >
-        {filteredSessions.map((session) => (
-          <SessionItem key={session.id} {...session} />
-        ))}
+      <div className='flex justify-center'>
+        <div
+          className="grid grid-cols-2 gap-x-[8px] gap-y-[40px]"
+          style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}
+        >
+          {filteredSessions.map((session) => (
+            <SessionItem key={session.id} {...session} />
+          ))}
+        </div>
       </div>
+
     </div>
   );
 }

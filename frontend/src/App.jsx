@@ -19,11 +19,9 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/streaming" element={<Streaming />} />
             <Route path="/session" element={<SessionList />} />
-
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          
         </Routes>
       </Router>
     </GoogleOAuthProvider>

@@ -10,7 +10,7 @@ const NavbarItem = ({ to, label }) => {
 
 const Navbar = () => {
   return (
-    <nav className="w-full max-w-[1856px] h-[45px] flex justify-between items-center mx-auto">
+    <nav className=" h-[45px] flex justify-between items-center mx-[160px]">
       {/* 로고 영역 */}
       <div className="w-[184px] h-[45px] px-4 py-2.5 bg-[#d9d9d9] flex justify-center items-center">
         <span className="text-black text-xs font-medium">아직 미정인 로고 자리입니다</span>
