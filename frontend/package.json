@@ -23,7 +23,8 @@
     "react-naver-login": "^0.1.4",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.3.0",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "tailwind-scrollbar-hide": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
