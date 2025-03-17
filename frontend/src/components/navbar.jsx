@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const NavbarItem = ({ to, label }) => {
   return (
-    <Link
+    <NavLink
       to={to}
-      className="relative inline-flex items-center text-[#85878D] 
-      font-bold hover:text-black group px-[16px] py-[16px]"
+      className={({ isActive }) =>
+        `relative inline-flex items-center 
+        font-bold group px-[16px] py-[16px] 
+        ${isActive ? 'text-black' : 'text-[#85878D]'} 
+        hover:text-black`
+      }
     >
       {label}
       {/* 호버 시 밑줄 역할을 하는 요소 */}
@@ -13,7 +17,7 @@ const NavbarItem = ({ to, label }) => {
         transition-transform scale-x-0 duration-300 origin-left 
         group-hover:scale-x-100 transform -translate-x-1/2">
       </span>
-    </Link>
+    </NavLink>
   );
 };
 
@@ -25,7 +29,9 @@ const Navbar = () => {
       
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
-        <img src="./public/images/8+1bit-logo.png" alt="Logo" />
+        <a href="/main" alt="홈으로">
+          <img src="./public/images/8+1bit-logo.png" alt="Logo" />
+        </a>
       </div>
 
       {/* 네비게이션 메뉴 */}
