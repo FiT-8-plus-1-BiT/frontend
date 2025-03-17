@@ -4,7 +4,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
+
+import Main from "~/main-page.jsx";
+
 import SessionList from "~/pages/session-list";
+
 
 function App() {
 
@@ -13,13 +17,14 @@ function App() {
       GoogleOAuthProvider는 Google 로그인 기능을 전역에서 사용할 수 있도록 설정하는 컨텍스트
       이걸 감싸야 GoogleLogin과 useOneTap이 정상적으로 작동함
     */
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/streaming" element={<Streaming />} />
             <Route path="/session" element={<SessionList />} />
           </Route>
+          <Route path="/main" element={<Main />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
         </Routes>

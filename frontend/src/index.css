@@ -5,16 +5,18 @@
 @layer components {
   .btn {
     @apply w-full h-16 flex items-center relative py-3 px-5 
-    rounded-3xl shadow-md transition-all duration-300 text-lg font-semibold;
+    rounded-full shadow-md transition-all duration-300 text-lg font-semibold;
   }
 
   .btn-kakao {
-    @apply bg-yellow-400 text-black hover:bg-yellow-300;
+    @apply bg-yellow-400 text-black hover:bg-yellow-300
+    hover:scale-105 transition-all duration-200;
   }
 
   .btn-naver {
     @apply bg-gradient-to-r from-green-500 to-green-600 
-    text-white hover:from-green-600 hover:to-green-700;
+    text-white hover:from-green-600 hover:to-green-700
+    hover:scale-105 transition-all duration-200;
   }
 
   /* 이미지 왼쪽 정렬 */
