@@ -4,7 +4,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
+
 import Main from "~/main-page.jsx";
+
+import SessionList from "~/pages/session-list";
+
 
 function App() {
 
@@ -18,11 +22,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/streaming" element={<Streaming />} />
+            <Route path="/session" element={<SessionList />} />
           </Route>
           <Route path="/main" element={<Main />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          
         </Routes>
       </Router>
     </GoogleOAuthProvider>
