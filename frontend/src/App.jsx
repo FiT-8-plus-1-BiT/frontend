@@ -9,6 +9,7 @@ import Main from "~/main-page.jsx";
 
 import SessionList from "~/pages/session-list";
 
+import MyPage from "~/pages/mypage";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/main" element={<Main />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
