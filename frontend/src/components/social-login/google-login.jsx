@@ -3,6 +3,7 @@ import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
 import "~/index.css";
 // import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
@@ -26,7 +27,25 @@ const GoogleLoginComponent = () => {
           const accessToken = response.headers.get("Authorization");
           if (accessToken) {
             localStorage.setItem("access-token", accessToken);
-            dispatch(loginSuccess({ accessToken }));
+            // 액세스 토큰을 Redux 상태에 저장
+            // dispatch(loginSuccess({ accessToken }));
+
+            // 사용자 정보 가져오기
+            const userResponse = await axios.get(
+              "http://localhost:8080/api/v1/users/account", // 계정 정보 조회 API
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 포함
+                },
+              }
+            );
+
+            // 사용자 정보와 토큰을 Redux 상태에 저장
+            dispatch(loginSuccess({
+              user: userResponse.data, // 사용자 정보 저장
+              token: accessToken, // 액세스 토큰 저장
+            }));
+            
             // navigate("/main"); // 메인 페이지로 이동
           }
         } else {
@@ -55,7 +74,9 @@ const GoogleLoginComponent = () => {
   };
 
   return (
-    <button onClick={onGoogleLogin} className="btn btn-google bg-blue-400 text-black 
+    <button 
+      onClick={onGoogleLogin} 
+      className="btn btn-google bg-blue-400 text-black 
        rounded-full hover:bg-blue-500 transition-colors duration-200 
        hover:scale-105 transition-all duration-200"
     >
