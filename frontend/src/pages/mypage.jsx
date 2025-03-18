@@ -13,26 +13,30 @@ const mypage = () => {
           계정정보
         </div>
  
-        <div className="bg-[#FAFAFA] flex items-center space-x-6 px-5 py-5 mb-[20px]">
-          {/* 프로필 */}
-          <div className="w-[88px] h-[88px] h-full rounded-full overflow-hidden">
-            <img 
-              src="/images/Ellipse 7.png" 
-              alt="profile" 
-              className="w-full h-full object-cover rounded-full" 
-            />
-          </div>
-
-          <div className="flex flex-col space-y-1">
-            <div className="text-black text-2xl font-bold leading-[150%] tracking-[-0.14px]">
-              닉네임
+        <div className="bg-[#FAFAFA] flex items-center justify-start space-x-6 px-5 py-5 mb-[20px]">
+          {/* 프로필 정보 */}
+          <div className="flex items-center space-x-4">
+            {/* 프로필 이미지 */}
+            <div className="w-[88px] h-[88px] rounded-full overflow-hidden">
+              <img 
+                src="/images/Ellipse 7.png" 
+                alt="profile" 
+                className="object-cover w-full h-full rounded-full" 
+              />
             </div>
 
-            <div className="text-[#606166] text-base font-medium leading-[150%]">
-              ddddd@naver.com
+            {/* 닉네임과 이메일 */}
+            <div className="flex flex-col">
+              <div className="text-black text-2xl font-bold leading-[150%] tracking-[-0.14px]">
+                닉네임
+              </div>
+              <div className="text-[#606166] text-base font-medium leading-[150%]">
+                ddddd@naver.com
+              </div>
             </div>
           </div>
 
+          {/* 화살표 아이콘 */}
           <div className="ml-auto flex justify-end w-full">
             <img src="./public/images/chevron-left.png" alt="Arrow" className="w-6 h-6" />
           </div>
@@ -72,35 +76,43 @@ const mypage = () => {
 
         {/* 관심 분야 + 라벨 그룹 */}
         <div className="px-5 py-16 flex flex-col">
-          <div className="flex items-center space-x-5 mb-4 pb-[40px] ml-[40px]">
-            <div className="text-[#606166] text-lg w-[240px]">관심 분야</div>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+          {/* 관심 분야 */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 pb-[40px] sm:ml-[40px]">
+            <div className="text-[#606166] text-lg w-full sm:w-[240px]">관심 분야</div>
+            <div className="flex flex-wrap gap-2 sm:gap-5">
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+            </div>
           </div>
 
           <hr className="border-[#E0E0E0]" />
 
-          <div className="flex items-center space-x-5 mb-4 py-[40px] ml-[40px]">
-            <div className="text-[#606166] text-lg w-[240px]">좋아요 표시한 강연</div>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+          {/* 좋아요 표시한 강연 */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 py-[40px] sm:ml-[40px]">
+            <div className="text-[#606166] text-lg w-full sm:w-[240px]">좋아요 표시한 강연</div>
+            <div className="flex flex-wrap gap-2 sm:gap-5">
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+            </div>
           </div>
 
           <hr className="border-[#E0E0E0]" />
 
-          <div className="flex items-center space-x-5 mb-4 pb-[40px] ml-[40px] pt-[40px]">
-            <div className="text-[#606166] text-lg w-[240px]">AI 추천 강연</div>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-            <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+          {/* AI 추천 강연 */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 pb-[40px] sm:ml-[40px] pt-[40px]">
+            <div className="text-[#606166] text-lg w-full sm:w-[240px]">AI 추천 강연</div>
+            <div className="flex flex-wrap gap-2 sm:gap-5">
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+            </div>
           </div>
-        </div>    
-
+        </div>
 
         <div className="w-full max-w-[1520px] min-h-[1836px] bg-[#FAFAFA] mx-auto">
           {/* 나의 스케줄 제목 */}
