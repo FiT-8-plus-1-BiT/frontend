@@ -23,6 +23,9 @@ const GoogleLoginComponent = () => {
           }
         );
 
+        console.log("Response Status:", response.status); // 상태 코드 출력
+        console.log("Response Headers:", response.headers); // 응답 헤더 출력
+
         if (response.ok) {
           const accessToken = response.headers.get("Authorization");
           if (accessToken) {

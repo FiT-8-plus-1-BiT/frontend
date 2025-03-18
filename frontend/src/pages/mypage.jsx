@@ -4,10 +4,13 @@ import Navbar from "~/components/navbar.jsx"
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "~/redux/auth-slice.js";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const mypage = () => {
+  // 사용자 정보
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 사용자 프로필 정보를 가져오는 함수
   const fetchUserProfile = async () => {
@@ -29,13 +32,13 @@ const mypage = () => {
   useEffect(() => {
     if (user) {
       fetchUserProfile();
-    }
+    } 
   }, [user]);
 
   // 로그아웃 기능
   const handleLogout = () => {
     dispatch(logout()); // Redux 상태 초기화
-    window.location.href = "/"; // 홈으로 이동 (필요에 따라 변경 가능)
+    navigate("/"); // 홈으로 이동 (필요에 따라 변경 가능)
   };
 
   return (
