@@ -3,8 +3,8 @@ import React, { useState } from "react";
 const SwitchButton = ({ label, active, onClick }) => {
   return (
     <button
-      className={`px-5 py-2 rounded-full border text-xl font-bold transition ${
-        active ? "bg-[#373de7] text-white border-[#373de7]" : "border-[#373de7] text-[#373de7]"
+      className={`py-2 border text-s font-bold transition w-[170px] md:w-[124px] ${
+        active ? "bg-black text-white " : " text-black"
       }`}
       onClick={onClick}
     >
