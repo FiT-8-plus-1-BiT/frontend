@@ -31,7 +31,7 @@ const GoogleLoginComponent = () => {
           if (accessToken) {
             localStorage.setItem("access-token", accessToken);
             // 액세스 토큰을 Redux 상태에 저장
-            // dispatch(loginSuccess({ accessToken }));
+            dispatch(loginSuccess({ token: accessToken }));
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
@@ -79,16 +79,15 @@ const GoogleLoginComponent = () => {
   return (
     <button 
       onClick={onGoogleLogin} 
-      className="btn btn-google bg-blue-400 text-black 
-       rounded-full hover:bg-blue-500 transition-colors duration-200 
-       hover:scale-105 transition-all duration-200"
+      className="w-full h-[60px] bg-white text-black 
+        flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
       <img 
         src="/images/google-logo.png" 
-        alt="구글 로고" className="w-8 h-8 absolute left-5" 
+        alt="구글 로고" className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]" 
       />
-      <span className="flex-1 text-center text-black">
-        구글로 로그인
+      <span className="text-black text-[20px] font-bold whitespace-nowrap">
+        구글로 시작하기
       </span>
     </button>
   );

@@ -4,9 +4,9 @@ import GoogleLogin from "~/components/social-login/google-login.jsx";
 
 const SocialLoginButtons = () => {
   return (
-    <div className="flex flex-col gap-4">
-      <KakaoLogin />
+    <div className="flex flex-col items-center gap-5 w-full">
       <NaverLogin />
+      <KakaoLogin />
       <GoogleLogin />
     </div>
   );

@@ -5,39 +5,66 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "~/redux/auth-slice.js";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { loginSuccess } from '~/redux/auth-slice.js';
 
 const mypage = () => {
-  // 사용자 정보
+  // Redux 상태에서 사용자 정보 가져오기
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 사용자 프로필 정보를 가져오는 함수
-  const fetchUserProfile = async () => {
+  // const fetchUserProfile = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:8080/api/v1/users/profile", {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("access-token")}`, // 액세스 토큰을 헤더에 포함
+  //       },
+  //     });
+  //     dispatch(loginSuccess({
+  //       user: response.data, // 사용자 프로필 정보 저장
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to fetch user profile:", error);
+  //   }
+  // };
+
+  const fetchUserData = async (accessToken) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/users/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`, // 액세스 토큰을 헤더에 포함
-        },
-      });
+      // 사용자 정보 가져오기
+      const userResponse = await axios.get(
+        "http://localhost:8080/api/v1/users/account", // 계정 정보 조회 API
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 포함
+          },
+        }
+      );
+      // redux 상태 업데이트
       dispatch(loginSuccess({
-        user: response.data, // 사용자 프로필 정보 저장
+        user: userResponse.data, // 사용자 정보 저장
+        token: accessToken, // 액세스 토큰 저장
       }));
     } catch (error) {
-      console.error("Failed to fetch user profile:", error);
+      console.log("Failed to fetch user data:", error);
     }
-  };
+  }
 
-  // 마이페이지 로드 시 사용자 프로필 정보 가져오기
+  // 마이페이지 로드 시 사용자 정보 불러오기
   useEffect(() => {
-    if (user) {
-      fetchUserProfile();
-    } 
-  }, [user]);
+    const accessToken = localStorage.getItem("access-token"); // 로컬 스토리지에서 토큰 가져오기
+    if (accessToken) {
+      fetchUserData(accessToken); // 토큰이 있으면 사용자 데이터 가져오기
+      console.log(accessToken);
+    } else {
+      navigate("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+    }
+  }, [dispatch, navigate]);
 
-  // 로그아웃 기능
+  // 로그아웃 처리
   const handleLogout = () => {
     dispatch(logout()); // Redux 상태 초기화
+    localStorage.removeItem("access-token"); // 로컬 스토리지에서 토큰 삭제
     navigate("/"); // 홈으로 이동 (필요에 따라 변경 가능)
   };
 
@@ -58,7 +85,7 @@ const mypage = () => {
             {/* 프로필 이미지 */}
             <div className="w-[88px] h-[88px] rounded-full overflow-hidden">
               <img 
-                src={user?.profileImage || "/images/default-profile.png"}
+                src={user?.profileImage || "./public/images/Ellipse 7.png"}
                 alt="profile" 
                 className="object-cover w-full h-full rounded-full" 
               />

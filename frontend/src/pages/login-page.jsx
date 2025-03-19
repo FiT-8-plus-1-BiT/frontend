@@ -1,45 +1,70 @@
 import SocialLoginButtons from '~/components/social-login/social-login-buttons';
-// import LogoutButton from '~/components/logout-button';
-// import { useSelector, useDispatch  } from 'react-redux';
-// import { useEffect } from 'react';
-// import Main from '~/main-page.jsx';
-// import { useNavigate } from 'react-router-dom';
-// import { loginSuccess } from "~/redux/auth-slice";
+import Navbar from "~/components/navbar.jsx"
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  // // Redux에서 로그인 상태 가져오기
-  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const dispatch = useDispatch(); // 액션 디스패치 함수
-  // const navigate = useNavigate();
+  // useNavigate 훅을 사용하여 페이지 이동 기능을 가져옴
+  const navigate = useNavigate();
 
-  // // 로그인 상태가 true이면 메인 페이지로 이동
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate('/main'); // 로그인 성공 시 메인 페이지로
-  //   }
-  // }, [isAuthenticated, navigate]);
+  const handleClick = () => {
+    navigate('/main');
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative">
-      {/* Logo Placeholder */}
-      <div className="w-40 bg-gray-400 text-center py-4 absolute top-0 left-0 z-10">
-        <span className="text-black">로고 들어갈 자리</span>
-      </div>
+    <>
+      <Navbar />
 
-      {/* Image Placeholder */}
-      <div className="w-1/2 min-h-screen bg-gray-200 flex justify-center items-center">
-        <span className="text-black">이미지 들어갈 자리</span>
-      </div>
+      {/* 전체 컨테이너 박스를 중앙에 배치 */}
+      <div className="w-full h-screen flex justify-center items-center 
+        px-4 sm:px-8 md:px-20 pt-[450px] pb-[20px] md:py-[160px] overflow-y-auto">
+        {/* 내부 컨테이너 */}
+        <div className="flex flex-col md:flex-row justify-center items-center w-full h-full">
 
-      {/* Right Section (Email and Password Fields) */}
-      <div className="w-1/2 pl-6 pr-6">
+          {/* 왼쪽 이미지 영역 */}
+          <div className="w-full md:w-auto flex justify-center 
+            items-center mt-[60px]">
+            <img 
+              src="https://mblogthumb-phinf.pstatic.net/MjAyMTA4MThfNjQg/MDAxNjI5MjUwNTk5Mzg0.XA0T0u2BSgIDdOJ20CzuLmiwVBvNvYpsjQmJIH7-ro0g.6m--zWiMFU_M-g0se0tUOgdyNzBx3oQdj13TnZgZngog.JPEG.wenice777/3.jpg?type=w800" 
+              alt="background" 
+              className="w-full md:max-w-[760px] h-full md:h-[760px] object-cover"
+            />
+          </div>
 
-        {/* Social Login Buttons */}
-        <div className="mt-20 flex flex-col gap-4">
-          <SocialLoginButtons />
+          {/* 오른쪽 로그인 영역 */}
+          <div className="w-full md:max-w-[600px] font-[Pretendard] flex flex-col justify-center self-center gap-y-6 text-left ml-[60px] mt-[17px]">
+            <h1 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold">
+              Sub title
+            </h1>
+
+            <p className="text-lg sm:text-xl font-medium">
+              sub text
+            </p>
+
+            <div className="mt-10 flex flex-col gap-4">
+              <SocialLoginButtons />
+            </div>
+
+            <hr className="my-[40px] w-full border-t border-[#E0E1E4]" />
+
+            <div className="flex flex-col items-center pb-[100px]">
+              <small className="text-[#131212] text-sm sm:text-base font-semibold leading-[140%] tracking-[-0.5px] text-center py-[10px] px-[12px] mb-[12px]">
+                LabelLabelLabelLabelLabelLabel
+              </small>
+
+              <button 
+                onClick={handleClick}
+                className="w-full h-[52px] bg-[#131212] text-center"
+              >
+                <span className='w-[198px] h-[36px] text-white text-[24px]'>
+                  로그인 없이 둘러보기
+                </span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
