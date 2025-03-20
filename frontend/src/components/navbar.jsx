@@ -1,6 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import React from 'react';
 
-const NavbarItem = ({ to, label }) => {
+const NavbarItem = ({ to, label, requiresAuth }) => {
+  const navigate = useNavigate();
+  // 로그인 상태 가져오기
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <NavLink
       to={to}
@@ -10,6 +16,12 @@ const NavbarItem = ({ to, label }) => {
         ${isActive ? 'text-black' : 'text-[#85878D]'} 
         hover:text-black`
       }
+      onClick={(e) => {
+        if (requiresAuth && !isAuthenticated) {
+          e.preventDefault();
+          navigate("/login");
+        }
+      }}
     >
       {label}
       {/* 호버 시 밑줄 역할을 하는 요소 */}
@@ -23,7 +35,6 @@ const NavbarItem = ({ to, label }) => {
 
 const Navbar = () => {
   return (
-
     <nav className="fixed top-0 inset-x-0 max-w-[1920px] w-full h-[89px] 
       flex justify-between items-center px-4 lg:px-[160px] py-[12px] 
       bg-white z-50 mb-[40px] mx-auto">
@@ -39,7 +50,7 @@ const Navbar = () => {
       <div className="flex flex-nowrap gap-[20px] md:gap-[40px] justify-center">
         <NavbarItem to="/main" label="홈 화면" />
         <NavbarItem to="/schedule" label="강연목록" />
-        <NavbarItem to="/mypage" label="마이페이지" />
+        <NavbarItem to="/mypage" label="마이페이지" requiresAuth={true} />
       </div>
     </nav>
   );

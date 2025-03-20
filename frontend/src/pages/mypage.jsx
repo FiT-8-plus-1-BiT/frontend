@@ -1,44 +1,68 @@
-import React,{ useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import Navbar from "~/components/navbar.jsx"
-
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "~/redux/auth-slice.js";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { loginSuccess, logout } from "~/redux/auth-slice.js";
 
-const mypage = () => {
-  // 사용자 정보
+const Mypage = () => {
+  // Redux 상태에서 사용자 정보 가져오기
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 사용자 프로필 정보를 가져오는 함수
-  const fetchUserProfile = async () => {
+  // 사용자 정보를 가져오는 함수
+  const fetchUserProfile = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/users/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`, // 액세스 토큰을 헤더에 포함
-        },
-      });
-      dispatch(loginSuccess({
-        user: response.data, // 사용자 프로필 정보 저장
-      }));
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-    }
-  };
+      const accessToken = localStorage.getItem("access-token");
+      console.log("Access Token:", accessToken);
 
-  // 마이페이지 로드 시 사용자 프로필 정보 가져오기
+      if (!accessToken) {
+        console.warn('Access token not found. Redirecting to login.');
+        navigate('/login');
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/users/account",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const userData = response.data.response;
+        dispatch(loginSuccess({ user: userData, token: accessToken }));
+      } else {
+        console.error("사용자 정보 조회 실패", response.data);
+        // 실패 시 로그아웃 처리 또는 에러 메시지 표시
+        localStorage.removeItem('access-token');
+        dispatch(logout());
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error("사용자 정보를 가져오는 중 오류 발생:", error);
+      // 오류 발생 시 로그아웃 처리 또는 에러 메시지 표시
+      localStorage.removeItem('access-token');
+      dispatch(logout());
+      navigate('/login');
+    }
+  }, [dispatch, navigate]);
+
+  // 사용자 정보가 없으면 프로필 불러오기
   useEffect(() => {
-    if (user) {
+    if (!user?.email) {
       fetchUserProfile();
-    } 
-  }, [user]);
+    }
+  }, [user?.email, fetchUserProfile]);
 
   // 로그아웃 기능
   const handleLogout = () => {
-    dispatch(logout()); // Redux 상태 초기화
-    navigate("/"); // 홈으로 이동 (필요에 따라 변경 가능)
+    localStorage.removeItem("access-token");
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -67,10 +91,10 @@ const mypage = () => {
             {/* 닉네임과 이메일 */}
             <div className="flex flex-col">
               <div className="text-black text-2xl font-bold leading-[150%] tracking-[-0.14px]">
-                {user?.name || "닉네임"}
+                {user?.name || "이름을 가져오지 못 했습니다"}
               </div>
               <div className="text-[#606166] text-base font-medium leading-[150%]">
-                {user?.email || "email@example.com"}
+                {user?.email || "이메일을 가져오지 못 했습니다"}
               </div>
             </div>
           </div>
@@ -79,7 +103,8 @@ const mypage = () => {
           {user && (
             <button 
               onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              className="bg-red-500 text-white px-4 py-2 
+                rounded-lg hover:bg-red-600 transition whitespace-nowrap"
             >
               로그아웃
             </button>
@@ -226,4 +251,4 @@ const mypage = () => {
   )
 };
 
-export default mypage;
+export default Mypage;
