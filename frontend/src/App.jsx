@@ -11,6 +11,8 @@ import SessionList from "~/pages/session-list";
 
 import MyPage from "~/pages/mypage";
 
+import MobileLoginPage from "~/pages/login-mobilepage.jsx"
+
 function App() {
 
   return (
@@ -27,6 +29,7 @@ function App() {
           </Route>
           <Route path="/main" element={<Main />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login2" element={<MobileLoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Routes>
