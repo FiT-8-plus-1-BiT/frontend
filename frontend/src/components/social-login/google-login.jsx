@@ -3,6 +3,7 @@ import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
 import "~/index.css";
 // import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
@@ -22,11 +23,32 @@ const GoogleLoginComponent = () => {
           }
         );
 
+        console.log("Response Status:", response.status); // 상태 코드 출력
+        console.log("Response Headers:", response.headers); // 응답 헤더 출력
+
         if (response.ok) {
           const accessToken = response.headers.get("Authorization");
           if (accessToken) {
             localStorage.setItem("access-token", accessToken);
-            dispatch(loginSuccess({ accessToken }));
+            // 액세스 토큰을 Redux 상태에 저장
+            dispatch(loginSuccess({ token: accessToken }));
+
+            // 사용자 정보 가져오기
+            const userResponse = await axios.get(
+              "http://localhost:8080/api/v1/users/account", // 계정 정보 조회 API
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 포함
+                },
+              }
+            );
+
+            // 사용자 정보와 토큰을 Redux 상태에 저장
+            dispatch(loginSuccess({
+              user: userResponse.data, // 사용자 정보 저장
+              token: accessToken, // 액세스 토큰 저장
+            }));
+            
             // navigate("/main"); // 메인 페이지로 이동
           }
         } else {
@@ -55,16 +77,17 @@ const GoogleLoginComponent = () => {
   };
 
   return (
-    <button onClick={onGoogleLogin} className="btn btn-google bg-blue-400 text-black 
-       rounded-full hover:bg-blue-500 transition-colors duration-200 
-       hover:scale-105 transition-all duration-200"
+    <button 
+      onClick={onGoogleLogin} 
+      className="w-full h-[60px] bg-white text-black 
+        flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
       <img 
         src="/images/google-logo.png" 
-        alt="구글 로고" className="w-8 h-8 absolute left-5" 
+        alt="구글 로고" className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]" 
       />
-      <span className="flex-1 text-center text-black">
-        구글로 로그인
+      <span className="text-black text-[20px] font-bold whitespace-nowrap">
+        구글로 시작하기
       </span>
     </button>
   );

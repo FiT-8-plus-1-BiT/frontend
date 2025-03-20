@@ -1,7 +1,73 @@
-import React from 'react'
+import React,{ useEffect } from 'react'
 import Navbar from "~/components/navbar.jsx"
 
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "~/redux/auth-slice.js";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { loginSuccess } from '~/redux/auth-slice.js';
+
 const mypage = () => {
+  // Redux 상태에서 사용자 정보 가져오기
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // 사용자 프로필 정보를 가져오는 함수
+  // const fetchUserProfile = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:8080/api/v1/users/profile", {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("access-token")}`, // 액세스 토큰을 헤더에 포함
+  //       },
+  //     });
+  //     dispatch(loginSuccess({
+  //       user: response.data, // 사용자 프로필 정보 저장
+  //     }));
+  //   } catch (error) {
+  //     console.error("Failed to fetch user profile:", error);
+  //   }
+  // };
+
+  const fetchUserData = async (accessToken) => {
+    try {
+      // 사용자 정보 가져오기
+      const userResponse = await axios.get(
+        "http://localhost:8080/api/v1/users/account", // 계정 정보 조회 API
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 헤더에 포함
+          },
+        }
+      );
+      // redux 상태 업데이트
+      dispatch(loginSuccess({
+        user: userResponse.data, // 사용자 정보 저장
+        token: accessToken, // 액세스 토큰 저장
+      }));
+    } catch (error) {
+      console.log("Failed to fetch user data:", error);
+    }
+  }
+
+  // 마이페이지 로드 시 사용자 정보 불러오기
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access-token"); // 로컬 스토리지에서 토큰 가져오기
+    if (accessToken) {
+      fetchUserData(accessToken); // 토큰이 있으면 사용자 데이터 가져오기
+      console.log(accessToken);
+    } else {
+      navigate("/login"); // 토큰 없으면 로그인 페이지로 리다이렉트
+    }
+  }, [dispatch, navigate]);
+
+  // 로그아웃 처리
+  const handleLogout = () => {
+    dispatch(logout()); // Redux 상태 초기화
+    localStorage.removeItem("access-token"); // 로컬 스토리지에서 토큰 삭제
+    navigate("/"); // 홈으로 이동 (필요에 따라 변경 가능)
+  };
+
   return (
     <>
       <Navbar className="mb-[100px]" />
@@ -19,7 +85,7 @@ const mypage = () => {
             {/* 프로필 이미지 */}
             <div className="w-[88px] h-[88px] rounded-full overflow-hidden">
               <img 
-                src="/images/Ellipse 7.png" 
+                src={user?.profileImage || "./public/images/Ellipse 7.png"}
                 alt="profile" 
                 className="object-cover w-full h-full rounded-full" 
               />
@@ -28,13 +94,23 @@ const mypage = () => {
             {/* 닉네임과 이메일 */}
             <div className="flex flex-col">
               <div className="text-black text-2xl font-bold leading-[150%] tracking-[-0.14px]">
-                닉네임
+                {user?.name || "닉네임"}
               </div>
               <div className="text-[#606166] text-base font-medium leading-[150%]">
-                ddddd@naver.com
+                {user?.email || "email@example.com"}
               </div>
             </div>
           </div>
+
+          {/* 로그아웃 버튼 */}
+          {user && (
+            <button 
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            >
+              로그아웃
+            </button>
+          )}
 
           {/* 화살표 아이콘 */}
           <div className="ml-auto flex justify-end w-full">
