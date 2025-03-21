@@ -126,7 +126,7 @@ export default function SessionList() {
 
       {/* 필터링된 세션 리스트 */}
       <div
-        className="grid grid-cols-2 gap-x-[8px] gap-y-[40px]"
+        className="grid grid-cols-3 gap-x-[8px] gap-y-[40px]"
         style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}
       >
         {filteredSessions.map((session) => (
