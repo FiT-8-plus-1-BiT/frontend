@@ -51,9 +51,7 @@ const GoogleLoginComponent = () => {
 
             // 사용자 정보와 토큰을 Redux 상태에 저장
             dispatch(loginSuccess({ user: userData, token: accessToken }));
-            // 인증 상태를 true로 설정
-            // dispatch(setIsAuthenticated(true));
-            // 마이페이지로 이동
+
             navigate("/mypage");
           }
         } else {
