@@ -2,12 +2,10 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import { useEffect } from "react";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const GoogleLoginComponent = () => {
+const GoogleMobileLoginComponent = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
-  // const navigate = useNavigate(); // React Router 훅 (리디렉션 용)
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -72,25 +70,27 @@ const GoogleLoginComponent = () => {
   }, [dispatch]);
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
-  const onGoogleLogin = () => {
+  const onGoogleMobileLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   return (
     <button 
-      onClick={onGoogleLogin} 
-      className="w-full h-[60px] bg-white text-black 
-        flex items-center justify-center gap-4 p-2 border border-gray-300"
+      onClick={onGoogleMobileLogin} 
+      className="flex items-center justify-center 
+        w-full h-[48px] bg-[#FFFFFF] border border-gray-300 text-black"
     >
       <img 
-        src="/images/google-logo.png" 
-        alt="구글 로고" className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]" 
+          src="./images/구글 로고.png" 
+          alt="Google" 
+          className="w-[20px] h-[20px] mr-[20px]" 
       />
-      <span className="text-black text-[20px] font-bold whitespace-nowrap">
-        구글로 시작하기
+      <span 
+          className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
+          구글로 시작하기
       </span>
     </button>
   );
 };
 
-export default GoogleLoginComponent;
+export default GoogleMobileLoginComponent;

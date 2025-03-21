@@ -18,6 +18,7 @@ const authSlice = createSlice({
     loginSuccess(state, action) {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      // 인증 상태 업데이트
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;

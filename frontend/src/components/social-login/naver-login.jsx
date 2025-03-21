@@ -55,12 +55,19 @@ const NaverLogin = () => {
   };
   
   return (
-    <button onClick={onNaverLogin} className="btn btn-naver">
+    <button 
+      onClick={onNaverLogin} 
+      className="w-full h-[60px] bg-[#03C75A] text-white 
+        flex items-center justify-center gap-4 p-2"
+    >
       <img
-        src="/images/naver-logo.png"
+        src="/images/네이버 로고.png"
         alt="네이버 로고"
+        className="w-[24px] h-[24px] sm:w-[25px] sm:h-[25px]"
       />
-      <span>네이버로 로그인</span>
+      <span className="text-white text-[20px] font-bold whitespace-nowrap">
+        네이버로 시작하기
+      </span>
     </button>
   );
 };
