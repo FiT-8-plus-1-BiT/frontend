@@ -6,6 +6,7 @@ import Streaming from "~/pages/streaming";
 import Main from "~/main-page.jsx";
 import SessionList from "~/pages/session-list";
 import MyPage from "~/pages/mypage";
+import MobileMainPage from "~/pages/main-mobile-page";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/session" element={<SessionList />} />
           </Route>
           <Route path="/main" element={<Main />} />
+          <Route path="/main2" element={<MobileMainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Routes>
