@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { SessionItem } from '~/components/session-list/session-item';
 import SessionFilter from '~/components/session-list/session-filter';
 import { getAllSessions } from '~/api/session/get-all-session'; // 👈 아까 만든 fetch 함수 불러오기
+import { getLiveSessions } from '~/api/session/get-live-session';
 
 export default function SessionList() {
   const [sessions, setSessions] = useState([]);
+  const [liveSessions, setLiveSessions] = useState([]);
   const [filters, setFilters] = useState({
     category: '',
     topic: '',
@@ -17,7 +19,9 @@ export default function SessionList() {
   useEffect(() => {
     const fetchData = async () => {
       const content = await getAllSessions(); // ← response.content 배열만 리턴하도록 구성했었죠?
-      console.log(content);
+      const sessions = await getLiveSessions();
+      setLiveSessions(sessions);
+      console.log(liveSessions);
       const mapped = content.map((s) => ({
         id: s.id,
         title: s.title,
@@ -31,7 +35,6 @@ export default function SessionList() {
         thumbnail: s.speaker?.image || '',
         description: s.summary || '',
       }));
-
       setSessions(mapped);
     };
 
@@ -57,7 +60,23 @@ export default function SessionList() {
   });
 
   return (
-    <div className="flex flex-col min-h-screen py-8 mx-[160px]">
+    <div className="flex flex-col min-h-screen pt-24 py-8 mx-[160px]">
+      <div>현재 라이브중인 세션</div>
+      <div
+        className="grid grid-cols-3 gap-x-[8px] gap-y-[40px]"
+        style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}
+      >
+        {liveSessions.map((session) => (
+          <SessionItem
+            key={session.id}
+            id={session.id}
+            title={session.title}
+            summary={session.summary}
+            speaker={session.speaker}
+            tags={Object.values(session.tags).filter(Boolean)} // tags를 배열로 변환
+          />
+        ))}
+      </div>
       <div className="flex">
         <SessionFilter onFilterChange={handleFilterChange} />
       </div>
