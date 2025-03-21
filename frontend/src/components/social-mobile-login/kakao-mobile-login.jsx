@@ -2,11 +2,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 
-const KakaoLogin = () => {
+const KakaoMobileLogin = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
-  // const navigate = useNavigate(); // React Router 훅
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -49,27 +47,25 @@ const KakaoLogin = () => {
     }
   }, [dispatch]);
 
-  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
-  const onKakaoLogin = () => {
+  const onKakaoMobileLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
   };
 
   return (
     <button 
-      onClick={onKakaoLogin} 
-      className="w-full h-[60px] bg-[#FEE500] text-black 
-        flex items-center justify-center gap-4 p-2"
-    >
-      <img
-        src="/images/카카오 로고.png"
-        alt="카카오 로고"
-        className="w-[24px] h-[24px] sm:w-[30px] sm:h-[30px]"
+      onClick={onKakaoMobileLogin} 
+      className="flex items-center justify-center w-full h-[48px] bg-[#FEE500] text-black">
+      <img 
+          src="./images/카카오 로고.png" 
+          alt="Kakao" 
+          className="w-[16px] h-[16px] mr-[20px]" 
       />
-      <span className="text-black text-[20px] font-bold whitespace-nowrap">
-        카카오로 시작하기
+      <span 
+          className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
+          카카오로 시작하기
       </span>
-    </button>
+  </button>
   );
 };
 
-export default KakaoLogin;
+export default KakaoMobileLogin;

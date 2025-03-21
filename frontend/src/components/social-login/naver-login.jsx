@@ -1,34 +1,73 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { loginSuccess } from "~/redux/auth-slice";
+import "~/index.css";
+// import { useNavigate } from "react-router-dom";
 
 const NaverLogin = () => {
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk.v2.js";
-    script.async = true;
-    script.onload = () => {
-      new window.naver.LoginWithNaverId({
-        clientId: import.meta.env.VITE_NAVER_CLIENT_ID,
-        callbackUrl: import.meta.env.VITE_NAVER_CALLBACK_URL,
-        isPopup: false,
-      }).init();
-    };
-    document.head.appendChild(script);
-  }, []);
+    const exchangeToken = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // 쿠키 포함
+          }
+        );
 
-  const handleNaverLogin = () => {
-    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${import.meta.env.VITE_NAVER_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_NAVER_CALLBACK_URL}`;
+        if (response.ok) {
+          const accessToken = response.headers.get("Authorization");
+          if (accessToken) {
+            localStorage.setItem("access-token", accessToken);
+            dispatch(loginSuccess({ accessToken }));
+            // navigate("/main"); // 메인 페이지로 이동
+          }
+        } else {
+          console.error("Token exchange failed");
+        }
+      } catch (error) {
+        console.error("Error during token exchange:", error);
+      }
+    };
+
+    // 에러 발생 시 회원가입 페이지 유지
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+
+    if (error) {
+      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
+      // navigate("/signup");
+    } else {
+      exchangeToken(); // 로그인 성공 시 토큰 교환
+    }
+  }, [dispatch]);
+
+  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
+  const onNaverLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/naver";
   };
   
   return (
-    <button onClick={handleNaverLogin} className="btn btn-naver">
+    <button 
+      onClick={onNaverLogin} 
+      className="w-full h-[60px] bg-[#03C75A] text-white 
+        flex items-center justify-center gap-4 p-2"
+    >
       <img
-        src="/images/naver-logo.png"
+        src="/images/네이버 로고.png"
         alt="네이버 로고"
+        className="w-[24px] h-[24px] sm:w-[25px] sm:h-[25px]"
       />
-      <span>네이버로 로그인</span>
+      <span className="text-white text-[20px] font-bold whitespace-nowrap">
+        네이버로 시작하기
+      </span>
     </button>
   );
 };

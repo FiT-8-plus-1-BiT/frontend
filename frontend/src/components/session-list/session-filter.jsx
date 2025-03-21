@@ -55,11 +55,11 @@ function SessionFilter({ onFilterChange }) {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start flex-wrap gap-4 p-4 bg-white shadow-md rounded-lg w-fit">
+    <div className="flex flex-col items-start justify-start flex-wrap gap-4 p-4 bg-white rounded-lg w-fit">
       <div className="flex gap-4 ">
         {/* 중점분야 필터 */}
         <select
-          className="border border-gray-300 rounded-md px-4 py-2"
+          className="border border-gray-200 rounded-md px-4 py-2"
           value={selectedFilters.category}
           onChange={(e) => handleFilterChange('category', e.target.value)}
         >
@@ -73,7 +73,7 @@ function SessionFilter({ onFilterChange }) {
 
         {/* 주제 필터 */}
         <select
-          className="border border-gray-300 rounded-md px-4 py-2"
+          className="border border-gray-200 rounded-md px-4 py-2"
           value={selectedFilters.topic}
           onChange={(e) => handleFilterChange('topic', e.target.value)}
         >
@@ -87,7 +87,7 @@ function SessionFilter({ onFilterChange }) {
 
         {/* 콘텐츠 유형 필터 */}
         <select
-          className="border border-gray-300 rounded-md px-4 py-2"
+          className="border border-gray-200 rounded-md px-4 py-2"
           value={selectedFilters.contentType}
           onChange={(e) => handleFilterChange('contentType', e.target.value)}
         >
@@ -101,7 +101,7 @@ function SessionFilter({ onFilterChange }) {
 
         {/* 등급 필터 */}
         <select
-          className="border border-gray-300 rounded-md px-4 py-2"
+          className="border border-gray-200 rounded-md px-4 py-2"
           value={selectedFilters.level}
           onChange={(e) => handleFilterChange('level', e.target.value)}
         >
