@@ -8,7 +8,7 @@ import { Client } from "@stomp/stompjs";
  */
 export function connectWebSocket(sessionId, onMessageReceived) {
   const stompClient = new Client({
-    brokerURL: "ws://localhost:8080/ws", // WebSocket 연결 URL
+    brokerURL: "ws://fit-conf.shop/ws", // WebSocket 연결 URL
     reconnectDelay: 5000, // 자동 재연결 간격 (5초)
     onConnect: () => {
       console.log(`✅ STOMP 연결 성공 [sessionId: ${sessionId}]`);

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const tagClasses =
   "flex justify-center items-center self-stretch rounded-lg border bg-[#efeffd] border-[#efeffd] py-1 px-4 h-8 text-[#4f5158] text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
 const buttonClasses =
-  'flex justify-center items-center gap-2 py-2 px-5 rounded border border-[#efeffd] bg-[#fafafe] text-sm font-medium';
+  'flex justify-center items-center gap-2 py-2 px-5  border border-[#efeffd] bg-[#fafafe] text-sm font-medium';
 
 // SVG 아이콘 컴포넌트
 const Icon = ({ color = '#171719' }) => (
@@ -29,7 +29,7 @@ function StreamingInformation({ mode }) {
   const [muted, setMuted] = useState(false); // 음소거 상태 관리
 
   return (
-    <div className={`flex flex-col gap-6 mt-6 `}>
+    <div className={`flex flex-col gap-6 mt-6`}>
 
       {/* 강연 정보 */}
       <div className={`flex flex-col gap-[12px] ${mode ? "order-2" : "order-1"}`}>
@@ -43,31 +43,33 @@ function StreamingInformation({ mode }) {
         </div>
 
         {/* 강연 제목 & 버튼 그룹 */}
-        <div className={mode ? "flex flex-col gap-[40px]" : "flex justify-between"}>
-          <h1 className="text-3xl font-semibold text-[#0e0e0e]">
+        <div className="flex flex-col xl:flex-row xl:justify-between gap-[20px] xl:gap-[40px]">
+          {/* 제목 */}
+          <h1 className="md:text-3xl text-xl font-semibold text-[#0e0e0e]">
             예비 토스 디자이너의 컨포넌트 만든 척 해보기
           </h1>
 
-          {/* 우측 버튼 그룹 */}
-          <div className="flex gap-3">
-            <button className={`${buttonClasses} text-[#383de7]`}>
+          {/* 버튼 그룹 */}
+          <div className="flex md:flex-row gap-2 xl:gap-3">
+            <button className={`${buttonClasses} text-[#383de7] whitespace-nowrap`}>
               <Icon color="#383de7" />
               좋아요 <span className="text-xs text-[#9fa0a3]">n.nn</span>
             </button>
-            <button className={buttonClasses}>
+            <button className={`${buttonClasses} whitespace-nowrap`}>
               <Icon />
               싫어요 <span className="text-xs text-[#9fa0a3]">n.nn</span>
             </button>
-            <button className={buttonClasses}>
+            <button className={`${buttonClasses} whitespace-nowrap`}>
               <Icon />
               공유하기
             </button>
           </div>
         </div>
+
       </div>
 
       {/* 강연 상세 정보 박스 */}
-      <div className={`p-6 rounded-2xl border border-[#e4e4e7] bg-white shadow-sm ${mode ? "order-1" : "order-2"}`}>
+      <div className={`p-6 border mb-10 bg-gray-50  ${mode ? "order-1 " : "order-2"}`}>
         {mode && (
           <div className="flex items-center justify-between gap-2">
             {/* 프로그레시브 바 */}
@@ -111,7 +113,7 @@ function StreamingInformation({ mode }) {
           공개하는 디자인 B안과 함께 톺아보는 토스 디자인 성장기.
         </p>
       </div>
-
+      
     </div>
   );
 }
