@@ -18,10 +18,14 @@ export default function Streaming() {
   };
 
   return (
-    <div className="flex gap-[8px]">
-      <StreamingSessionNavbar />
+    <div className="flex flex-col md:flex-row gap-[8px]">
+      {/* 1. Navbar: 모바일에서는 맨 아래로 */}
+      <div className="order-last md:order-none">
+        <StreamingSessionNavbar />
+      </div>
+
+      {/* 2. 나머지 콘텐츠 */}
       <div className="flex flex-1 flex-col gap-[20px]">
-        {/* 상태 변경 버튼 */}
         <StreamingSwitchButton handleToggle={handleToggle} />
         <div className="flex flex-1 gap-[8px] h-full">
           <StreamingSection mode={isAudioMode} />
@@ -29,5 +33,6 @@ export default function Streaming() {
         </div>
       </div>
     </div>
+
   );
 }

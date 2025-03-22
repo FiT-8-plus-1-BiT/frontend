@@ -24,7 +24,7 @@ const NavbarItem = ({ to, label }) => {
 const Navbar = () => {
   return (
 
-    <nav className=" h-[45px] flex justify-between items-center mx-[160px]">
+    <nav className=" h-[45px] flex justify-between items-center md:mx-[160px] mx-0">
 
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
