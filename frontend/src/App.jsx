@@ -6,7 +6,14 @@ import Streaming from "~/pages/streaming";
 import Main from "~/main-page.jsx";
 import SessionList from "~/pages/session-list";
 import MyPage from "~/pages/mypage";
-import MobileMainPage from "~/pages/main-mobile-page";
+// import MobileMainPage from "~/pages/main-mobile-page";
+import { useMediaQuery } from 'react-responsive';
+import MobileMainPage from '~pages/main-mobile-page.jsx';
+
+const MainPageWrapper = () => {
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  return isMobile ? <MobileMainPage /> : <Main />;
+};
 
 function App() {
   return (
@@ -17,8 +24,8 @@ function App() {
             <Route path="/streaming" element={<Streaming />} />
             <Route path="/session" element={<SessionList />} />
           </Route>
-          <Route path="/main" element={<Main />} />
-          <Route path="/main2" element={<MobileMainPage />} />
+          <Route path="/main" element={<MainPageWrapper />} />
+          {/* <Route path="/main2" element={<MobileMainPage />} /> */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Routes>
