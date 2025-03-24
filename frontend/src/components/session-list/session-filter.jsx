@@ -35,7 +35,6 @@ function SessionFilter({ onFilterChange }) {
     topic: '',
     contentType: '',
     level: '',
-    tags: [],
   });
 
   // 필터 변경 핸들러
@@ -45,14 +44,6 @@ function SessionFilter({ onFilterChange }) {
     onFilterChange(updatedFilters);
   };
 
-  // 태그 체크박스 선택/해제
-  const handleTagToggle = (tag) => {
-    const updatedTags = selectedFilters.tags.includes(tag)
-      ? selectedFilters.tags.filter((t) => t !== tag) // 선택 해제
-      : [...selectedFilters.tags, tag]; // 선택 추가
-
-    handleFilterChange('tags', updatedTags);
-  };
 
   return (
     <div className="flex flex-col items-start justify-start flex-wrap gap-4 p-4 bg-white rounded-lg w-fit">
@@ -114,20 +105,7 @@ function SessionFilter({ onFilterChange }) {
         </select>
       </div>
 
-      {/* 태그 필터 (체크박스) */}
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <label key={tag} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              className="form-checkbox text-blue-500"
-              checked={selectedFilters.tags.includes(tag)}
-              onChange={() => handleTagToggle(tag)}
-            />
-            <span className="text-gray-700 text-sm">{tag}</span>
-          </label>
-        ))}
-      </div>
+
     </div>
   );
 }

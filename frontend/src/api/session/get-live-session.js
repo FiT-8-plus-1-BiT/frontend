@@ -19,6 +19,7 @@ export async function getLiveSessions() {
     }
 
     const data = await response.json();
+    console.log('라이브 세션',data)
     return data.response || []; // `response` 배열만 반환
   } catch (error) {
     console.error('라이브 세션 불러오기 실패:', error);
