@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import likedSessionsReducer from '~/redux/likedSessionsSlice';
+import likedSessionsReducer from '~/redux/liked-sessions-slice';
 import authReducer from '~/redux/auth-slice';
 
 const store = configureStore({

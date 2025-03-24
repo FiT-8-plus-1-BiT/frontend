@@ -35,7 +35,7 @@ const Navbar = () => {
       {/* 네비게이션 메뉴 */}
       <div className="flex flex-nowrap gap-[20px] md:gap-[40px] justify-center">
         <NavbarItem to="/main" label="홈 화면" />
-        <NavbarItem to="/schedule" label="강연목록" />
+        <NavbarItem to="/session" label="강연목록" />
         <NavbarItem to="/mypage" label="마이페이지" />
       </div>
     </nav>
