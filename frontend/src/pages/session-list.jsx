@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SessionItem } from '~/components/session-list/session-item';
 import SessionFilter from '~/components/session-list/session-filter';
 
-/**
- * SessionList: 필터링된 세션 아이템을 그리드 형태로 나열
- */
 export default function SessionList() {
-  // 임의의 예시 데이터
+  const navigate = useNavigate();
+
   const sessionData = [
     {
       id: 1,
@@ -88,7 +87,6 @@ export default function SessionList() {
     },
   ];
 
-  // 필터 상태 저장
   const [filters, setFilters] = useState({
     category: '',
     topic: '',
@@ -97,45 +95,40 @@ export default function SessionList() {
     tags: [],
   });
 
-  // 필터 변경
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
   };
 
-  // 필터링된 세션 데이터
   const filteredSessions = sessionData.filter((session) => {
     return (
       (filters.category ? session.category === filters.category : true) &&
       (filters.topic ? session.topic === filters.topic : true) &&
-      (filters.contentType
-        ? session.contentType === filters.contentType
-        : true) &&
+      (filters.contentType ? session.contentType === filters.contentType : true) &&
       (filters.level ? session.level === filters.level : true) &&
-      (filters.tags.length > 0
-        ? filters.tags.every((tag) => session.tags.includes(tag))
-        : true) // 모든 선택된 태그가 포함된 세션만 표시
+      (filters.tags.length > 0 ? filters.tags.every((tag) => session.tags.includes(tag)) : true)
     );
   });
 
+  const handleSessionClick = (id) => {
+    navigate(`/streaming?session_id=${id}`);
+  };
+
   return (
     <div className="flex flex-col min-h-screen py-8 mx-[160px]">
-      {/* 필터 UI */}
       <div className="flex">
         <SessionFilter onFilterChange={handleFilterChange} />
       </div>
 
-      {/* 필터링된 세션 리스트 */}
-      <div className='flex justify-center'>
-        <div
-          className="grid grid-cols-2 gap-x-[8px] gap-y-[40px]"
-          style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}
-        >
+      <div className="flex justify-center">
+        <div className="grid grid-cols-2 gap-x-[8px] gap-y-[40px]"
+          style={{ width: 'calc(768px * 2 + 8px)', gridAutoRows: '740px' }}>
           {filteredSessions.map((session) => (
-            <SessionItem key={session.id} {...session} />
+            <div key={session.id} onClick={() => handleSessionClick(session.id)} className="cursor-pointer">
+              <SessionItem {...session} />
+            </div>
           ))}
         </div>
       </div>
-
     </div>
   );
 }

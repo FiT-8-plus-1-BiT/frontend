@@ -54,7 +54,7 @@ const StreamingSessionNavbar = () => {
   };
   
   return (
-    <div className="mt-[28px] flex flex-col bg-white border-b border-gray-300 h-[768px] min-w-[152px]  ">
+    <div className="mt-[28px] flex flex-col bg-white border-b border-gray-300 h-[768px] min-w-[132px]  ">
       {/* 세션 선택 Navbar */}
       <div className="flex flex-col  bg-white ">
         {sessionList.map((session) => (

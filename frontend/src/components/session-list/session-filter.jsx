@@ -59,7 +59,7 @@ function SessionFilter({ onFilterChange }) {
       <div className="flex gap-4 ">
         {/* 중점분야 필터 */}
         <select
-          className="border border-gray-200 rounded-md px-4 py-2"
+          className="border border-gray-300 rounded-md px-4 py-2"
           value={selectedFilters.category}
           onChange={(e) => handleFilterChange('category', e.target.value)}
         >

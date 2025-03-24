@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 const NavbarItem = ({ to, label }) => {
   return (
@@ -13,21 +13,18 @@ const NavbarItem = ({ to, label }) => {
     >
       {label}
       {/* 호버 시 밑줄 역할을 하는 요소 */}
-      <span className="absolute bottom-0 left-1/2 w-full h-[2px] bg-black 
+      <span
+        className="absolute bottom-0 left-1/2 w-full h-[2px] bg-black 
         transition-transform scale-x-0 duration-300 origin-left 
-        group-hover:scale-x-100 transform -translate-x-1/2">
-      </span>
+        group-hover:scale-x-100 transform -translate-x-1/2"
+      ></span>
     </NavLink>
   );
 };
 
 const Navbar = () => {
   return (
-
-    <nav className="fixed top-0 inset-x-0 max-w-[1920px] w-full h-[89px] 
-      flex justify-between items-center px-4 lg:px-[160px] py-[12px] 
-      bg-white z-50 mb-[40px] mx-auto">
-
+    <nav className=" h-[45px] flex justify-between items-center md:mx-[160px] mx-0">
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
         <a href="/main" alt="홈으로">
@@ -38,7 +35,7 @@ const Navbar = () => {
       {/* 네비게이션 메뉴 */}
       <div className="flex flex-nowrap gap-[20px] md:gap-[40px] justify-center">
         <NavbarItem to="/main" label="홈 화면" />
-        <NavbarItem to="/schedule" label="강연목록" />
+        <NavbarItem to="/session" label="강연목록" />
         <NavbarItem to="/mypage" label="마이페이지" />
       </div>
     </nav>
