@@ -29,6 +29,7 @@ const Navbar = () => {
       flex justify-between items-center px-4 lg:px-[160px] py-[12px] 
       bg-white z-50 mb-[40px] mx-auto"
     >
+
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
         <a href="/main" alt="홈으로">
@@ -38,8 +39,8 @@ const Navbar = () => {
 
       {/* 네비게이션 메뉴 */}
       <div className="flex flex-nowrap gap-[20px] md:gap-[40px] justify-center">
-        <NavbarItem to="/main" label="홈 화면" />
-        <NavbarItem to="/schedule" label="강연목록" />
+        <NavbarItem to="/" label="홈 화면" />
+        <NavbarItem to="/session" label="강연목록" />
         <NavbarItem to="/mypage" label="마이페이지" />
       </div>
     </nav>

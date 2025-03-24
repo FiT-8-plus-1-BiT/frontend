@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SessionItem } from '~/components/session-list/session-item';
 import SessionFilter from '~/components/session-list/session-filter';
 import { getAllSessions } from '~/api/session/get-all-session'; // 👈 아까 만든 fetch 함수 불러오기
@@ -14,6 +16,7 @@ export default function SessionList() {
     level: '',
     tags: [],
   });
+
 
   // ⭐️ API로 세션 불러오기
   useEffect(() => {
@@ -41,25 +44,32 @@ export default function SessionList() {
     fetchData();
   }, []);
 
+
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
   };
 
+
   const filteredSessions = sessions.filter((session) => {
+
     return (
       (filters.category ? session.category === filters.category : true) &&
       (filters.topic ? session.topic === filters.topic : true) &&
-      (filters.contentType
-        ? session.contentType === filters.contentType
-        : true) &&
+      (filters.contentType ? session.contentType === filters.contentType : true) &&
       (filters.level ? session.level === filters.level : true) &&
       (filters.tags.length > 0
         ? filters.tags.every((tag) => session.tags.includes(tag))
         : true)
+
     );
   });
 
+  const handleSessionClick = (id) => {
+    navigate(`/streaming?session_id=${id}`);
+  };
+
   return (
+
     <div className="flex flex-col min-h-screen pt-24 py-8 mx-[160px]">
       <div>현재 라이브중인 세션</div>
       <div
@@ -77,6 +87,7 @@ export default function SessionList() {
           />
         ))}
       </div>
+
       <div className="flex">
         <SessionFilter onFilterChange={handleFilterChange} />
       </div>
@@ -88,6 +99,7 @@ export default function SessionList() {
         {filteredSessions.map((session) => (
           <SessionItem key={session.id} {...session} />
         ))}
+
       </div>
     </div>
   );
