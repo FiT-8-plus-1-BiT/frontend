@@ -1,11 +1,8 @@
-//~/hooks/session/use-scheduled-session.jsx
+// ~/hooks/session/use-scheduled-session.jsx
 import { useEffect, useState } from 'react';
 
 const BASE_URL = 'https://fit-conf.shop';
 
-/**
- * ✅ 커스텀 훅: 사용자가 미리 담은 세션 스케줄 불러오기
- */
 export function useScheduledSessions(token) {
   const [scheduledSessions, setScheduledSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +21,7 @@ export function useScheduledSessions(token) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -44,5 +41,6 @@ export function useScheduledSessions(token) {
     fetchSchedule();
   }, [token]);
 
-  return { scheduledSessions, loading, error };
+  // ✅ setScheduledSessions도 반환해주기
+  return { scheduledSessions, setScheduledSessions, loading, error };
 }
