@@ -8,7 +8,7 @@ import SessionList from "~/pages/session-list";
 import MyPage from "~/pages/mypage";
 // import MobileMainPage from "~/pages/main-mobile-page";
 import { useMediaQuery } from 'react-responsive';
-import MobileMainPage from '~pages/main-mobile-page.jsx';
+import MobileMainPage from '~/pages/main-mobile-page';
 
 const MainPageWrapper = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
