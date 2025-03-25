@@ -2,11 +2,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 
 const KakaoLogin = () => {
   const dispatch = useDispatch(); // Redux 디스패치 훅
-  // const navigate = useNavigate(); // React Router 훅
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -49,7 +47,6 @@ const KakaoLogin = () => {
     }
   }, [dispatch]);
 
-  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
   const onKakaoLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
   };

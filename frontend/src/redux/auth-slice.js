@@ -58,6 +58,10 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
     },
+    // 인증 상태 설정 액션 추가
+    setIsAuthenticated(state, action) {
+      state.isAuthenticated = action.payload;
+    },
   },
 });
 
@@ -70,6 +74,7 @@ export const {
   setLoading,
   setError,
   logout,
+  setIsAuthenticated,
 } = authSlice.actions;
 
 // 리듀서 내보내기
