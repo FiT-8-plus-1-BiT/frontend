@@ -188,7 +188,7 @@ const Mypage = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-[1520px] min-h-[1836px] bg-[#FAFAFA] mx-auto">
+        <div className="w-full max-w-[1520px] min-h-[1836px] mx-auto  overflow-x-auto">
           {/* 나의 스케줄 제목 */}
           <h2 className="text-black text-[40px] font-bold leading-[150%] 
             tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]">
@@ -199,7 +199,7 @@ const Mypage = () => {
           <div className="space-y-[20px]">
             {/* 네모 박스 컨테이너 */}
             <div className="flex justify-start items-center gap-[20px] 
-              px-[40px] py-[20px] pl-[160px] w-full">
+              px-[40px] py-[20px] pl-[calc(40px+7.5vw)] sm:pl-[calc(40px+10vw)] md:pl-[160px] w-full">
               {[101, 102, 103, 104, 105].map((item, index) => (
                 <div key={index} className="flex-shrink-0 w-[240px] h-[52px] flex 
                   items-center justify-center text-black text-[24px] 
@@ -211,14 +211,14 @@ const Mypage = () => {
             {[...Array(5)].map((_, rowIndex) => (
               <div key={rowIndex} className="flex items-start space-x-[20px] pl-[40px]">
                 {/* 시간 박스 */}
-                <div className="w-[100px] h-[288px] bg-white flex flex-col 
-                  justify-center items-center text-black text-[22px] font-medium">
+                <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col 
+                  justify-center items-center text-black text-[22px] font-medium border border-[black]">
                   <div>09:50</div>
                   <div>~</div>
                   <div>10:00</div>
                 </div>
                 {[...Array(5)].map((_, colIndex) => (
-                  <div key={colIndex} className="flex flex-col w-[240px] h-[288px] border border-[#CCCDD2]">
+                  <div key={colIndex} className="flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2]">
                     {/* 상단 구분선 */}
                     <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
 
