@@ -197,17 +197,6 @@ const Mypage = () => {
 
           {/* 스케줄 표 */}
           <div className="space-y-[20px]">
-            {/* 네모 박스 컨테이너 */}
-            <div className="flex justify-start items-center gap-[20px] 
-              px-[40px] py-[20px] pl-[calc(40px+7.5vw)] sm:pl-[calc(40px+10vw)] md:pl-[160px] w-full">
-              {[101, 102, 103, 104, 105].map((item, index) => (
-                <div key={index} className="flex-shrink-0 w-[240px] h-[52px] flex 
-                  items-center justify-center text-black text-[24px] 
-                  font-medium bg-[white] border border-black">
-                  {item}
-                </div>
-              ))}
-            </div>
             {[...Array(5)].map((_, rowIndex) => (
               <div key={rowIndex} className="flex items-start space-x-[20px] pl-[40px]">
                 {/* 시간 박스 */}
