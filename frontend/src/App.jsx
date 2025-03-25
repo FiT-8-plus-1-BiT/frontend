@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from '~/pages/login-page.jsx';
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import SignUpPage from "~/pages/signup-page.jsx";
 import Layout from "~/components/layout";
 import Streaming from "~/pages/streaming";
 import Main from "~/main-page.jsx";

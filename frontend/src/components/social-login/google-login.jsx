@@ -33,9 +33,6 @@ const GoogleLoginComponent = () => {
             }
             localStorage.setItem("access-token", accessToken);
 
-            // 우선 토큰만 저장 (필요에 따라 상태 업데이트)
-            // dispatch(loginSuccess({ token: accessToken }));
-
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
               "https://fit-conf.shop/api/v1/users/account",
@@ -78,16 +75,18 @@ const GoogleLoginComponent = () => {
   };
 
   return (
-    <button
-      onClick={onGoogleLogin}
-      className="btn btn-google bg-blue-400 text-black rounded-full hover:bg-blue-500 transition-colors duration-200 hover:scale-105 transition-all duration-200"
+    <button 
+      onClick={onGoogleLogin} 
+      className="w-full h-[60px] bg-white text-black 
+        flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
-      <img
-        src="/images/google-logo.png"
-        alt="구글 로고"
-        className="w-8 h-8 absolute left-5"
+      <img 
+        src="/images/google-logo.png" 
+        alt="구글 로고" className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]" 
       />
-      <span className="flex-1 text-center text-black">구글로 로그인</span>
+      <span className="text-black text-[20px] font-bold whitespace-nowrap">
+        구글로 시작하기
+      </span>
     </button>
   );
 };

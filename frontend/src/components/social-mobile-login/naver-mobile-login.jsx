@@ -2,11 +2,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 
-const NaverLogin = () => {
+const NaverMobileLogin = () => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -50,26 +48,27 @@ const NaverLogin = () => {
   }, [dispatch]);
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
-  const onNaverLogin = () => {
+  const onNaverMobileLogin = () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/naver";
   };
   
   return (
     <button 
-      onClick={onNaverLogin} 
-      className="w-full h-[60px] bg-[#03C75A] text-white 
-        flex items-center justify-center gap-4 p-2"
+      onClick={onNaverMobileLogin} 
+      className="flex items-center justify-center w-full 
+        h-[48px] bg-[#03C75A] text-white"
     >
-      <img
-        src="/images/네이버 로고.png"
-        alt="네이버 로고"
-        className="w-[24px] h-[24px] sm:w-[25px] sm:h-[25px]"
+      <img 
+          src="./images/네이버 로고.png" 
+          alt="Naver" 
+          className="w-[16px] h-[16px] mr-[20px]" 
       />
-      <span className="text-white text-[20px] font-bold whitespace-nowrap">
-        네이버로 시작하기
+      <span 
+          className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
+          네이버로 시작하기
       </span>
     </button>
   );
 };
 
-export default NaverLogin;
+export default NaverMobileLogin;

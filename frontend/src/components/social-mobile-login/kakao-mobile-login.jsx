@@ -2,11 +2,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 
-const NaverLogin = () => {
-  const dispatch = useDispatch();
-  // const navigate = useNavigate();
+const KakaoMobileLogin = () => {
+  const dispatch = useDispatch(); // Redux 디스패치 훅
 
   useEffect(() => {
     const exchangeToken = async () => {
@@ -45,31 +43,29 @@ const NaverLogin = () => {
       alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
       // navigate("/signup");
     } else {
-      exchangeToken(); // 로그인 성공 시 토큰 교환
+      exchangeToken(); // 회원가입 성공 시 토큰 교환
     }
   }, [dispatch]);
 
-  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
-  const onNaverLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/naver";
+  const onKakaoMobileLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
   };
-  
+
   return (
     <button 
-      onClick={onNaverLogin} 
-      className="w-full h-[60px] bg-[#03C75A] text-white 
-        flex items-center justify-center gap-4 p-2"
-    >
-      <img
-        src="/images/네이버 로고.png"
-        alt="네이버 로고"
-        className="w-[24px] h-[24px] sm:w-[25px] sm:h-[25px]"
+      onClick={onKakaoMobileLogin} 
+      className="flex items-center justify-center w-full h-[48px] bg-[#FEE500] text-black">
+      <img 
+          src="./images/카카오 로고.png" 
+          alt="Kakao" 
+          className="w-[16px] h-[16px] mr-[20px]" 
       />
-      <span className="text-white text-[20px] font-bold whitespace-nowrap">
-        네이버로 시작하기
+      <span 
+          className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
+          카카오로 시작하기
       </span>
-    </button>
+  </button>
   );
 };
 
-export default NaverLogin;
+export default KakaoMobileLogin;

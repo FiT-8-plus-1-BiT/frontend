@@ -52,12 +52,19 @@ const KakaoLogin = () => {
   };
 
   return (
-    <button onClick={onKakaoLogin} className="btn btn-kakao">
+    <button 
+      onClick={onKakaoLogin} 
+      className="w-full h-[60px] bg-[#FEE500] text-black 
+        flex items-center justify-center gap-4 p-2"
+    >
       <img
-        src="/images/kakao-logo.png"
+        src="/images/카카오 로고.png"
         alt="카카오 로고"
+        className="w-[24px] h-[24px] sm:w-[30px] sm:h-[30px]"
       />
-      <span>카카오로 로그인</span>
+      <span className="text-black text-[20px] font-bold whitespace-nowrap">
+        카카오로 시작하기
+      </span>
     </button>
   );
 };

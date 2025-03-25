@@ -58,7 +58,7 @@ const Mypage = () => {
     }
   }, [user?.email, fetchUserProfile]);
 
-  // 로그아웃 기능
+  // 로그아웃 처리
   const handleLogout = () => {
     localStorage.removeItem("access-token");
     dispatch(logout());
@@ -82,7 +82,7 @@ const Mypage = () => {
             {/* 프로필 이미지 */}
             <div className="w-[88px] h-[88px] rounded-full overflow-hidden">
               <img 
-                src={user?.profileImage || "/images/default-profile.png"}
+                src={user?.profileImage || "./public/images/Ellipse 7.png"}
                 alt="profile" 
                 className="object-cover w-full h-full rounded-full" 
               />
