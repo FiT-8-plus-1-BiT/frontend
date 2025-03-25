@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import Navbar from "~/components/navbar.jsx"
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
@@ -10,6 +10,63 @@ const Mypage = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // 사용자의 스케줄 데이터 상태
+  const [mySchedule, setMySchedule] = useState([]);
+  // 모든 세션 데이터 상태
+  const [allSessions, setAllSessions] = useState([]);
+
+  // 컴포넌트가 마운트될 때 실행되는 함수
+  useEffect(() => {
+    // 사용자의 스케줄 데이터를 가져옵니다
+    fetchMySchedule();
+    // 모든 세션 데이터를 가져옵니다
+    fetchAllSessions();
+  }, []);
+
+  const handleErrorResponse = (errorData) => {
+    if (errorData?.statusName === 'UNAUTHORIZED') {
+      alert('로그인이 필요합니다');
+      navigate('/login');
+    } else {
+      console.error('API Error:', errorData);
+    }
+  };
+
+  // API 요청 공통 처리 함수
+  const handleApiRequest = async (apiCall, setState) => {
+    try {
+      const response = await apiCall();
+      if (response.data.success) {
+        setState(response.data.response || []);
+      } else {
+        handleErrorResponse(response.data);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      handleErrorResponse(error.response?.data);
+    }
+  };
+
+  // 내 스케줄 조회
+  const fetchMySchedule = () => 
+    handleApiRequest(
+      () => axios.get('/api/v1/users/sessions'),
+      (data) => setMySchedule(data || [])
+    );
+
+  // 전체 세션 조회
+  const fetchAllSessions = () => 
+    handleApiRequest(
+      () => axios.get('/api/v1/session/all'),
+      (data) => setAllSessions(data?.content || [])
+    );
+
+  // 세션 투명도 계산
+  const getSessionOpacity = (session) => 
+    mySchedule.some(mySession => mySession.sessionId === session.id) 
+      ? 'opacity-100' 
+      : 'opacity-50';
 
   // 사용자 정보를 가져오는 함수
   const fetchUserProfile = useCallback(async () => {
@@ -188,50 +245,58 @@ const Mypage = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-[1520px] min-h-[1836px] mx-auto  overflow-x-auto">
-          {/* 나의 스케줄 제목 */}
-          <h2 className="text-black text-[40px] font-bold leading-[150%] 
-            tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]">
+        <div className="w-full max-w-[1520px] min-h-[1836px] mx-auto overflow-x-auto">
+          <h2 className="text-black text-[40px] font-bold leading-[150%] tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]">
             나의 스케줄
           </h2>
 
-          {/* 스케줄 표 */}
           <div className="space-y-[20px]">
-            {[...Array(5)].map((_, rowIndex) => (
-              <div key={rowIndex} className="flex items-start space-x-[20px] pl-[40px]">
-                {/* 시간 박스 */}
-                <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col 
-                  justify-center items-center text-black text-[22px] font-medium border border-[black]">
-                  <div>09:50</div>
-                  <div>~</div>
-                  <div>10:00</div>
-                </div>
-                {[...Array(5)].map((_, colIndex) => (
-                  <div key={colIndex} className="flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2]">
-                    {/* 상단 구분선 */}
-                    <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
-
-                    {/* 세션 정보 */}
-                    <div className="w-[216px] min-h-[60px] px-[12px] pb-[12px] 
-                      text-black text-[18px] font-medium pt-[20px]">
-                      세션의 이름은 최대 2줄까지 길어집니다
-                    </div>
-
-                    {/* 스피커 정보 */}
-                    <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
-                      스피커(스피커의 직무 및 직책은 2줄입니다)
-                    </div>
-
-                    {/* 이미지 */}
-                    <img 
-                      src="./public/images/image (1).png" 
-                      alt="세션 이미지" 
-                      className="w-full h-[120px] object-cover" 
-                    />
+            {/* 세션 표시 영역 */}
+            {allSessions && allSessions.map((session) => (
+              <div key={session.id} className="flex items-start space-x-[20px] pl-[40px]">
+                <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
+                  <div>
+                    {new Date(session.startTime).toLocaleTimeString('ko-KR', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </div>
-                ))}
+                  <div>~</div>
+                  <div>
+                    {new Date(session.endTime).toLocaleTimeString('ko-KR', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </div>
+                </div>
+
+                <div className={`flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] ${getSessionOpacity(session)}`}>
+                  <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
+                  <div className="w-[216px] min-h-[60px] px-[12px] pb-[12px] text-black text-[18px] font-medium pt-[20px]">
+                    {session.title}
+                  </div>
+                  <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
+                    {session.speaker?.name || '스피커 정보 없음'}
+                  </div>
+                  <img 
+                    src={session.sessionImage || '/default-image.png'} 
+                    alt="세션 이미지" 
+                    className="w-full h-[120px] object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/default-image.png';
+                    }}
+                  />
+                </div>
               </div>
             ))}
+
+            {/* 데이터 없을 경우 표시 */}
+            {allSessions?.length === 0 && (
+              <div className="text-center py-20 text-gray-500">
+                등록된 세션이 없습니다
+              </div>
+            )}
           </div>
         </div>
 
