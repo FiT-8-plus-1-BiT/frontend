@@ -33,10 +33,6 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    /*
-      GoogleOAuthProvider는 Google 로그인 기능을 전역에서 사용할 수 있도록 설정하는 컨텍스트
-      이걸 감싸야 GoogleLogin과 useOneTap이 정상적으로 작동함
-    */
     <Provider store={store}>
       <GoogleOAuthProvider>
         <Router>

@@ -13,7 +13,7 @@ const GoogleLoginComponent = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/v1/auth/token-exchange",
+          "https://fit-conf.shop/api/v1/auth/token-exchange",
           {
             method: 'POST',
             headers: {
@@ -35,7 +35,7 @@ const GoogleLoginComponent = () => {
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
-              "http://localhost:8080/api/v1/users/account",
+              "https://fit-conf.shop/api/v1/users/account",
               {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -45,6 +45,17 @@ const GoogleLoginComponent = () => {
 
             const userData = userResponse.data.response;
             console.log("User Data:", userData);
+
+            // ✅ 프로필 이미지 업데이트 요청
+            await axios.put(
+              "https://fit-conf.shop/api/v1/users/profile/image",
+              {}, // PUT 요청은 보통 데이터를 보내지만, 여기서는 빈 객체
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            );
 
             // 사용자 정보와 토큰을 Redux 상태에 저장
             dispatch(loginSuccess({ user: userData, token: accessToken }));
@@ -71,7 +82,7 @@ const GoogleLoginComponent = () => {
   }, [dispatch, navigate]);
 
   const onGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = "https://fit-conf.shop/oauth2/authorization/google";
   };
 
   return (
