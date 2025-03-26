@@ -32,7 +32,6 @@ const MainPage = () => {
 
   return (
     <>
-      <Navbar />
 
       <div className="flex justify-center">
         <motion.div

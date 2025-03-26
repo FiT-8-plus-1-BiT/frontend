@@ -1,14 +1,26 @@
+// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    global: {}, // sockjs-client 에러 방지
+  },
   resolve: {
     alias: {
-      // `src`를 절대 경로로 설정
-      "~": path.resolve(__dirname, "src"), // 이제 @를 src로 설정
+      "~": path.resolve(__dirname, "src"),
+    },
+  },
+  server: {
+    proxy: {
+      "/ws": {
+        target: "https://fit-conf.shop",
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
     },
   },
 });

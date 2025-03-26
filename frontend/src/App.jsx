@@ -7,7 +7,7 @@ import Main from "~/main-page.jsx";
 import SessionList from "~/pages/session-list";
 import MyPage from "~/pages/mypage.jsx";
 import { Provider, useSelector } from 'react-redux';
-import store from '~/redux/store.js';
+import { store } from '~/redux/store.js';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
@@ -42,13 +42,13 @@ function App() {
         <Router>
           <ToastContainer position="top-center" />
           <Routes>
+            <Route path="/" element={<Navigate to="/main" replace />} />
             <Route path="/" element={<Layout />}>
               <Route path="/streaming" element={<Streaming />} />
               <Route path="/session" element={<SessionList />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/main" element={<Main />} />
             </Route>
-            <Route path="/main" element={<Main />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
             <Route
               path="/mypage"
               element={

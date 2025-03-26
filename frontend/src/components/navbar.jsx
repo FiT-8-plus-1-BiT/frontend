@@ -38,9 +38,9 @@ const Navbar = () => {
   return (
 
     <nav
-      className="fixed top-0 inset-x-0 max-w-[1920px] w-full h-[89px] 
+      className=" max-w-[1920px] w-full h-[89px] 
       flex justify-between items-center px-4 lg:px-[160px] py-[12px] 
-      bg-white z-50 mb-[40px] mx-auto"
+      bg-white z-50  mx-auto"
     >
 
 

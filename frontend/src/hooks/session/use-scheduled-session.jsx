@@ -30,6 +30,7 @@ export function useScheduledSessions(token) {
         }
 
         const data = await res.json();
+        console.log('스케줄된 세션',data.response)
         setScheduledSessions(data.response || []);
       } catch (err) {
         setError(err.message || '알 수 없는 오류');

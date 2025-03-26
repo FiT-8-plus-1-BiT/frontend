@@ -2,14 +2,15 @@
 
 const BASE_URL = 'https://fit-conf.shop';
 
-export const getAllSessions = async () => {
+export const getAllSessions = async (token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/v1/session/all?page=0&size=9&sort=id,asc`,
+      `${BASE_URL}/api/v1/session/all?page=0&size=100&sort=id,asc`,
       {
         method: 'GET',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       },
     );
