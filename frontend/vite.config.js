@@ -14,6 +14,19 @@ export default defineConfig({
     },
   },
   server: {
-    
-  },
+    proxy: {
+      '/api': {
+        target: 'https://fit-conf.shop',
+        changeOrigin: true,
+        secure: false,
+        ws: true // WebSocket 프록시 활성화
+      },
+      '/ws': {  // WebSocket 경로 추가
+        target: 'https://fit-conf.shop',
+        changeOrigin: true,
+        secure: false,
+        ws: true
+      }
+    }
+  }
 });

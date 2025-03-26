@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LiveSessionItem } from '~/components/session-list/live-session-item';
 import { useLiveSessionsWithSchedule } from '~/hooks/session/use-live-sessions-with-schedule';
-import { createStompClient } from '~/api/chat/stomp-client';
+import { createCongestionStompClient } from '~/api/congestion/stomp-client';
 
 export default function LiveSessionList({ token }) {
   const navigate = useNavigate();
@@ -28,59 +28,47 @@ export default function LiveSessionList({ token }) {
     await toggleLiveSchedule(sessionId);
   };
 
-  // 🧠 혼잡도 구독 로직
+
   useEffect(() => {
     if (!token) return;
 
-    const client = createStompClient(token);
-
-    client.onConnect = () => {
-      console.log('🟢 STOMP 연결됨. 혼잡도 구독 시작');
-
-      // 모든 세션에 대해 구독
-      liveSessions.forEach((session) => {
-        const topic = `/sub/session`; // 혹은 /sub/session/123 등 실제 백엔드에 따라
-        client.subscribe(topic, (message) => {
-          const data = JSON.parse(message.body);
-          console.log('📩 혼잡도 수신:', data);
-
-          setCongestionMap((prev) => ({
-            ...prev,
-            [data.sessionId]: data.congestionLevel, // 예: low / medium / high
-          }));
-        });
-      });
-    };
+    const client = createCongestionStompClient(token, (data) => {
+      setCongestionMap((prev) => ({
+        ...prev,
+        [data.sessionId]: data.congestionLevel,
+      }));
+    });
 
     return () => {
-      console.log('🛑 STOMP 연결 해제');
+      console.log('🛑 혼잡도 STOMP 연결 해제');
       client.deactivate();
     };
-  }, [token, liveSessions]);
+  }, [token]);
+  console.log("혼잡도",congestionMap)
 
-  if (liveLoading) return <div>라이브 세션 로딩 중...</div>;
-  if (liveError) return <div>라이브 세션 에러: {liveError.message || '에러 발생'}</div>;
+if (liveLoading) return <div>라이브 세션 로딩 중...</div>;
+if (liveError) return <div>라이브 세션 에러: {liveError.message || '에러 발생'}</div>;
 
-  return (
-    <>
-      <h2 className="text-2xl font-bold mb-4">현재 라이브 중인 세션</h2>
-      <div className="grid justify-item-center xl:grid-cols-3 grid-cols-2 gap-8 mb-12">
-        {liveSessions.map((session) => (
-          <LiveSessionItem
-            key={session.id}
-            sessionId={session.id}
-            title={session.title}
-            thumbnail={session.thumbnail}
-            speaker={session.speaker}
-            description={session.summary}
-            tags={Object.values(session.tags)}
-            isScheduled={session.isMySession}
-            congestion={congestionMap[session.id]} // 💡 혼잡도 전달
-            onToggleSchedule={handleToggleSchedule}
-            onClick={() => handleSessionClick(session.id)}
-          />
-        ))}
-      </div>
-    </>
-  );
+return (
+  <>
+    <h2 className="text-2xl font-bold mb-4">현재 라이브 중인 세션</h2>
+    <div className="grid justify-item-center xl:grid-cols-3 grid-cols-2 gap-8 mb-12">
+      {liveSessions.map((session) => (
+        <LiveSessionItem
+          key={session.id}
+          sessionId={session.id}
+          title={session.title}
+          thumbnail={session.thumbnail}
+          speaker={session.speaker}
+          description={session.summary}
+          tags={Object.values(session.tags)}
+          isScheduled={session.isMySession}
+          congestion={congestionMap[session.id]} // 💡 혼잡도 전달
+          onToggleSchedule={handleToggleSchedule}
+          onClick={() => handleSessionClick(session.id)}
+        />
+      ))}
+    </div>
+  </>
+);
 }

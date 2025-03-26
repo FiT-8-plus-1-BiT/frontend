@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import AllSessionList from '~/components/session-list/all-session-list';
-import LiveSessionList from '../components/session-list/Live-session-list';
+import LiveSessionList from '~/components/session-list/Live-session-list';
 export default function SessionList() {
   const token = useSelector((state) => state.auth.token);
 

@@ -5,7 +5,7 @@ import { Client } from '@stomp/stompjs';
 export function createStompClient(token, sessionId, onMessageReceived) {
   const stompClient = new Client({
     // 👉 SockJS 사용: webSocketFactory만 사용해야 함
-    webSocketFactory: () => new SockJS("https://fit-conf.shop/ws-chat"),
+    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
 
     // 💡 brokerURL은 절대 같이 쓰면 안 됨! (SockJS 사용 시 제거)
     connectHeaders: {
