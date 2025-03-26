@@ -6,8 +6,72 @@ import { useNavigate } from "react-router-dom";
 import { loginSuccess, logout } from "~/redux/auth-slice.js";
 
 const EditProfile = ({ onProfileUpdate }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('')
+  const [lastName, setLastName] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  useEffect(() => {
+    fetchUserAccount();
+  }, []);
+
+  const fetchUserAccount = async () => {
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await axios.get('https://fit-conf.shop/api/v1/users/account', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.success) {
+        const { email, imageUrl } = response.data.response;
+        setEmail(email);
+        setProfileImage(imageUrl || '/images/default-profile.png');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user account:', error);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedFile) {
+      alert('파일을 선택해주세요.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('requestImage', selectedFile);
+
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await axios.put(
+        'https://fit-conf.shop/api/v1/users/profile/image',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
+        fetchUserAccount();
+      } else {
+        alert('프로필 이미지 업데이트에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('이미지 업로드 실패', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+    }
+  };
 
   const handleCancel = () => {
     onProfileUpdate();
@@ -18,18 +82,18 @@ const EditProfile = ({ onProfileUpdate }) => {
   };
 
   return (
-    <div className="w-[1520px] h-[954px] mx-[200px] my-[36px] bg-white">
+    <div className="w-[1520px] h-[954px] mx-[200px] my-[36px] bg-white mb-[36px]">
       <h1 className="h-[66px] text-black text-[44px] font-bold text-left pb-[80px]">
         <a href='/mypage'></a>프로필 수정
       </h1>
       
       
-      <div className="flex mt-[40px] mb-[40px]">
+      <div className="flex mt-[40px]">
         <div className='flex flex-row ml-[100px]'>
           {/* 프로필 이미지 */}
           <img 
-            src=""
-            alt="" 
+            src={profileImage}
+            alt="Profile" 
             className="w-[100px] h-[100px] mb-[40px] bg-[gray] rounded-full
               mt-[20px] mr-[40px]" 
           />
@@ -41,15 +105,22 @@ const EditProfile = ({ onProfileUpdate }) => {
             </label>
             <input
               type="text"
-              placeholder="elli1231@naver.com"
+              value={email}
+              readOnly
               className="pl-[20px] pr-[20px] pt-[12px] pb-[12px] border bg-[#FAFAFA] text-[#A9ABB4]
                 w-[640px] h-[54px] text-[20px] font-medium leading-[150%] text-left"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
             />
             <p className='text-[#606166] mt-[12px] ml-[20px]'>
-              {} 간편 로그인으로 연결되었습니다.
+              간편 로그인으로 연결되었습니다.
             </p>
+
+            {/* 이미지 업로드 폼 */}
+            <div className="flex flex-row mt-[20px] mb-[40px]">
+              <input type="file" onChange={handleFileChange} accept="image/*" />
+              <button onClick={handleImageUpload} className="bg-blue-500 text-white px-4 py-2 rounded">
+                프로필 이미지 업데이트
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -120,20 +191,20 @@ const EditProfile = ({ onProfileUpdate }) => {
           관심 분야
       </label>
 
-      <div className="pl-[100px] pr-[100px] pt-[24px] pb-[24px] pl-[320px] pr-[320px] bg-[#606166]">
-        <div className="flex justify-center gap-[20px] mb-[20px]">
+      <div className="ml-[100px] mr-[100px] pt-[24px] pb-[24px] bg-[#606166]">
+        <div className="flex text-left gap-[20px] mb-[20px]">
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
         </div>
-        <div className="flex justify-center gap-[20px] mb-[20px]">
+        <div className="flex gap-[20px] mb-[20px]">
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
         </div>
-        <div className="flex justify-center gap-[20px]">
+        <div className="flex gap-[20px]">
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
@@ -142,7 +213,7 @@ const EditProfile = ({ onProfileUpdate }) => {
       </div>
       <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">관심 분야는 최대 3가지 선택해주세요.</p>
 
-      <div className="flex pl-[100px]">
+      <div className="flex pl-[100px] pb-[50px]">
         <button className="w-[640px] h-[52px] text-center text-[#131212] text-[24px] font-medium leading-[150%] tracking-[-0.12px]" onClick={handleCancel}>취소하기</button>
         <div className="w-[40px]" />
         <button className="w-[640px] h-[52px] bg-[#131212] text-white text-center text-[24px] font-medium leading-[150%] tracking-[-0.12px]" onClick={handleSave}>저장하기</button>
@@ -158,7 +229,6 @@ const Mypage = () => {
   const navigate = useNavigate();
   const [mySchedule, setMySchedule] = useState([]);
   const [allSessions, setAllSessions] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
   // 이미지 로딩 상태를 저장하는 state 추가
   const [imageLoadStatus, setImageLoadStatus] = useState({});
 
@@ -197,45 +267,6 @@ const Mypage = () => {
     mySchedule.some(mySession => mySession.sessionId === session.id)
       ? 'opacity-100'
       : 'opacity-50';
-    
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const handleImageUpload = async () => {
-    if (!selectedFile) {
-      alert('파일을 선택해주세요.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('requestImage', selectedFile);
-
-    try {
-      const accessToken = localStorage.getItem('access-token');
-      const response = await axios.put(
-        'https://fit-conf.shop/api/v1/users/profile/image',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      if (response.data.success) {
-        alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
-        // 프로필 정보 새로고침
-        fetchUserProfile();
-      } else {
-        alert('프로필 이미지 업데이트에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('이미지 업로드 실패', error);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
-    }
-  };
     
   const fetchUserProfile = useCallback(async () => {
     try {
@@ -290,16 +321,6 @@ const Mypage = () => {
     fetchUserProfile(); // 프로필 업데이트 후 새로고침
   };
 
-  // 이미지 로드 상태 업데이트 함수
-  const handleImageLoad = (sessionId) => {
-    setImageLoadStatus(prev => ({ ...prev, [sessionId]: 'loaded' }));
-  };
-
-  // 이미지 로드 실패 상태 업데이트 함수
-  const handleImageError = (sessionId) => {
-    setImageLoadStatus(prev => ({ ...prev, [sessionId]: 'error' }));
-  };
-
   return (
     <>
       <Navbar />
@@ -335,12 +356,6 @@ const Mypage = () => {
                   {user?.email || "이메일을 가져오지 못 했습니다"}
                 </div>
               </div>
-            </div>
-
-            {/* 이미지 업로드 폼 */}
-            <div className="mt-4">
-              <input type="file" onChange={handleFileChange} accept="image/*" />
-              <button onClick={handleImageUpload}>프로필 이미지 업데이트</button>
             </div>
 
             {/* 로그아웃 버튼 */}
