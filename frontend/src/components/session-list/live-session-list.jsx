@@ -14,7 +14,7 @@ export default function LiveSessionList({ token }) {
     error: liveError,
     toggleSchedule: toggleLiveSchedule,
   } = useLiveSessionsWithSchedule(token);
-
+console.log()
   const handleSessionClick = (id) => {
     navigate(`/streaming?session_id=${id}`);
   };
