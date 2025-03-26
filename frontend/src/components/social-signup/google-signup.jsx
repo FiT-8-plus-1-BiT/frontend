@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { signupSuccess } from "~/redux/auth-slice";
-import "~/index.css";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { signupSuccess } from '~/redux/auth-slice';
+import '~/index.css';
+import { useNavigate } from 'react-router-dom';
 
 const GoogleSignup = () => {
   const dispatch = useDispatch();
@@ -12,38 +12,40 @@ const GoogleSignup = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          'https://fit-conf.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-            credentials: "include", // 쿠키 포함
-          }
+            credentials: 'include', // 쿠키 포함
+          },
         );
 
         if (response.ok) {
-          const accessToken = response.headers.get("Authorization");
+          console.log("signup 진행")
+          const accessToken = response.headers.get('Authorization');
           if (accessToken) {
-            localStorage.setItem("access-token", accessToken);
-            dispatch(signupSuccess({ accessToken }));
-            navigate("/login"); // 로그인 페이지로 이동
+            localStorage.setItem('access-token', accessToken);
+            dispatch(signupSuccess({token: accessToken,
+            }));
+            navigate('/login'); // 로그인 페이지로 이동
           }
         } else {
-          console.error("Token exchange failed");
+          console.error('Token exchange failed');
         }
       } catch (error) {
-        console.error("Error during token exchange:", error);
+        console.error('Error during token exchange:', error);
       }
     };
 
     // 에러 발생 시 회원가입 페이지 유지
     const params = new URLSearchParams(window.location.search);
-    const error = params.get("error");
+    const error = params.get('error');
 
     if (error) {
-      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
-      navigate("/signup");
+      alert('이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.');
+      navigate('/signup');
     } else {
       exchangeToken(); // 회원가입 성공 시 토큰 교환
     }
@@ -53,19 +55,18 @@ const GoogleSignup = () => {
   const onGoogleSignup = () => {
     // const redirectUri = "http://localhost:5173/login"; // 회원가입 후 리디렉션할 URI
     // window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = 'http://fit-conf.shop/oauth2/authorization/google';
   };
 
   return (
-    <button onClick={onGoogleSignup} className="btn btn-google flex items-center 
+    <button
+      onClick={onGoogleSignup}
+      className="btn btn-google flex items-center 
       justify-start gap-8 bg-blue-700 text-black py-2 px-6 rounded-full
       hover:bg-blue-600 transition-colors duration-200 
-      hover:scale-105 transition-all duration-200 ">
-      <img
-        src="/images/google-logo.png"
-        alt="구글 로고"
-        className="w-8 h-8"
-      />
+      hover:scale-105 transition-all duration-200 "
+    >
+      <img src="/images/google-logo.png" alt="구글 로고" className="w-8 h-8" />
       <span className="ml-20">구글로 회원가입</span>
     </button>
   );

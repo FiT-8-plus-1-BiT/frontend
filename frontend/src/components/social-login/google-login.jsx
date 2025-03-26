@@ -15,9 +15,9 @@ const GoogleLoginComponent = () => {
         const response = await fetch(
           "https://fit-conf.shop/api/v1/auth/token-exchange",
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             credentials: "include",
           }
@@ -40,7 +40,7 @@ const GoogleLoginComponent = () => {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
                 },
-              }
+              },
             );
 
             const userData = userResponse.data.response;
@@ -52,16 +52,16 @@ const GoogleLoginComponent = () => {
             navigate("/mypage");
           }
         } else {
-          console.error("Token exchange failed");
+          console.error('❌ Token exchange failed');
         }
       } catch (error) {
-        console.error("Error during token exchange:", error);
+        console.error('🔥 Token exchange error:', error);
       }
     };
 
     // URL 쿼리 파라미터에서 error 확인
     const params = new URLSearchParams(window.location.search);
-    const error = params.get("error");
+    const error = params.get('error');
 
     if (error) {
       alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
@@ -75,14 +75,15 @@ const GoogleLoginComponent = () => {
   };
 
   return (
-    <button 
-      onClick={onGoogleLogin} 
+    <button
+      onClick={onGoogleLogin}
       className="w-full h-[60px] bg-white text-black 
         flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
-      <img 
-        src="/images/google-logo.png" 
-        alt="구글 로고" className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]" 
+      <img
+        src="/images/google-logo.png"
+        alt="구글 로고"
+        className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]"
       />
       <span className="text-black text-[20px] font-bold whitespace-nowrap">
         구글로 시작하기

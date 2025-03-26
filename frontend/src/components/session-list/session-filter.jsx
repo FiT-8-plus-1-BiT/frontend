@@ -1,62 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllSessions } from '~/api/session/get-all-session';
 
-const categories = [
-  'AI',
-  'Blockchain',
-  'Design',
-  'Cloud',
-  'Cybersecurity',
-  'Data Science',
-];
-const topics = [
-  'Neural Networks',
-  'Decentralized Finance',
-  'User Experience',
-  'Infrastructure',
-  'Network Security',
-  'Data Analysis',
-];
-const contentTypes = ['Lecture', 'Panel Discussion', 'Workshop'];
-const levels = ['Beginner', 'Intermediate', 'Advanced'];
-const tags = [
-  'Machine Learning',
-  'Web3',
-  'Product Design',
-  'AWS',
-  'Hacking',
-  'Big Data',
-  'Analytics',
-  'DevOps',
-];
+function SessionFilter({ onFilterChange, token }) {
+  const [tagOptions, setTagOptions] = useState({
+    fields: [],
+    topics: [],
+    types: [],
+    levels: [],
+  });
 
-function SessionFilter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({
     category: '',
     topic: '',
     contentType: '',
     level: '',
-    tags: [],
   });
 
-  // 필터 변경 핸들러
+  // ✅ 태그 옵션을 세션들에서 추출
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const sessions = await getAllSessions(token);
+        const fieldSet = new Set();
+        const topicSet = new Set();
+        const typeSet = new Set();
+        const levelSet = new Set();
+
+        sessions.forEach((session) => {
+          const { tags } = session;
+          if (!tags) return;
+
+          if (tags.field) fieldSet.add(tags.field);
+          if (tags.topic) topicSet.add(tags.topic);
+          if (tags.type) typeSet.add(tags.type);
+          if (tags.level) levelSet.add(tags.level);
+        });
+
+        setTagOptions({
+          fields: Array.from(fieldSet),
+          topics: Array.from(topicSet),
+          types: Array.from(typeSet),
+          levels: Array.from(levelSet),
+        });
+      } catch (err) {
+        console.error('태그 필터 정보 로딩 실패:', err);
+      }
+    }
+
+    fetchTags();
+  }, [token]);
+
+  // ✅ 필터 선택 시 상태 업데이트 및 상위로 전달
   const handleFilterChange = (field, value) => {
     const updatedFilters = { ...selectedFilters, [field]: value };
     setSelectedFilters(updatedFilters);
     onFilterChange(updatedFilters);
   };
 
-  // 태그 체크박스 선택/해제
-  const handleTagToggle = (tag) => {
-    const updatedTags = selectedFilters.tags.includes(tag)
-      ? selectedFilters.tags.filter((t) => t !== tag) // 선택 해제
-      : [...selectedFilters.tags, tag]; // 선택 추가
-
-    handleFilterChange('tags', updatedTags);
-  };
-
   return (
     <div className="flex flex-col items-start justify-start flex-wrap gap-4 p-4 bg-white rounded-lg w-fit">
-      <div className="flex gap-4 ">
+      <div className="flex gap-4 flex-wrap">
         {/* 중점분야 필터 */}
         <select
           className="border border-gray-300 rounded-md px-4 py-2"
@@ -64,9 +67,9 @@ function SessionFilter({ onFilterChange }) {
           onChange={(e) => handleFilterChange('category', e.target.value)}
         >
           <option value="">중점분야 선택</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
+          {tagOptions.fields.map((field) => (
+            <option key={field} value={field}>
+              {field}
             </option>
           ))}
         </select>
@@ -78,7 +81,7 @@ function SessionFilter({ onFilterChange }) {
           onChange={(e) => handleFilterChange('topic', e.target.value)}
         >
           <option value="">주제 선택</option>
-          {topics.map((topic) => (
+          {tagOptions.topics.map((topic) => (
             <option key={topic} value={topic}>
               {topic}
             </option>
@@ -92,7 +95,7 @@ function SessionFilter({ onFilterChange }) {
           onChange={(e) => handleFilterChange('contentType', e.target.value)}
         >
           <option value="">콘텐츠 유형 선택</option>
-          {contentTypes.map((type) => (
+          {tagOptions.types.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
@@ -106,27 +109,12 @@ function SessionFilter({ onFilterChange }) {
           onChange={(e) => handleFilterChange('level', e.target.value)}
         >
           <option value="">등급 선택</option>
-          {levels.map((level) => (
+          {tagOptions.levels.map((level) => (
             <option key={level} value={level}>
               {level}
             </option>
           ))}
         </select>
-      </div>
-
-      {/* 태그 필터 (체크박스) */}
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <label key={tag} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              className="form-checkbox text-blue-500"
-              checked={selectedFilters.tags.includes(tag)}
-              onChange={() => handleTagToggle(tag)}
-            />
-            <span className="text-gray-700 text-sm">{tag}</span>
-          </label>
-        ))}
       </div>
     </div>
   );

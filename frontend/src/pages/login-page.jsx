@@ -1,5 +1,5 @@
 import SocialLoginButtons from '~/components/social-login/social-login-buttons';
-import Navbar from "~/components/navbar.jsx"
+
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
@@ -12,13 +12,13 @@ function LoginPage() {
 
   return (
     <>
-      <Navbar />
+
 
       {/* 전체 컨테이너 박스를 중앙에 배치 */}
-      <div className="pt-[900px] w-full h-screen flex justify-center items-center 
-        px-4 sm:px-8 md:px-20 pt-[450px] pb-[20px] md:py-[160px] overflow-y-auto">
+      <div className=" w-full h-screen flex justify-center items-center 
+        px-4 sm:px-8 md:px-20 pb-[20px]">
         {/* 내부 컨테이너 */}
-        <div className="flex flex-col md:flex-row justify-center items-center w-full h-full">
+        <div className="flex flex-col md:flex-row justify-center items-center w-full ">
 
           {/* 왼쪽 이미지 영역 */}
           <div className="w-full md:w-auto flex justify-center items-center mt-[60px]">

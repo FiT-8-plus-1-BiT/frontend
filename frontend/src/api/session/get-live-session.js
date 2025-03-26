@@ -1,25 +1,27 @@
-const baseURL = 'https://fit-conf.shop';
+// src/api/session/getLive.js
 
-// 좋아요 추가
-export async function getLiveSessions(sessionId) {
+const BASE_URL = 'https://fit-conf.shop';
 
-
+export const getLiveSessions = async (token) => {
   try {
-    const response = await fetch(`${baseURL}/api/v1/session/all`, {
-      method: 'POST',
+    const response = await fetch(`${BASE_URL}/api/v1/session/live`, {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ sessionId }),
     });
 
-    if (!response.ok) throw new Error('서버 오류');
+    if (!response.ok) {
+      throw new Error(`서버 오류 발생! 상태 코드: ${response.status}`);
+    }
 
     const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('좋아요 실패:', error);
-    alert('좋아요 요청 실패');
-  }
-}
+    console.log('✅ 라이브 세션 조회 결과:', data);
 
+    return data.response || []; // 응답 구조 내 response 배열만 반환
+  } catch (error) {
+    console.error('❌ 라이브 세션 불러오기 실패:', error);
+    return []; // 실패 시에도 빈 배열 반환
+  }
+};

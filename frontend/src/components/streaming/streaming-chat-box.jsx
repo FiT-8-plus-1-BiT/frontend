@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, memo } from "react";
-import { connectWebSocket, sendMessage } from "~/api/chat/stomp-client";
+import { createStompClient, sendMessage } from "~/api/chat/stomp-client";
 import { likeQuestion, unlikeQuestion } from "~/api/chat/chat-like";
 import { Send } from "lucide-react";
 import { MessageSquare } from "lucide-react";
