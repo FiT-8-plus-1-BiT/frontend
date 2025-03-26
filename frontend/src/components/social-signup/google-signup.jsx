@@ -12,7 +12,7 @@ const GoogleSignup = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          'http://fit-conf.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
+          'https://fit-conf.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
           {
             method: 'POST',
             headers: {
@@ -23,10 +23,12 @@ const GoogleSignup = () => {
         );
 
         if (response.ok) {
+          console.log("signup 진행")
           const accessToken = response.headers.get('Authorization');
           if (accessToken) {
             localStorage.setItem('access-token', accessToken);
-            dispatch(signupSuccess({ accessToken }));
+            dispatch(signupSuccess({token: accessToken,
+            }));
             navigate('/login'); // 로그인 페이지로 이동
           }
         } else {

@@ -4,6 +4,16 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://fit-conf.shop',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   plugins: [react()],
   define: {
     global: {}, // sockjs-client 에러 방지

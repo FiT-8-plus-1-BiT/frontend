@@ -52,10 +52,10 @@ const GoogleLoginComponent = () => {
             navigate("/mypage");
           }
         } else {
-          console.error('Token exchange failed');
+          console.error('❌ Token exchange failed');
         }
       } catch (error) {
-        console.error('Error during token exchange:', error);
+        console.error('🔥 Token exchange error:', error);
       }
     };
 
