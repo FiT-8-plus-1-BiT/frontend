@@ -14,13 +14,6 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      "/ws": {
-        target: "https://fit-conf.shop",
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-    },
+    
   },
 });

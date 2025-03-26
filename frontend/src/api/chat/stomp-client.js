@@ -5,14 +5,14 @@ import { Client } from '@stomp/stompjs';
 export function createStompClient(token, sessionId, onMessageReceived) {
   const stompClient = new Client({
     // 👉 SockJS 사용: webSocketFactory만 사용해야 함
-    webSocketFactory: () => new SockJS("https://fit-conf.shop/ws"),
+    webSocketFactory: () => new SockJS("https://fit-conf.shop/ws-chat"),
 
     // 💡 brokerURL은 절대 같이 쓰면 안 됨! (SockJS 사용 시 제거)
     connectHeaders: {
-      Authorization: `Bearer ${token}`, // 인터셉터 통과용
+      Authorization: [`Bearer ${token}`], // 문자열 템플릿 수정
     },
 
-    debug: (str) => console.log(`[📡 DEBUG] ${str}`),
+    debug: (str) => console.log(`📡 DEBUG: ${str}`), // 템플릿 리터럴 수정
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
@@ -21,7 +21,7 @@ export function createStompClient(token, sessionId, onMessageReceived) {
       console.log("✅ STOMP 연결 성공:", frame);
 
       // 채팅 세션 구독
-      stompClient.subscribe(`/sub/chat/${sessionId}`, (message) => {
+      stompClient.subscribe(`/sub/chat/${sessionId}`, (message) => { // 문자열로 수정
         try {
           const payload = JSON.parse(message.body);
           console.log("📥 메시지 수신:", payload);
@@ -64,7 +64,7 @@ export function sendMessage(stompClient, sessionId, userId, content) {
   };
 
   stompClient.publish({
-    destination: `/pub/chat/${sessionId}`,
+    destination: `/pub/chat/${sessionId}`, // 문자열로 수정
     body: JSON.stringify(message),
     headers: { "Content-Type": "application/json" },
   });
