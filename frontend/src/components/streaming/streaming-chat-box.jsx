@@ -1,9 +1,8 @@
+// src/components/StreamingChatBox.jsx
 import React, { useEffect, useState, useRef, useCallback, memo } from "react";
-import { createStompClient, sendMessage } from "~/api/chat/stomp-client";
+import { createStompClient, sendMessage, disconnectStompClient } from "~/api/chat/stomp-client";
 import { likeQuestion, unlikeQuestion } from "~/api/chat/chat-like";
-import { Send } from "lucide-react";
-import { MessageSquare } from "lucide-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Send, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react";
 import { QuestionList } from "~/components/streaming/streaming-chat-liked-question";
 
 // ────────────────────────────────────────────────
@@ -36,10 +35,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span
-              className={`text-[14px] ${msg.type === "question" ? "text-blue-600" : "text-gray-800"
-                }`}
-            >
+            <span className={`text-[14px] ${msg.type === "question" ? "text-blue-600" : "text-gray-800"}`}>
               {msg.content}
             </span>
           </div>
@@ -47,8 +43,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
       </div>
       <button
         onClick={handleLikeClick}
-        className={`ml-2 flex items-center gap-1 ${msg.likedByUser ? "text-red-500" : "text-gray-400"
-          } hover:text-red-600 transition-colors`}
+        className={`ml-2 flex items-center gap-1 ${msg.likedByUser ? "text-red-500" : "text-gray-400"} hover:text-red-600 transition-colors`}
       >
         <svg
           className="w-4 h-4"
@@ -72,31 +67,33 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
 // ────────────────────────────────────────────────
 // StreamingChatBox Component
 // ────────────────────────────────────────────────
-const StreamingChatBox = ({ mode, sessionId, userId }) => {
+const StreamingChatBox = ({ token, sessionId, userId }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [category, setCategory] = useState("general");
+  const [category, setCategory] = useState("GENERAL");
   const [message, setMessage] = useState("");
 
   const chatEndRef = useRef(null);
-  const scrollContainerRef = useRef(null);
 
-  // WebSocket 연결
+  // WebSocket 연결 및 해제
   useEffect(() => {
-    const client = connectWebSocket(
-      sessionId,
-      (newMessage) => setMessages((prev) => [...prev, newMessage]),
-      (error) => console.error("WebSocket Error:", error)
+    const client = createStompClient(token, sessionId, (newMessage) =>
+      setMessages((prev) => [...prev, newMessage])
     );
     setStompClient(client);
     return () => {
-      if (client?.connected) client.deactivate();
+      disconnectStompClient(client);
     };
-  }, [sessionId]);
+  }, [token, sessionId]);
 
-  // 메시지 전송
+  // 메시지가 추가될 때 스크롤 자동 이동
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // 메시지 전송 핸들러
   const handleSendMessage = () => {
     if (!stompClient?.connected) {
       console.error("WebSocket not connected");
@@ -108,7 +105,7 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
     }
   };
 
-  // Enter 키 이벤트 처리
+  // 엔터 키 입력 처리 (Shift + Enter는 줄바꿈)
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -116,11 +113,31 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
     }
   };
 
-  // 채팅 열기/닫기
-  const toggleChat = useCallback(() => {
-    setIsChatOpen((prev) => !prev)
-    setIsMobileChatOpen((prev) => !prev)
+  // 데스크탑과 모바일 채팅창 토글 함수 분리
+  const toggleDesktopChat = useCallback(() => {
+    setIsChatOpen((prev) => !prev);
   }, []);
+
+  const toggleMobileChat = useCallback(() => {
+    setIsMobileChatOpen((prev) => !prev);
+  }, []);
+
+  // 좋아요 토글 처리 (실제 로직은 필요에 따라 구현)
+  const handleLikeToggle = (messageId, likedByUser) => {
+    if (likedByUser) {
+      unlikeQuestion(messageId)
+        .then(() => {
+          // 메시지 상태 업데이트 로직 추가
+        })
+        .catch((err) => console.error("Unlike failed:", err));
+    } else {
+      likeQuestion(messageId)
+        .then(() => {
+          // 메시지 상태 업데이트 로직 추가
+        })
+        .catch((err) => console.error("Like failed:", err));
+    }
+  };
 
   return (
     <>
@@ -131,18 +148,18 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
       >
         <MessageSquare className="w-5 h-5" />
       </button>
-      <div
-        className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${isChatOpen ? "w-[404px]" : "w-[56px]"
-          }`}
 
+      {/* 데스크탑 채팅창 */}
+      <div
+        className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${
+          isChatOpen ? "w-[404px]" : "w-[56px]"
+        }`}
       >
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">
-          {/* Header */}
           <div className="flex items-center justify-between p-3 border-b">
             <div className="flex items-center gap-2">
-              {/* 접기 버튼 */}
               <button
-                onClick={toggleChat}
+                onClick={toggleDesktopChat}
                 className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100"
               >
                 {isChatOpen ? (
@@ -151,26 +168,22 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
                   <ChevronRight className="w-4 h-4" />
                 )}
               </button>
-
-              {/* 채팅 제목은 열려 있을 때만 보이게 */}
               {isChatOpen && <h2 className="text-lg font-bold">채팅</h2>}
             </div>
-
-
           </div>
-
-          {/* 메시지 영역 */}
           {isChatOpen && (
             <>
               <QuestionList sessionId={sessionId} />
               <div className="flex-1 overflow-y-auto bg-gray-90 p-2">
                 {messages.map((msg) => (
-                  <MessageItem key={msg.messageId} msg={msg} onLikeToggle={() => { }} />
+                  <MessageItem
+                    key={msg.messageId}
+                    msg={msg}
+                    onLikeToggle={handleLikeToggle}
+                  />
                 ))}
                 <div ref={chatEndRef} />
               </div>
-
-              {/* 입력창 */}
               <div className="p-2 m-2 gap-1 flex bg-gray-100">
                 <select
                   className="text-sm px-2 py-1 rounded-md bg-white"
@@ -190,7 +203,7 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
                 />
                 <button
                   onClick={handleSendMessage}
-                  className=" text-black rounded-md h-full aspect-square flex items-center justify-center"
+                  className="text-black rounded-md h-full aspect-square flex items-center justify-center"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -200,33 +213,32 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
         </div>
       </div>
 
-
-
-      {/* 768px 미만: Bottom Sheet */}
+      {/* 모바일 채팅 Bottom Sheet */}
       <div
-        className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${isMobileChatOpen ? "translate-y-0" : "translate-y-full"
-          }`}
+        className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${
+          isMobileChatOpen ? "translate-y-0" : "translate-y-full"
+        }`}
       >
-        {/* Header */}
         <div className="flex items-center justify-between p-3 border-b">
           <h2 className="text-lg font-bold">채팅</h2>
-          <button onClick={toggleChat} className="text-gray-500 hover:text-gray-800">
+          <button
+            onClick={toggleMobileChat}
+            className="text-gray-500 hover:text-gray-800"
+          >
             ✕
           </button>
         </div>
-
-        {/* 질문 리스트 */}
         <QuestionList sessionId={sessionId} />
-
-        {/* 메시지 목록 영역 (데스크탑과 동일 스타일 적용) */}
         <div className="flex-1 overflow-y-auto bg-gray-90 p-2 min-h-[50vh]">
           {messages.map((msg) => (
-            <MessageItem key={msg.messageId} msg={msg} onLikeToggle={() => { }} />
+            <MessageItem
+              key={msg.messageId}
+              msg={msg}
+              onLikeToggle={handleLikeToggle}
+            />
           ))}
           <div ref={chatEndRef} />
         </div>
-
-        {/* 입력창 (데스크탑과 동일한 클래스 구성) */}
         <div className="p-2 m-2 gap-1 flex items-center bg-gray-100">
           <select
             className="text-sm px-2 py-1 rounded-md bg-white"
@@ -236,7 +248,6 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
             <option value="GENERAL">일반채팅</option>
             <option value="QUESTION">질문하기</option>
           </select>
-
           <input
             type="text"
             placeholder="메시지를 입력하세요"
@@ -245,7 +256,6 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
           />
-
           <button
             onClick={handleSendMessage}
             className="text-black rounded-md h-full aspect-square flex items-center justify-center"
@@ -254,7 +264,6 @@ const StreamingChatBox = ({ mode, sessionId, userId }) => {
           </button>
         </div>
       </div>
-
     </>
   );
 };
