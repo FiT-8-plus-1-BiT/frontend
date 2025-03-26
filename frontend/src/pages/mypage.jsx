@@ -105,20 +105,12 @@ const Mypage = () => {
   const navigate = useNavigate();
   const [mySchedule, setMySchedule] = useState([]);
   const [allSessions, setAllSessions] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     fetchMySchedule();
     fetchAllSessions();
   }, []);
-
-  const handleErrorResponse = (errorData) => {
-    if (errorData?.statusName === 'UNAUTHORIZED') {
-      alert('로그인이 필요합니다');
-      navigate('/login');
-    } else {
-      console.error('API Error:', errorData);
-    }
-  };
 
   const handleApiRequest = async (apiCall, setState) => {
     try {
@@ -136,13 +128,13 @@ const Mypage = () => {
 
   const fetchMySchedule = () =>
     handleApiRequest(
-      () => axios.get('/api/v1/users/sessions'),
+      () => axios.get('https://fit-conf.shop/api/v1/users/sessions'),
       (data) => setMySchedule(data || [])
     );
 
   const fetchAllSessions = () =>
     handleApiRequest(
-      () => axios.get('/api/v1/session/all'),
+      () => axios.get('https://fit-conf.shop/api/v1/session/all'),
       (data) => setAllSessions(data?.content || [])
     );
 
@@ -150,29 +142,46 @@ const Mypage = () => {
     mySchedule.some(mySession => mySession.sessionId === session.id)
       ? 'opacity-100'
       : 'opacity-50';
+    
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
-  const updateProfileImage = async (accessToken) => {
+  const handleImageUpload = async () => {
+    if (!selectedFile) {
+      alert('파일을 선택해주세요.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('requestImage', selectedFile);
+
     try {
+      const accessToken = localStorage.getItem('access-token');
       const response = await axios.put(
-        "https://fit-conf.shop/api/v1/users/profile/image",
-        {}, // PUT 요청이므로 빈 객체 전달
+        'https://fit-conf.shop/api/v1/users/profile/image',
+        formData,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
-  
+
       if (response.data.success) {
-        console.log("✅ 프로필 이미지가 성공적으로 업데이트되었습니다.");
+        alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
+        // 프로필 정보 새로고침
+        fetchUserProfile();
       } else {
-        console.error("❌ 프로필 이미지 업데이트 실패", response.data);
+        alert('프로필 이미지 업데이트에 실패했습니다.');
       }
     } catch (error) {
-      console.error("❌ 프로필 이미지 업데이트 중 오류 발생:", error);
+      console.error('이미지 업로드 실패', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
     }
   };
-
+    
   const fetchUserProfile = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem("access-token");
@@ -194,13 +203,6 @@ const Mypage = () => {
 
       if (response.data.success) {
         const userData = response.data.response;
-
-        // ✅ 프로필 이미지가 없으면 `PUT` 요청으로 업데이트
-        if (!userData.imageUrl) {
-          console.log("⚠️ 프로필 이미지가 없습니다. 업데이트를 시도합니다.");
-          await updateProfileImage(accessToken);
-        }
-
         dispatch(loginSuccess({ user: userData, token: accessToken }));
         console.log(userData);
       } else {
@@ -239,15 +241,15 @@ const Mypage = () => {
 
   return (
     <>
-      <Navbar className="mb-[100px]" />
+      <Navbar />
 
       {isEditingProfile ? (
         <EditProfile onProfileUpdate={handleProfileUpdate} />
       ) : (
-        <div className="w-full max-w-[1520px] mx-auto px-5 py-16">
+        <div className="w-full max-w-[1520px] mx-auto px-5 pb-16">
           {/* 계정 정보 */}
           <div className="text-black text-4xl font-bold leading-[150%] 
-          tracking-[-0.22px] text-left px-5 py-16">
+          tracking-[-0.22px] text-left px-5 pb-16">
             계정정보
           </div>
 
@@ -257,7 +259,7 @@ const Mypage = () => {
               {/* 프로필 이미지 */}
               <div className="w-[88px] h-[88px] rounded-full overflow-hidden">
                 <img
-                  src={user?.imageUrl ? user.imageUrl : "./public/images/Ellipse 7.png"}
+                  src={user?.imageUrl || "/images/default-profile.png"}
                   alt="profile"
                   className="object-cover w-full h-full rounded-full"
                 />
@@ -272,6 +274,12 @@ const Mypage = () => {
                   {user?.email || "이메일을 가져오지 못 했습니다"}
                 </div>
               </div>
+            </div>
+
+            {/* 이미지 업로드 폼 */}
+            <div className="mt-4">
+              <input type="file" onChange={handleFileChange} accept="image/*" />
+              <button onClick={handleImageUpload}>프로필 이미지 업데이트</button>
             </div>
 
             {/* 로그아웃 버튼 */}
@@ -344,13 +352,14 @@ const Mypage = () => {
 
           {/* 나의 활동 내역 */}
           <div className="text-black text-4xl font-bold leading-[150%] 
-          tracking-[-0.22px] text-left px-5 py-[60px]">
+          tracking-[-0.22px] text-left px-5 pt-[60px]">
             나의 활동 내역
           </div>
-          ... {/* 관심 분야 + 라벨 그룹 */}
           <div className="px-5 py-16 flex flex-col">
             {/* 좋아요 표시한 강연 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 py-[40px] sm:ml-[40px]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center 
+              sm:space-x-5 mb-4 py-[40px] sm:ml-[40px]"
+            >
               <div className="text-[#606166] text-lg w-full sm:w-[240px]">좋아요 표시한 강연</div>
               <div className="flex flex-wrap gap-2 sm:gap-5">
                 <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
@@ -375,7 +384,9 @@ const Mypage = () => {
           </div>
 
           <div className="w-full max-w-[1520px] min-h-[1836px] mx-auto overflow-x-auto">
-            <h2 className="text-black text-[40px] font-bold leading-[150%] tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]">
+            <h2 className="text-black text-[40px] font-bold 
+              leading-[150%] tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]"
+            >
               나의 스케줄
             </h2>
 
