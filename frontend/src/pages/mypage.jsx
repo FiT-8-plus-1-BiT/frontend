@@ -7,7 +7,6 @@ import { loginSuccess, logout } from "~/redux/auth-slice.js";
 
 const EditProfile = ({ onProfileUpdate }) => {
   const [lastName, setLastName] = useState('');
-
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -84,7 +83,7 @@ const EditProfile = ({ onProfileUpdate }) => {
   return (
     <div className="w-[1520px] h-[954px] mx-[200px] my-[36px] bg-white mb-[36px]">
       <h1 className="h-[66px] text-black text-[44px] font-bold text-left pb-[80px]">
-        <a href='/mypage'></a>프로필 수정
+        프로필 수정
       </h1>
       
       
@@ -94,7 +93,7 @@ const EditProfile = ({ onProfileUpdate }) => {
           <img 
             src={profileImage}
             alt="Profile" 
-            className="w-[100px] h-[100px] mb-[40px] bg-[gray] rounded-full
+            className="w-[100px] h-[100px] mb-[40px] rounded-full
               mt-[20px] mr-[40px]" 
           />
           <div className='flex flex-col'>
@@ -187,24 +186,24 @@ const EditProfile = ({ onProfileUpdate }) => {
       <div className="pb-[20px]" />
 
       <label className="pl-[100px] w-[1320px] h-[33px] text-left 
-        text-[22px] text-[#131212] font-medium leading-[150%] pb-[16px]">
+        text-[22px] text-[#131212] font-medium leading-[150%] pb-[16px] mb-[16px]">
           관심 분야
       </label>
 
-      <div className="ml-[100px] mr-[100px] pt-[24px] pb-[24px] bg-[#606166]">
-        <div className="flex text-left gap-[20px] mb-[20px]">
+      <div className="flex flex-wrap align-center h-[184px] ml-[100px] mr-[100px] bg-[#606166] mt-[16px]">
+        <div className="flex text-left gap-[20px] mb-[20px] pl-[20px] pt-[24px]">
+          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
+          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
+          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
         </div>
-        <div className="flex gap-[20px] mb-[20px]">
+        <div className="flex gap-[20px] pl-[20px]">
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-        </div>
-        <div className="flex gap-[20px]">
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
@@ -214,7 +213,9 @@ const EditProfile = ({ onProfileUpdate }) => {
       <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">관심 분야는 최대 3가지 선택해주세요.</p>
 
       <div className="flex pl-[100px] pb-[50px]">
-        <button className="w-[640px] h-[52px] text-center text-[#131212] text-[24px] font-medium leading-[150%] tracking-[-0.12px]" onClick={handleCancel}>취소하기</button>
+        <button className="w-[640px] h-[52px] text-center text-[#131212] text-[24px] font-medium leading-[150%] tracking-[-0.12px] border border-black" onClick={handleCancel}>
+          취소하기
+        </button>
         <div className="w-[40px]" />
         <button className="w-[640px] h-[52px] bg-[#131212] text-white text-center text-[24px] font-medium leading-[150%] tracking-[-0.12px]" onClick={handleSave}>저장하기</button>
       </div>
@@ -251,17 +252,76 @@ const Mypage = () => {
     }
   };
 
-  const fetchMySchedule = () =>
-    handleApiRequest(
-      () => axios.get('https://fit-conf.shop/api/v1/users/sessions'),
-      (data) => setMySchedule(data || [])
-    );
+  const handleErrorResponse = (errorData) => {
+    if (errorData?.message) {
+      alert(`오류 발생: ${errorData.message}`);
+    } else {
+      alert('알 수 없는 오류가 발생했습니다.');
+    }
+  };  
 
-  const fetchAllSessions = () =>
-    handleApiRequest(
-      () => axios.get('https://fit-conf.shop/api/v1/session/all'),
-      (data) => setAllSessions(data?.content || [])
-    );
+  // const fetchMySchedule = () => {
+  //   // 로컬 스토리지에서 토큰 가져오기
+  //   const accessToken = localStorage.getItem("access-token"); 
+
+  //   if (!accessToken) {
+  //     // 토큰이 없으면 로그인 페이지로 리다이렉트 또는 다른 처리
+  //     navigate('/login');
+  //     return;
+  //   }
+  //   handleApiRequest(
+  //     () => axios.get('https://fit-conf.shop/api/v1/users/sessions'),
+  //     (data) => setMySchedule(data || [])
+  //   );
+  // }
+
+  const fetchMySchedule = async () => {
+    // 로컬 스토리지에서 토큰 가져오기
+    const accessToken = localStorage.getItem("access-token"); 
+
+    if (!accessToken) {
+      // 토큰이 없으면 로그인 페이지로 리다이렉트 또는 다른 처리
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.get('https://fit-conf.shop/api/v1/users/sessions', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.success) {
+        setMySchedule(response.data.response || []);
+      } else {
+        handleErrorResponse(response.data);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      handleErrorResponse(error.response?.data);
+    }
+  }
+    
+  // const fetchAllSessions = () =>
+  //   handleApiRequest(
+  //     () => axios.get('https://fit-conf.shop/api/v1/session/all'),
+  //     (data) => setAllSessions(data?.content || [])
+  //   );
+
+  const fetchAllSessions = async () => {
+    try {
+      const response = await axios.get('https://fit-conf.shop/api/v1/session/all');
+      if (response.data.success) {
+        setAllSessions(response.data?.content || []);
+      } else {
+         handleErrorResponse(response.data);
+      }
+    } catch (error) {
+       console.error('API Error:', error);
+       handleErrorResponse(error.response?.data);
+    }
+  };
 
   const getSessionOpacity = (session) =>
     mySchedule.some(mySession => mySession.sessionId === session.id)
@@ -320,6 +380,20 @@ const Mypage = () => {
     setIsEditingProfile(false);
     fetchUserProfile(); // 프로필 업데이트 후 새로고침
   };
+
+  const handleImageLoad = (sessionId) => {
+    setImageLoadStatus((prevStatus) => ({
+      ...prevStatus,
+      [sessionId]: 'loaded',
+    }));
+  };
+  
+  const handleImageError = (sessionId) => {
+    setImageLoadStatus((prevStatus) => ({
+      ...prevStatus,
+      [sessionId]: 'error',
+    }));
+  };  
 
   return (
     <>
@@ -472,14 +546,24 @@ const Mypage = () => {
                 <div key={session.id} className="flex items-start space-x-[20px] pl-[40px]">
                   <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
                     <div>
-                      {new Date(session.startTime).toLocaleTimeString('ko-KR', {
+                      {/* {new Date(session.startTime).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })} */}
+                      {/* session.startTime이 유효한 Date 객체인지 확인 */}
+                      {session.startTime && new Date(session.startTime).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
                     </div>
                     <div>~</div>
                     <div>
-                      {new Date(session.endTime).toLocaleTimeString('ko-KR', {
+                      {/* {new Date(session.endTime).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })} */}
+                      {/* session.endTime이 유효한 Date 객체인지 확인 */}
+                      {session.endTime && new Date(session.endTime).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
@@ -488,7 +572,7 @@ const Mypage = () => {
 
                   <div className={`flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] ${getSessionOpacity(session)}`}>
                     <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
-                    <div className="w-[216px] min-h-[60px] px-[12px] pb-[12px] text-black text-[18px] font-medium pt-[20px]">
+                    <div className="w-[216px] min-h-[60px] px-[12px] mb-[18px] text-black text-[18px] font-medium pt-[20px]">
                       {session.title || '스피커 제목 없음'}
                     </div>
                     <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
@@ -500,7 +584,7 @@ const Mypage = () => {
                     <img
                       src={session.speaker?.image || '/default-image.png'}
                       alt={`${session.speaker?.name || '스피커'} 이미지`}
-                      className="w-full h-[120px] object-cover"
+                      className="w-full h-[120px] h-full object-cover"
                       onLoad={() => handleImageLoad(session.id)}
                       onError={() => handleImageError(session.id)}
                       style={{ display: imageLoadStatus[session.id] === 'loaded' ? 'block' : 'none' }}
