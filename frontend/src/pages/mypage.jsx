@@ -1,10 +1,9 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import Navbar from "~/components/navbar.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { loginSuccess, logout } from "~/redux/auth-slice.js";
-import { AllSessionItem } from '~/components/session-list/all-session-item.jsx';
 
 const EditProfile = ({ onProfileUpdate }) => {
   const [lastName, setLastName] = useState('');
@@ -211,7 +210,9 @@ const EditProfile = ({ onProfileUpdate }) => {
           <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
         </div>
       </div>
-      <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">관심 분야는 최대 3가지 선택해주세요.</p>
+      <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">
+        관심 분야 3가지 선택해주세요.
+      </p>
 
       <div className="flex pl-[100px] pb-[50px]">
         <button className="w-[640px] h-[52px] text-center text-[#131212] text-[24px] font-medium leading-[150%] tracking-[-0.12px] border border-black" onClick={handleCancel}>
@@ -238,20 +239,6 @@ const Mypage = () => {
     fetchMySchedule();
     fetchAllSessions();
   }, []);
-
-  const handleApiRequest = async (apiCall, setState) => {
-    try {
-      const response = await apiCall();
-      if (response.data.success) {
-        setState(response.data.response || []);
-      } else {
-        handleErrorResponse(response.data);
-      }
-    } catch (error) {
-      console.error('API Error:', error);
-      handleErrorResponse(error.response?.data);
-    }
-  };
 
   const handleErrorResponse = (errorData) => {
     if (errorData?.message) {
@@ -290,8 +277,10 @@ const Mypage = () => {
   const fetchAllSessions = async () => {
     try {
       const response = await axios.get('https://fit-conf.shop/api/v1/session/all');
+      console.log(response.data); // API 응답 구조 확인
       if (response.data.success) {
-        setAllSessions(response.data?.content || []);
+        // API 응답 구조에 맞춰서 세션 데이터를 추출합니다.
+        setAllSessions(response.data.response.content || []);
       } else {
          handleErrorResponse(response.data);
       }
@@ -302,7 +291,7 @@ const Mypage = () => {
   };
 
   const getSessionOpacity = (session) =>
-    mySchedule.includes(session.id)
+    mySchedule.includes(session.sessionId)
       ? 'opacity-100'
       : 'opacity-50';
     
@@ -417,7 +406,7 @@ const Mypage = () => {
             계정정보
           </div>
 
-          <div className="flex items-center justify-start space-x-6 px-5 py-5 mb-[20px]">
+          <div className="flex items-center justify-start space-x-6 px-5 py-5 mb-[60px]">
             {/* 프로필 정보 */}
             <div className="flex items-center space-x-4">
               {/* 프로필 이미지 */}
@@ -470,10 +459,11 @@ const Mypage = () => {
           <div className="bg-[#FAFAFA] px-5 py-5">
             {/* 첫 번째 줄 */}
             <div className="flex">
-              <span className="text-[#606166] text-lg pl-[40px]">
+              <span className="w-[140px] h-full text-[#606166] text-lg pl-[10px] py-[20px]">
                 직무
               </span>
-              <span className="text-[#606166] text-lg pl-[40px] leading-[150%] tracking-[-0.22px] font-bold">
+              <span className="text-[#606166] text-lg pl-[60px] leading-[150%] 
+                tracking-[-0.22px] font-bold py-[20px]">
                 연차
               </span>
             </div>
@@ -482,59 +472,95 @@ const Mypage = () => {
             <hr className="border-[#E0E1E4] my-2" />
 
             {/* 두 번째 줄 */}
-            <div className="flex">
-              <span className="text-[#606166] text-lg pl-[40px]">
+            <div className="flex py-[20px]">
+              <span className="w-[140px] h-full text-[#606166] text-lg pl-[10px]">
                 연차
               </span>
-              <span className="text-[#606166] text-lg pl-[40px] leading-[150%] tracking-[-0.22px] font-bold">
+              <span className="text-[#606166] text-lg pl-[60px] 
+                leading-[150%] tracking-[-0.22px] font-bold">
                 연차
               </span>
             </div>
 
             {/* 구분선 */}
             <hr className="border-[#E0E1E4] my-2" />
-            <div className="flex">
-              <span className="text-[#606166] text-lg pl-[40px] mr-[60px]">
+            <div className="flex align-center">
+              <div className="w-[140px] h-full mt-[24px] text-[#606166] text-lg ml-[10px] mr-[60px]">
                 관심 분야
-              </span>
-              <div className="flex flex-wrap gap-2 sm:gap-5">
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              </div>
+              <div className="flex flex-wrap my-[20px] gap-2 sm:gap-5">
+                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
+                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
+                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
               </div>
             </div>
           </div>
 
-          {/* 나의 활동 내역 */}
           <div className="text-black text-4xl font-bold leading-[150%] 
-          tracking-[-0.22px] text-left px-5 pt-[60px]">
-            나의 활동 내역
+          tracking-[-0.22px] text-left px-5 pt-[100px]">
+            나의 활동내역
           </div>
+
           <div className="px-5 py-16 flex flex-col">
-            {/* 좋아요 표시한 강연 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center 
-              sm:space-x-5 mb-4 py-[40px] sm:ml-[40px]"
+            <div className="sm:flex-row items-start sm:items-center 
+              sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
             >
-              <div className="text-[#606166] text-lg w-full sm:w-[240px]">좋아요 표시한 강연</div>
-              <div className="flex flex-wrap gap-2 sm:gap-5">
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+              <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
+                좋아요 표시한 강연
+              </div>
+              <div className="space-x-6 py-5 mb-[20px]">
+                {/* 프로필 정보 */}
+                <div className="flex items-center space-x-4">
+                  {/* 프로필 이미지 */}
+                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                    <img
+                      src=''
+                      alt="profile"
+                      className="object-cover w-full h-full bg-[gray]"
+                    />
+                  </div>
+                  {/* 닉네임과 이메일 */}
+                  <div className="flex flex-col gap-[2px]">
+                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                      암호화폐 규제와 글로벌 시장 대용 전략
+                    </div>
+                    <div className="text-[#606166] text-base font-medium leading-[150%]">
+                      James Lee
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <hr className="border-[#E0E0E0]" />
 
-            {/* AI 추천 강연 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 pb-[40px] sm:ml-[40px] pt-[40px]">
-              <div className="text-[#606166] text-lg w-full sm:w-[240px]">AI 추천 강연</div>
-              <div className="flex flex-wrap gap-2 sm:gap-5">
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium">Label</label>
+            <div className="sm:flex-row items-start sm:items-center 
+              sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
+            >
+              <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
+                추천 강연
+              </div>
+              <div className="space-x-6 py-5 mb-[20px]">
+                {/* 프로필 정보 */}
+                <div className="flex items-center space-x-4">
+                  {/* 프로필 이미지 */}
+                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                    <img
+                      src=''
+                      alt="profile"
+                      className="object-cover w-full h-full bg-[gray]"
+                    />
+                  </div>
+                  {/* 닉네임과 이메일 */}
+                  <div className="flex flex-col gap-[2px]">
+                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                      암호화폐 규제와 글로벌 시장 대용 전략
+                    </div>
+                    <div className="text-[#606166] text-base font-medium leading-[150%]">
+                      James Lee
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -548,61 +574,54 @@ const Mypage = () => {
 
             <div className="space-y-[20px]">
               {/* 세션 표시 영역 */}
-              {allSessions && allSessions.map((session) => (
-                <div key={session.id} className="flex items-start space-x-[20px] pl-[40px]">
-                  <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
-                    <div>
-                      {session.startTime && new Date(session.startTime).toLocaleTimeString('ko-KR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </div>
-                    <div>~</div>
-                    <div>
-                      {session.endTime && new Date(session.endTime).toLocaleTimeString('ko-KR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </div>
+              {allSessions.map((session) => (
+                <div key={session.sessionId} className="flex items-start space-x-[20px] pl-[40px]">
+                <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
+                  <div>
+                    {session.startTime && new Date(session.startTime).toLocaleTimeString('ko-KR', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </div>
-
-                  <div className={`flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] ${getSessionOpacity(session)}`}>
-                    <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
-                    <div className="w-[216px] min-h-[60px] px-[12px] mb-[18px] text-black text-[18px] font-medium pt-[20px]">
-                      {session.title || '스피커 제목 없음'}
-                    </div>
-                    <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
-                      {session.speaker?.name || '스피커 이름 없음'}
-                    </div>
-                    {imageLoadStatus[session.id] === 'loading' && <div>Loading...</div>}
-                    {imageLoadStatus[session.id] === 'error' && <div>Error loading image</div>}
-                    <img
-                      src={session.sessionImage || '/default-image.png'}
-                      alt={`${session.title || '세션'} 이미지`}
-                      className="w-full h-[120px] object-cover"
-                      onLoad={() => handleImageLoad(session.id)}
-                      onError={() => handleImageError(session.id)}
-                      style={{ display: imageLoadStatus[session.id] === 'loaded' ? 'block' : 'none' }}
-                    />
+                  <div>~</div>
+                  <div>
+                    {session.endTime && new Date(session.endTime).toLocaleTimeString('ko-KR', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </div>
-                  <button
-                    onClick={() => toggleSchedule(session.id)}
-                    className={`px-3 py-1 rounded-md text-sm font-semibold ${
-                      mySchedule.includes(session.id) ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
-                    }`}
-                  >
-                    {mySchedule.includes(session.id) ? '담기 취소' : '미리 담기'}
-                  </button>
                 </div>
-              ))}
 
-              {allSessions?.length === 0 && (
-                <div className="text-center py-20 text-gray-500">
-                  등록된 세션이 없습니다
+                <div className={`flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] ${getSessionOpacity(session)}`}>
+                  <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
+                  <div className="w-[216px] min-h-[60px] px-[12px] mb-[18px] text-black text-[18px] font-medium pt-[20px]">
+                    {session.title || '스피커 제목 없음'}
+                  </div>
+                  <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
+                    {session.speaker?.name || '스피커 이름 없음'}
+                  </div>
+                  {imageLoadStatus[session.sessionId] === 'loading' && <div>Loading...</div>}
+                  {imageLoadStatus[session.sessionId] === 'error' && <div>Error loading image</div>}
+                  <img
+                    src={session.speaker?.image || '/default-image.png'}
+                    alt={`${session.title || '세션'} 이미지`}
+                    className="w-full h-[120px] h-full object-cover"
+                    onLoad={() => handleImageLoad(session.sessionId)}
+                    onError={() => handleImageError(session.sessionId)}
+                    style={{ display: imageLoadStatus[session.sessionId] === 'loaded' ? 'block' : 'none' }}
+                  />
                 </div>
-              )}
-            </div>
+              </div>
+            ))}
+
+            {allSessions?.length === 0 && (
+              <div className="text-center py-20 text-gray-500">
+                등록된 세션이 없습니다
+              </div>
+            )}
           </div>
+        </div>
+
 
         </div>
       )}

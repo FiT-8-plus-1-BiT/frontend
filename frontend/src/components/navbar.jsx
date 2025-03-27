@@ -45,7 +45,7 @@ const Navbar = () => {
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
         <a href="/main" alt="홈으로">
-          <img src="./public/images/8+1bit-logo.png" alt="Logo" />
+          <img src="./public/images/8logo.png" alt="Logo" />
         </a>
       </div>
 
