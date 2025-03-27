@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { loginSuccess, logout } from "~/redux/auth-slice.js";
+import { AllSessionItem } from '../../components/AllSessionItem'
 
 const EditProfile = ({ onProfileUpdate }) => {
   const [lastName, setLastName] = useState('');
