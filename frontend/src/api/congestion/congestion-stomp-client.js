@@ -3,11 +3,16 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
 export function createCongestionStompClient(token, onMessageReceived) {
+  // if (!token) {
+  //   console.warn('⚠️ access-token 없음: 혼잡도 수신 불가');
+  //   return;
+  // }
+  console.log(token)
   const client = new Client({
-    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'), // ✅ 절대 경로 사용
-    connectHeaders: {
-      Authorization: [`Bearer ${token}`],
-    },
+    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'), 
+    // connectHeaders: {
+    //   Authorization: `Bearer ${token}`,
+    // },
     debug: (str) => console.log(`📡 DEBUG: ${str}`),
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
@@ -25,7 +30,9 @@ export function createCongestionStompClient(token, onMessageReceived) {
         } catch (e) {
           console.error('❌ 메시지 파싱 실패:', e);
         }
-      });
+      },{
+        Authorization: `Bearer ${token}`,
+      },);
     },
 
     onStompError: (frame) => {

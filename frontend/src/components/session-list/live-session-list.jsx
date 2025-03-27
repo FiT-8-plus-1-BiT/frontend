@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LiveSessionItem } from '~/components/session-list/live-session-item';
 import { useLiveSessionsWithSchedule } from '~/hooks/session/use-live-sessions-with-schedule';
-import { createCongestionStompClient } from '~/api/congestion/stomp-client';
+import { createCongestionStompClient } from '~/api/congestion/congestion-stomp-client';
 
 export default function LiveSessionList({ token }) {
   const navigate = useNavigate();
@@ -30,21 +30,21 @@ console.log()
 
 
   useEffect(() => {
-    if (!token) return;
-
+    if (!token || liveSessions.length === 0) return;
+  
     const client = createCongestionStompClient(token, (data) => {
       setCongestionMap((prev) => ({
         ...prev,
         [data.sessionId]: data.congestionLevel,
       }));
     });
-
+  
     return () => {
       console.log('🛑 혼잡도 STOMP 연결 해제');
       client.deactivate();
     };
-  }, [token]);
-  console.log("혼잡도",congestionMap)
+  }, [token, liveSessions]);
+  
 
 if (liveLoading) return <div>라이브 세션 로딩 중...</div>;
 if (liveError) return <div>라이브 세션 에러: {liveError.message || '에러 발생'}</div>;

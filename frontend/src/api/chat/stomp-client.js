@@ -3,6 +3,11 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
 export function createStompClient(token, sessionId, onMessageReceived) {
+  if (!token) {
+    console.error("❌ STOMP 연결 시도 실패: 토큰 없음");
+    return null;
+  }
+
   const stompClient = new Client({
     // SockJS를 사용하므로 webSocketFactory만 사용합니다.
     webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
@@ -25,7 +30,10 @@ export function createStompClient(token, sessionId, onMessageReceived) {
         } catch (e) {
           console.error("❌ 메시지 파싱 실패:", e);
         }
-      });
+      },
+        {
+          Authorization: `Bearer ${token}`,
+        });
     },
 
     onStompError: (frame) => {
@@ -47,26 +55,28 @@ export function createStompClient(token, sessionId, onMessageReceived) {
   return stompClient;
 }
 
-export function sendMessage(stompClient, sessionId, userId, content, category) {
+export function sendMessage(stompClient, sessionId, userId, message, category) {
   if (!stompClient?.connected) {
     console.error("❌ STOMP 연결되지 않음");
     return;
   }
 
-  const message = {
-    sender: userId,
-    content,
-    category, // category 포함 (필요에 따라 제거 가능)
-    timestamp: new Date().toISOString(),
+  const messages = {
+    sessionId: Number(sessionId),
+    message: message,            // ✅ content → message로 변경
+    category: category,
   };
 
   stompClient.publish({
     destination: `/pub/chat/${sessionId}`,
-    body: JSON.stringify(message),
-    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(messages),
+    headers: {
+      "Content-Type": "application/json",
+      "User-Id": userId,
+    },
   });
 
-  console.log("📤 메시지 발송:", message);
+  console.log("📤 메시지 발송:", messages);
 }
 
 export function disconnectStompClient(stompClient) {

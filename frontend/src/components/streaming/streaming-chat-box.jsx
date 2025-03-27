@@ -67,18 +67,22 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
 // ────────────────────────────────────────────────
 // StreamingChatBox Component
 // ────────────────────────────────────────────────
-const StreamingChatBox = ({ token, sessionId, userId }) => {
+const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [category, setCategory] = useState("GENERAL");
   const [message, setMessage] = useState("");
-
   const chatEndRef = useRef(null);
 
   // WebSocket 연결 및 해제
   useEffect(() => {
+    if (!token || !sessionId) {
+      console.log('토큰없어서 종료')
+      return; // 🔐 토큰이 없으면 연결하지 않음
+    }
+
     const client = createStompClient(token, sessionId, (newMessage) =>
       setMessages((prev) => [...prev, newMessage])
     );
@@ -99,6 +103,7 @@ const StreamingChatBox = ({ token, sessionId, userId }) => {
       console.error("WebSocket not connected");
       return;
     }
+    console.log('stompClient',stompClient)
     if (message.trim()) {
       sendMessage(stompClient, sessionId, userId, message, category);
       setMessage("");
