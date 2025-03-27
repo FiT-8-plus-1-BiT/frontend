@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { loginSuccess, logout } from "~/redux/auth-slice.js";
-import { AllSessionItem } from '../../components/AllSessionItem'
+import { AllSessionItem } from '~/components/session-list/all-session-item.jsx';
 
 const EditProfile = ({ onProfileUpdate }) => {
   const [lastName, setLastName] = useState('');
@@ -261,27 +261,10 @@ const Mypage = () => {
     }
   };  
 
-  // const fetchMySchedule = () => {
-  //   // 로컬 스토리지에서 토큰 가져오기
-  //   const accessToken = localStorage.getItem("access-token"); 
-
-  //   if (!accessToken) {
-  //     // 토큰이 없으면 로그인 페이지로 리다이렉트 또는 다른 처리
-  //     navigate('/login');
-  //     return;
-  //   }
-  //   handleApiRequest(
-  //     () => axios.get('https://fit-conf.shop/api/v1/users/sessions'),
-  //     (data) => setMySchedule(data || [])
-  //   );
-  // }
-
   const fetchMySchedule = async () => {
-    // 로컬 스토리지에서 토큰 가져오기
     const accessToken = localStorage.getItem("access-token"); 
 
     if (!accessToken) {
-      // 토큰이 없으면 로그인 페이지로 리다이렉트 또는 다른 처리
       navigate('/login');
       return;
     }
@@ -294,7 +277,7 @@ const Mypage = () => {
       });
 
       if (response.data.success) {
-        setMySchedule(response.data.response || []);
+        setMySchedule(response.data.response.map(session => session.sessionId));
       } else {
         handleErrorResponse(response.data);
       }
@@ -304,12 +287,6 @@ const Mypage = () => {
     }
   }
     
-  // const fetchAllSessions = () =>
-  //   handleApiRequest(
-  //     () => axios.get('https://fit-conf.shop/api/v1/session/all'),
-  //     (data) => setAllSessions(data?.content || [])
-  //   );
-
   const fetchAllSessions = async () => {
     try {
       const response = await axios.get('https://fit-conf.shop/api/v1/session/all');
@@ -325,7 +302,7 @@ const Mypage = () => {
   };
 
   const getSessionOpacity = (session) =>
-    mySchedule.some(mySession => mySession.sessionId === session.id)
+    mySchedule.includes(session.id)
       ? 'opacity-100'
       : 'opacity-50';
     
@@ -379,7 +356,7 @@ const Mypage = () => {
 
   const handleProfileUpdate = () => {
     setIsEditingProfile(false);
-    fetchUserProfile(); // 프로필 업데이트 후 새로고침
+    fetchUserProfile();
   };
 
   const handleImageLoad = (sessionId) => {
@@ -395,6 +372,36 @@ const Mypage = () => {
       [sessionId]: 'error',
     }));
   };  
+
+  const toggleSchedule = async (sessionId) => {
+    const accessToken = localStorage.getItem("access-token");
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
+    try {
+      const method = mySchedule.includes(sessionId) ? 'delete' : 'post';
+      const response = await axios({
+        method,
+        url: `https://fit-conf.shop/api/v1/users/sessions/${sessionId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.data.success) {
+        setMySchedule(prevSchedule => 
+          method === 'post' 
+            ? [...prevSchedule, sessionId] 
+            : prevSchedule.filter(id => id !== sessionId)
+        );
+      } else {
+        handleErrorResponse(response.data);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      handleErrorResponse(error.response?.data);
+    }
+  };
 
   return (
     <>
@@ -486,8 +493,6 @@ const Mypage = () => {
 
             {/* 구분선 */}
             <hr className="border-[#E0E1E4] my-2" />
-
-            {/* 두 번째 줄 */}
             <div className="flex">
               <span className="text-[#606166] text-lg pl-[40px] mr-[60px]">
                 관심 분야
@@ -547,11 +552,6 @@ const Mypage = () => {
                 <div key={session.id} className="flex items-start space-x-[20px] pl-[40px]">
                   <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
                     <div>
-                      {/* {new Date(session.startTime).toLocaleTimeString('ko-KR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })} */}
-                      {/* session.startTime이 유효한 Date 객체인지 확인 */}
                       {session.startTime && new Date(session.startTime).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',
                         minute: '2-digit'
@@ -559,11 +559,6 @@ const Mypage = () => {
                     </div>
                     <div>~</div>
                     <div>
-                      {/* {new Date(session.endTime).toLocaleTimeString('ko-KR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })} */}
-                      {/* session.endTime이 유효한 Date 객체인지 확인 */}
                       {session.endTime && new Date(session.endTime).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',
                         minute: '2-digit'
@@ -579,22 +574,28 @@ const Mypage = () => {
                     <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
                       {session.speaker?.name || '스피커 이름 없음'}
                     </div>
-                    {/* 이미지 로딩 상태에 따라 다른 UI 표시 */}
                     {imageLoadStatus[session.id] === 'loading' && <div>Loading...</div>}
                     {imageLoadStatus[session.id] === 'error' && <div>Error loading image</div>}
                     <img
-                      src={session.speaker?.image || '/default-image.png'}
-                      alt={`${session.speaker?.name || '스피커'} 이미지`}
-                      className="w-full h-[120px] h-full object-cover"
+                      src={session.sessionImage || '/default-image.png'}
+                      alt={`${session.title || '세션'} 이미지`}
+                      className="w-full h-[120px] object-cover"
                       onLoad={() => handleImageLoad(session.id)}
                       onError={() => handleImageError(session.id)}
                       style={{ display: imageLoadStatus[session.id] === 'loaded' ? 'block' : 'none' }}
                     />
                   </div>
+                  <button
+                    onClick={() => toggleSchedule(session.id)}
+                    className={`px-3 py-1 rounded-md text-sm font-semibold ${
+                      mySchedule.includes(session.id) ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
+                    }`}
+                  >
+                    {mySchedule.includes(session.id) ? '담기 취소' : '미리 담기'}
+                  </button>
                 </div>
               ))}
 
-              {/* 데이터 없을 경우 표시 */}
               {allSessions?.length === 0 && (
                 <div className="text-center py-20 text-gray-500">
                   등록된 세션이 없습니다
