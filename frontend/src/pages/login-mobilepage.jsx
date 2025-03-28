@@ -18,7 +18,7 @@ const loginMobilePage = () => {
             {/* 로고 영역 */}
             <div className="mt-[20px] ml-[20px] mb-[16px]">
                 <img
-                    src="./images/logo (1).png"
+                    src="/images/MobileLoginLogo.png"
                     alt="logo"
                     className="w-[60px] h-[60px]"
                 />

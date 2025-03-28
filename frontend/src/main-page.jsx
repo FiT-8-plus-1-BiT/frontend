@@ -80,7 +80,7 @@ const MainPage = () => {
       <div className="flex justify-center">
         <motion.img
           ref={ref}
-          src="./public/images/WebMainBanner.png"
+          src="/images/WebMainBanner.png"
           className="w-full max-w-[1924px] h-[874px] mb-[100px]"
           initial="hidden"
           animate={controls}
@@ -93,7 +93,7 @@ const MainPage = () => {
 
       <div 
         className="w-[1920px] w-full h-[690px] flex mb-[100px] bg-cover"
-        style={{ backgroundImage: "url('/public/images/FitBanner.png')" }} // 배경 이미지 적용
+        style={{ backgroundImage: "url('/images/FitBanner.png')" }} // 배경 이미지 적용
       >
         {/* 왼쪽 텍스트 영역 */}
         <div className="flex flex-col lg:w-[50%] 
@@ -115,9 +115,9 @@ const MainPage = () => {
         </div>
       </div>
 
-      <div className="">
+      <div>
         <img 
-          src="./public/images/BlueBanner.png"
+          src="/images/BlueBanner.png"
           className="w-[1920px] w-full h-[690px] mb-[100px]"
         />
       </div>
@@ -143,48 +143,137 @@ const MainPage = () => {
         </p>
         
         <div className="flex flex-wrap justify-center lg:justify-between">
-          {[1, 2, 3].map((_, index) => (
-            <div 
-              key={index} 
-              className="bg-white pl-[40px] pr-[40px] py-[24px] h-[388px] h-full w-[452px] 
-                w-full rounded-t-[12px] sm:w-[300px] md:w-[340px] 
-                lg:w-[440px] flex flex-col items-start"
-            >
-              <p className="text-[#45464A] mb-[20px] font-bold">
-                time:time ~ time:time
-              </p>
-              <p className="text-[#45464A] text-[20px] h-[26px] w-full mb-[20px] font-bold">
-                김은정 (신한은행 디지털전략본부장)
-              </p>
+          <div 
+            className="bg-white pl-[40px] pr-[40px] py-[24px] h-[388px] h-full w-[452px] 
+              w-full rounded-t-[12px] rounded-b-[12px] sm:w-[300px] md:w-[340px] 
+              lg:w-[440px] flex flex-col items-start"
+          >
+            <p className="text-[#45464A] mb-[20px] font-bold">
+              10:00~10:50
+            </p>
+            <p className="text-[#45464A] text-[20px] h-[26px] w-full mb-[20px] font-bold">
+              김은정 (신한은행 디지털전략본부장)
+            </p>
 
-              <h3 className="text-[#2A2EAD] text-[36px] font-bold leading-[150%] 
-                tracking-[-0.18px] w-full mb-[20px]">
-                  금융소비자 경험 혁신하기
-              </h3>
+            <h3 className="text-[#2A2EAD] text-[36px] font-bold leading-[150%] 
+              tracking-[-0.18px] w-full mb-[20px]">
+                금융소비자 경험 혁신하기
+            </h3>
 
-              <p className="text-[#606166] text-[16px] font-bold leading-[150%] tracking-[-0.18px] w-full mb-[20px]">
-                사용자 중심의 핀테크 서비스 개발 전략과 금융 소비자의 경험 혁신을 위한 최신 트렌드를 살펴봅니다.
-              </p>
+            <p className="text-[#606166] text-[16px] font-bold leading-[150%] tracking-[-0.18px] w-full mb-[20px]">
+              사용자 중심의 핀테크 서비스 개발 전략과 금융 소비자의 경험 혁신을 위한 최신 트렌드를 살펴봅니다.
+            </p>
 
-              {/* 라벨 3개 */}
-              <div className="flex flex-wrap gap-[8px] flex-1">  {/* 🔥 flex-1 추가 */}
-                {["Label 1", "Label 2", "Label 3"].map((label, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-[#85878D] text-white text-[12px] sm:text-[14px] font-semibold leading-[140%] tracking-[-0.5px] 
-                    px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-
-              {/* 🔥 img가 바로 아래 붙도록 */}
-              <img 
-                className="w-[452px] h-[228px] bg-[gray] rounded-b-[12px] mt-[20px]"
-              />
+            {/* 라벨 3개 */}
+            <div className="flex flex-wrap gap-[8px] flex-1">  {/* 🔥 flex-1 추가 */}
+              {["소비자 경험", "기술 혁신", "패널 토론", "초급"].map((label, idx) => (
+                <span
+                  key={idx}
+                  className="bg-[#85878D] text-white text-[12px] sm:text-[14px] font-semibold leading-[140%] tracking-[-0.5px] 
+                  px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
+                >
+                  {label}
+                </span>
+              ))}
             </div>
-          ))}
+
+            {/* 🔥 img가 바로 아래 붙도록 */}
+            <img 
+              src="/images/MainSession1.png"
+              className="w-[452px] h-[200px] rounded-b-[12px] mt-[20px]"
+            />
+          </div>
+
+
+          <div 
+            className="bg-white pl-[40px] pr-[40px] py-[24px] h-[612px] h-full w-[452px] 
+              w-full rounded-t-[12px] rounded-b-[12px] sm:w-[300px] md:w-[340px] 
+              lg:w-[440px] flex flex-col items-start"
+          >
+            <p className="text-[#45464A] mb-[20px] font-bold">
+              14:35~15:25
+            </p>
+
+            <p className="text-[#45464A] text-[20px] h-[26px] w-full mb-[20px] font-bold">
+              김현우 (네이버페이 사업총괄)
+            </p>
+
+            <h3 className="text-[#2A2EAD] text-[36px] font-bold leading-[150%] 
+              tracking-[-0.18px] w-full mb-[100px]">
+                모바일 결제의 미래
+            </h3>
+
+            <p className="text-[#606166] text-[16px] font-bold 
+              leading-[150%] tracking-[-0.18px] w-full mb-[20px]"
+            >
+              모바일 결제 시장의 변화와 주요 기술 혁신, 
+              사용자 경험 개선 방안, 그리고 미래 전망을 분석합니다.
+            </p>
+
+            {/* 라벨 3개 */}
+            <div className="flex flex-wrap gap-[8px] flex-1"> 
+              {["송금/결제", "기술 혁신", "세미나", "중급"].map((label, idx) => (
+                <span
+                  key={idx}
+                  className="bg-[#85878D] text-white text-[12px] sm:text-[14px] font-semibold leading-[140%] tracking-[-0.5px] 
+                  px-[10px] rounded-[4px] flex items-center justify-center h-[32px]"
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {/* 🔥 img가 바로 아래 붙도록 */}
+            <img 
+              src="/images/MainSession2.png"
+              className="w-[452px] h-[200px] rounded-b-[12px] mt-[20px]"
+            />
+          </div>
+
+          <div 
+            className="bg-white pl-[40px] pr-[40px] py-[24px] h-[612px] h-full w-[452px] 
+              w-full rounded-t-[12px] rounded-b-[12px] sm:w-[300px] md:w-[340px] 
+              lg:w-[440px] flex flex-col items-start"
+          >
+            <p className="text-[#45464A] mb-[20px] font-bold">
+              16:45~17:35
+            </p>
+            <p className="text-[#45464A] text-[20px] h-[26px] w-full mb-[20px] font-bold">
+              이나경 (금융위원회 정책자문위원)
+            </p>
+
+            <h3 className="text-[#2A2EAD] text-[36px] font-bold leading-[150%] 
+              tracking-[-0.18px] w-full mb-[20px]">
+                핀테크 기업의 규제 대응 전략
+            </h3>
+
+            <p 
+              className="text-[#606166] text-[16px] font-bold leading-[150%] 
+              tracking-[-0.18px] w-full mb-[20px]"
+            >
+              금융 규제 변화에 따른 핀테크 기업의 대응 방안과 
+              성공적인 컴플라이언스(Compliance) 전략을 분석합니다.
+            </p>
+
+            {/* 라벨 3개 */}
+            <div className="flex flex-wrap gap-[8px] flex-1">  {/* 🔥 flex-1 추가 */}
+              {["규제 및 정책", "환경 변화", "워크숍", "고급"].map((label, idx) => (
+                <span
+                  key={idx}
+                  className="bg-[#85878D] text-white text-[12px] sm:text-[14px] font-semibold leading-[140%] tracking-[-0.5px] 
+                  px-[10px] py-[4px] rounded-[4px] flex items-center justify-center h-[32px]"
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {/* 🔥 img가 바로 아래 붙도록 */}
+            <img 
+              src="/images/MainSession3.png"
+              className="w-[452px] h-[200px] rounded-b-[12px] mt-[20px]"
+            />
+          </div>    
         </div>
 
         <div className="flex flex-col mt-[60px]">
@@ -497,7 +586,7 @@ const MainPage = () => {
         {selectedFloor === 1 && (
           <div className="w-full flex justify-center">
             <img
-              src="./public/images/1floor.png"
+              src="/images/1floor.png"
               alt="Session Image"
               className="w-full max-w-[1480px] h-auto mb-[60px]"
             />
@@ -506,7 +595,7 @@ const MainPage = () => {
         {selectedFloor === 2 && (
           <div className="w-full flex justify-center">
             <img
-              src="./public/images/2floor.png"
+              src="/images/2floor.png"
               alt="2층 위치 이미지"
               className="w-full max-w-[1480px] h-auto mb-[60px]"
             />
@@ -536,7 +625,7 @@ const MainPage = () => {
             {/* <!-- 오른쪽 이미지 박스 --> */}
             <div className="w-full lg:w-[508px] h-[220px] mt-[20px] lg:mt-0 lg:ml-[100px]">
               <img 
-                src="./public/images/WomanImage.png" 
+                src="/images/WomanImage.png" 
                 className="rounded-[20px]"
                 alt="이미지" 
               />
@@ -564,7 +653,7 @@ const MainPage = () => {
               mt-[20px] lg:mt-0 lg:ml-[100px]"
             >
               <img 
-                src="./public/images/PeopleImage.png"
+                src="/images/PeopleImage.png"
                 className="rounded-[20px]"  
                 alt="이미지" 
               />
@@ -595,7 +684,7 @@ const MainPage = () => {
               {/* 왼쪽 아이콘 + 텍스트 */}
               <div className="flex items-center gap-3 md:gap-[10px]">
                 <img 
-                  src="./public/images/Shape.png" 
+                  src="/images/Shape.png" 
                   alt="아이콘" 
                   className="w-8 md:w-[32px] h-8 md:h-[32px]" 
                 />
