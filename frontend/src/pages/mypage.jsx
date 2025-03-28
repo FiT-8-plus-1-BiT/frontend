@@ -1,15 +1,49 @@
-import React, { useEffect, useMemo, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import Navbar from "~/components/navbar.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { loginSuccess, logout } from "~/redux/auth-slice.js";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const EditProfile = ({ onProfileUpdate }) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleOpen = () => setIsOpen(!isOpen);
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const [isOpen2, setIsOpen2] = useState(false);
+  const toggleOpen2 = () => setIsOpen2(!isOpen2);
+  const [selectedValue2, setSelectedValue2] = useState("");
+
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleOptionClick = (value) => {
+    setSelectedValue(value); // 선택된 값을 상태에 저장
+    toggleOpen(); // 옵션 목록 닫기 (선택 후 자동으로 닫히도록)
+  };  
+
+  const handleOptionClick2 = (value2) => {
+    setSelectedValue2(value2);
+    toggleOpen2();
+  };  
+
+  const tags = [
+    "규제 기술", "마이데이터", "개인 금융 관리", "크라우드펀딩", "대출", "핀테크 인프라", "투자 및 자산 관리",
+    "블록체인 및 암호화폐", "금융 포용", "결제 및 송금", "디지털 뱅킹", "대출", "보험 테크"
+  ];
+
+  const handleTagClick = (tag) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter(t => t !== tag));
+    } else if (selectedTags.length < 3) {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
 
   useEffect(() => {
     fetchUserAccount();
@@ -82,7 +116,7 @@ const EditProfile = ({ onProfileUpdate }) => {
 
   return (
     <div className="w-[1520px] h-[954px] mx-[200px] my-[36px] bg-white mb-[36px]">
-      <h1 className="h-[66px] text-black text-[44px] font-bold text-left pb-[80px]">
+      <h1 className="h-[66px] text-black text-[44px] font-bold text-left pb-[80px] ml-[46px]">
         프로필 수정
       </h1>
       
@@ -98,7 +132,7 @@ const EditProfile = ({ onProfileUpdate }) => {
           <div className='flex flex-col'>
             <label 
               className="w-[640px] h-[33px] text-left text-[22px] 
-                text-[#131212] font-medium leading-[150%] mb-[16px]">
+                text-[#131212] font-bold leading-[150%] mb-[16px]">
                   내 계정
             </label>
             <input
@@ -130,7 +164,7 @@ const EditProfile = ({ onProfileUpdate }) => {
         <div className='flex flex-col ml-[100px]'>
           <label 
             className="w-[640px] h-[33px] text-left text-[22px] 
-              text-[#131212] font-medium leading-[150%] mb-[16px]">
+              text-[#131212] font-bold leading-[150%] mb-[16px]">
                 이름
           </label>
           <input
@@ -147,71 +181,181 @@ const EditProfile = ({ onProfileUpdate }) => {
       
       <div className="pb-[20px]" />
 
-      <div className="flex">
-        <div className='flex flex-col ml-[100px]'>
-          <label 
+      <div className="flex flex-col">
+        <div className="flex flex-col ml-[100px]">
+          <label
             className="w-[640px] h-[33px] text-left text-[22px] 
-              text-[#131212] font-medium leading-[150%] mb-[16px]">
+              text-[#131212] font-bold leading-[150%] mb-[16px]">
                 직무
           </label>
-          <input
-            type="text"
-            placeholder="직무를 선택해주세요"
-            className="pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-[1320px] 
-              h-[54px] text-[20px] font-medium leading-[150%] text-left"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <div className="relative w-[1320px] h-[54px] mb-[10px]">
+            <input
+              type="text"
+              placeholder="직무를 선택해주세요"
+              value={selectedValue} // 선택된 값 표시
+              // onChange={(e) => setSelectedValue(e.target.value)} // 직접 입력 가능하도록
+              className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full 
+                text-[20px] font-medium leading-[150%] text-left 
+                placeholder:text-[#85878D]"
+            />
+            {/* 아이콘 이미지 */}
+            <motion.img
+              src="/images/show-icon.png"
+              alt="아이콘"
+              className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
+              onClick={toggleOpen}
+              animate={{ rotate: isOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
         </div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col ml-[100px] w-[1320px] overflow-hidden border border-[#E0E0E0]"
+            >
+              <div className="pt-[12px] pb-[12px] pl-[28px] pr-[28px]">
+                {/* 목록 아이템 */}
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("직무 선택 안함")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    직무 선택 안함
+                  </span>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("직무 없음")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    직무 없음
+                  </span>
+                  <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
+                    ( 아직 재직 경험이 없어요 )
+                  </p>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("주니어 직무")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    주니어 직무
+                  </span>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("미들 직무")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    미들 직무
+                  </span>
+                </div>
+                <div className="py-[12px]" onClick={() => handleOptionClick("시니어 직무")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    시니어 직무
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="pb-[20px]" />
 
-      <div className="flex">
-        <div className='flex flex-col ml-[100px]'>
-          <label 
+      <div className="flex flex-col">
+        <div className="flex flex-col ml-[100px]">
+          <label
             className="w-[640px] h-[33px] text-left text-[22px] 
-              text-[#131212] font-medium leading-[150%] mb-[16px]">
+              text-[#131212] font-bold leading-[150%] mb-[16px]">
                 연차
           </label>
-          <input
-            type="text"
-            placeholder="연차를 선택해주세요"
-            className="pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-[1320px] 
-              h-[54px] text-[20px] font-medium leading-[150%] text-left"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <div className="relative w-[1320px] h-[54px] mb-[10px]">
+            <input
+              type="text"
+              placeholder="직무를 선택해주세요"
+              value={selectedValue2} // 선택된 값 표시
+              // onChange={(e) => setSelectedValue2(e.target.value)}
+              className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full 
+                text-[20px] font-medium leading-[150%] text-left 
+                placeholder:text-[#85878D]"
+            />
+            {/* 아이콘 이미지 */}
+            <motion.img
+              src="/images/show-icon.png"
+              alt="아이콘"
+              className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
+              onClick={toggleOpen2}
+              animate={{ rotate: isOpen2 ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
         </div>
+
+        <AnimatePresence>
+          {isOpen2 && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col ml-[100px] w-[1320px] overflow-hidden border border-[#E0E0E0]"
+            >
+              <div className="pt-[12px] pb-[12px] pl-[28px] pr-[28px]">
+                {/* 목록 아이템 */}
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("연차 선택 안함")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    연차 선택 안함
+                  </span>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("연차 없음")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    연차 없음
+                  </span>
+                  <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
+                    ( 아직 재직 경험이 없어요 )
+                  </p>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("주니어 연차")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    주니어 연차
+                  </span>
+                </div>
+                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("미들")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    미들
+                  </span>
+                </div>
+                <div className="py-[12px]" onClick={() => handleOptionClick2("시니어 연차")}>
+                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                    시니어 연차
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <div className="pb-[20px]" />
 
       <label className="pl-[100px] w-[1320px] h-[33px] text-left 
-        text-[22px] text-[#131212] font-medium leading-[150%] pb-[16px] mb-[16px]">
+        text-[22px] text-[#131212] font-bold leading-[150%] pb-[16px] mb-[16px]">
           관심 분야
       </label>
 
-      <div className="flex flex-wrap align-center h-[184px] ml-[100px] mr-[100px] bg-[#606166] mt-[16px]">
-        <div className="flex text-left gap-[20px] mb-[20px] pl-[20px] pt-[24px]">
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-        </div>
-        <div className="flex gap-[20px] pl-[20px]">
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
-          <label className="w-[116px] h-[32px] pt-[6px] pb-[6px] text-center bg-white text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px]">Label</label>
+      <div className="flex flex-wrap align-center h-auto ml-[100px] mr-[100px] mt-[16px] p-[20px]">
+        <div className="flex flex-wrap gap-[20px] mr-[300px]">
+          {tags.map((tag, index) => (
+            <label
+              key={index}
+              className={`w-[176px] w-full h-[32px] pt-[6px] pb-[6px] text-center text-[16px] font-medium leading-[150%] tracking-[-0.5px] rounded-[4px] cursor-pointer ${
+                selectedTags.includes(tag)
+                  ? "bg-[#007AFF] text-white"
+                  : "bg-[#F4F4F4] text-[#606166]"
+              }`}
+              onClick={() => handleTagClick(tag)}
+            >
+              {tag}
+            </label>
+          ))}
         </div>
       </div>
+
       <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">
         관심 분야 3가지 선택해주세요.
       </p>
