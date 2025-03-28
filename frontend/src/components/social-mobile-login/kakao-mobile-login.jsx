@@ -10,7 +10,7 @@ const KakaoMobileLogin = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          "http://fit-conf.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
           {
             method: "POST",
             headers: {
@@ -48,20 +48,21 @@ const KakaoMobileLogin = () => {
   }, [dispatch]);
 
   const onKakaoMobileLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    window.location.href = "http://fit-conf.shop/oauth2/authorization/kakao";
   };
 
   return (
     <button 
       onClick={onKakaoMobileLogin} 
-      className="flex items-center justify-center w-full h-[48px] bg-[#FEE500] text-black">
+      className="flex items-center justify-center w-full h-[48px] bg-[#FEE500] text-black"
+    >
       <img 
-          src="./images/카카오 로고.png" 
+          src="./images/KakaoLogo.png" 
           alt="Kakao" 
           className="w-[16px] h-[16px] mr-[20px]" 
       />
       <span 
-          className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
+        className="text-[16px] font-medium leading-[150%] tracking-[-0.5px]">
           카카오로 시작하기
       </span>
   </button>

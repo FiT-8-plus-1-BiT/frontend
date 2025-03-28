@@ -58,7 +58,7 @@ const KakaoLogin = () => {
         flex items-center justify-center gap-4 p-2"
     >
       <img
-        src="/images/카카오 로고.png"
+        src="/images/KakaoLogo.png"
         alt="카카오 로고"
         className="w-[24px] h-[24px] sm:w-[30px] sm:h-[30px]"
       />

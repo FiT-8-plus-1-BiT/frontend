@@ -87,7 +87,7 @@ const GoogleLoginComponent = () => {
         flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
       <img
-        src="/images/google-logo.png"
+        src="/images/GoogleLogo.png"
         alt="구글 로고"
         className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]"
       />

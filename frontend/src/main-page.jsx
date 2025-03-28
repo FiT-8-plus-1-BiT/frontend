@@ -77,12 +77,11 @@ const MainPage = () => {
 
   return (
     <div className="bg-[#F4F4F4]">
-
       <div className="flex justify-center">
         <motion.img
           ref={ref}
-          src="./public/images/웹_썸네일.png"
-          className="w-full max-w-[1924px] h-[874px] px-[160px] mb-[100px]"
+          src="./public/images/WebMainBanner.png"
+          className="w-full max-w-[1924px] h-[874px] mb-[100px]"
           initial="hidden"
           animate={controls}
           variants={{
@@ -93,12 +92,12 @@ const MainPage = () => {
       </div>
 
       <div 
-        className="w-[1920px] h-[690px] flex px-4 lg:px-[220px] mb-[100px] bg-cover"
-        style={{ backgroundImage: "url('/public/images/웹_차별점.png')" }} // 배경 이미지 적용
+        className="w-[1920px] w-full h-[690px] flex mb-[100px] bg-cover"
+        style={{ backgroundImage: "url('/public/images/FitBanner.png')" }} // 배경 이미지 적용
       >
         {/* 왼쪽 텍스트 영역 */}
-        <div className="flex flex-col justify-center lg:w-[50%] 
-          px-4 lg:px-[40px] p-6 rounded-lg">
+        <div className="flex flex-col lg:w-[50%] 
+          lg:px-[40px] p-6 rounded-lg mt-[148px] ml-[280px]">
           <h1 className="text-[24px] lg:text-[40px] font-[700] 
             leading-[150%] tracking-[-0.2px] text-left">
               그 동안 경험하지 못한 컨퍼런스
@@ -116,13 +115,14 @@ const MainPage = () => {
         </div>
       </div>
 
-      <div className="w-[1920px] h-[690px] pb-[40px] mb-[100px]">
+      <div className="">
         <img 
-          src="./public/images/웹, 모바일 공통_세션 소개.png"
+          src="./public/images/BlueBanner.png"
+          className="w-[1920px] w-full h-[690px] mb-[100px]"
         />
       </div>
 
-      <div className="w-full max-w-[1480px] mx-auto mt-[60px]">
+      <div className="w-full max-w-[1480px] mx-auto">
         <h1 className="text-black text-[52px] font-bold leading-[150%] 
           tracking-[-0.26px] pb-[60px] text-left">
           메인세션 및 연사정보
@@ -181,7 +181,7 @@ const MainPage = () => {
 
               {/* 🔥 img가 바로 아래 붙도록 */}
               <img 
-                className="w-[452px] h-[228px] bg-[gray] rounded-b-[12px]"
+                className="w-[452px] h-[228px] bg-[gray] rounded-b-[12px] mt-[20px]"
               />
             </div>
           ))}
@@ -497,7 +497,7 @@ const MainPage = () => {
         {selectedFloor === 1 && (
           <div className="w-full flex justify-center">
             <img
-              src="./public/images/1층.png"
+              src="./public/images/1floor.png"
               alt="Session Image"
               className="w-full max-w-[1480px] h-auto mb-[60px]"
             />
@@ -506,7 +506,7 @@ const MainPage = () => {
         {selectedFloor === 2 && (
           <div className="w-full flex justify-center">
             <img
-              src=""
+              src="./public/images/2floor.png"
               alt="2층 위치 이미지"
               className="w-full max-w-[1480px] h-auto mb-[60px]"
             />
@@ -536,7 +536,7 @@ const MainPage = () => {
             {/* <!-- 오른쪽 이미지 박스 --> */}
             <div className="w-full lg:w-[508px] h-[220px] mt-[20px] lg:mt-0 lg:ml-[100px]">
               <img 
-                src="./public/images/웹, 모바일 공통_장소이동.png" 
+                src="./public/images/WomanImage.png" 
                 className="rounded-[20px]"
                 alt="이미지" 
               />
@@ -564,7 +564,7 @@ const MainPage = () => {
               mt-[20px] lg:mt-0 lg:ml-[100px]"
             >
               <img 
-                src="./public/images/웹, 모바일 공통_집에서.png"
+                src="./public/images/PeopleImage.png"
                 className="rounded-[20px]"  
                 alt="이미지" 
               />
