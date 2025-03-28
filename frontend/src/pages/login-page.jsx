@@ -21,7 +21,7 @@ function LoginPage() {
           {/* 왼쪽 이미지 영역 */}
           <div className="w-full md:w-auto flex justify-center items-center mt-[36px]">
             <img 
-              src="./public/images/LoginImage.png" 
+              src="/images/LoginImage.png" 
               alt="background" 
               className="w-full md:max-w-[760px] h-full md:h-[760px] object-cover"
             />

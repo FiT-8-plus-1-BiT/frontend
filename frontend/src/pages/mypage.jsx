@@ -86,7 +86,6 @@ const EditProfile = ({ onProfileUpdate }) => {
         프로필 수정
       </h1>
       
-      
       <div className="flex mt-[40px]">
         <div className='flex flex-row ml-[100px]'>
           {/* 프로필 이미지 */}
@@ -116,7 +115,10 @@ const EditProfile = ({ onProfileUpdate }) => {
             {/* 이미지 업로드 폼 */}
             <div className="flex flex-row mt-[20px] mb-[40px]">
               <input type="file" onChange={handleFileChange} accept="image/*" />
-              <button onClick={handleImageUpload} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button 
+                onClick={handleImageUpload} 
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
                 프로필 이미지 업데이트
               </button>
             </div>
@@ -446,7 +448,7 @@ const Mypage = () => {
                 <span>프로필 수정</span>
                 <span>
                   <img
-                    src="./public/images/chevron-left.png"
+                    src="/images/chevron-left.png"
                     alt="Arrow"
                     className="w-6 h-6"
                   />
