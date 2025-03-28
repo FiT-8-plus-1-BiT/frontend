@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MobileLoginPage from '~/pages/login-mobilepage.jsx';
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -33,10 +34,6 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    /*
-      GoogleOAuthProvider는 Google 로그인 기능을 전역에서 사용할 수 있도록 설정하는 컨텍스트
-      이걸 감싸야 GoogleLogin과 useOneTap이 정상적으로 작동함
-    */
     <Provider store={store}>
       <GoogleOAuthProvider>
         <Router>
@@ -57,6 +54,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/login2" element={<MobileLoginPage />} />
           </Routes>
         </Router>
       </GoogleOAuthProvider>

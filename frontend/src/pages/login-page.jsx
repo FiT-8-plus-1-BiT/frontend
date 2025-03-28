@@ -12,18 +12,16 @@ function LoginPage() {
 
   return (
     <>
-
-
       {/* 전체 컨테이너 박스를 중앙에 배치 */}
       <div className=" w-full h-screen flex justify-center items-center 
-        px-4 sm:px-8 md:px-20 pb-[20px]">
+        px-[140px] sm:px-8 md:px-20">
         {/* 내부 컨테이너 */}
         <div className="flex flex-col md:flex-row justify-center items-center w-full ">
 
           {/* 왼쪽 이미지 영역 */}
-          <div className="w-full md:w-auto flex justify-center items-center mt-[60px]">
+          <div className="w-full md:w-auto flex justify-center items-center mt-[36px]">
             <img 
-              src="https://mblogthumb-phinf.pstatic.net/MjAyMTA4MThfNjQg/MDAxNjI5MjUwNTk5Mzg0.XA0T0u2BSgIDdOJ20CzuLmiwVBvNvYpsjQmJIH7-ro0g.6m--zWiMFU_M-g0se0tUOgdyNzBx3oQdj13TnZgZngog.JPEG.wenice777/3.jpg?type=w800" 
+              src="./public/images/LoginImage.png" 
               alt="background" 
               className="w-full md:max-w-[760px] h-full md:h-[760px] object-cover"
             />
@@ -31,36 +29,38 @@ function LoginPage() {
 
           {/* 오른쪽 로그인 영역 */}
           <div className="w-full md:max-w-[600px] font-[Pretendard] flex flex-col 
-            justify-center self-center gap-y-6 text-left ml-[60px] mt-[17px]"
+            justify-center self-center gap-y-6 text-left ml-[140px]"
           >
-            <h1 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold pt-[130px]">
-              Sub title
-            </h1>
+            <div className='flex flex-col gap-[12px]'>
+              <h1 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold mt-[60px]">
+                안녕하세요
+              </h1>
+              <h1 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold">
+                FiT입니다
+              </h1>
+            </div>
 
-            <p className="text-lg sm:text-xl font-medium">
-              sub text
-            </p>
+            <div className='mt-[20px] flex flex-col gap-[8px]'>
+              <p className="text-lg sm:text-xl font-medium">
+                네이버, 카카오, 구글 계정으로
+              </p>
+              <p className="text-lg sm:text-xl font-medium">
+                3초만에 가입하고 바로 시작해보세요!
+              </p>
+            </div>
 
-            <div className="mt-10 flex flex-col gap-4">
+            <div className="mt-[80px] flex flex-col gap-4">
               <SocialLoginButtons />
             </div>
 
-            <hr className="my-[100px] w-full border-t border-[#E0E1E4]" />
+            <hr className="mb-[20px] mt-[80px] w-full border-t border-[#E0E1E4]" />
 
-            <div className="flex flex-col items-center pb-[100px]">
-              <small className="text-[#131212] text-sm sm:text-base font-semibold leading-[140%] tracking-[-0.5px] text-center py-[10px] px-[12px] mb-[12px]">
-                LabelLabelLabelLabelLabelLabel
-              </small>
-
-              <button 
-                onClick={handleClick}
-                className="w-full h-[52px] bg-[#131212] text-center"
-              >
-                <span className='w-[198px] h-[36px] text-white text-[24px]'>
-                  로그인 없이 둘러보기
-                </span>
-              </button>
-            </div>
+            <a 
+              onClick={handleClick}
+              className="w-full h-[52px] text-[#45464A] text-center cursor-pointer underline"
+            >
+              로그인 없이 둘러보기
+            </a>
           </div>
 
         </div>

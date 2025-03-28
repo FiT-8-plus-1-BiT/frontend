@@ -10,7 +10,7 @@ const KakaoLogin = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          "https://fit-conf.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
           {
             method: "POST",
             headers: {
@@ -48,7 +48,7 @@ const KakaoLogin = () => {
   }, [dispatch]);
 
   const onKakaoLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    window.location.href = "https://fit-conf.shop/oauth2/authorization/kakao";
   };
 
   return (
@@ -58,7 +58,7 @@ const KakaoLogin = () => {
         flex items-center justify-center gap-4 p-2"
     >
       <img
-        src="/images/카카오 로고.png"
+        src="/images/KakaoLogo.png"
         alt="카카오 로고"
         className="w-[24px] h-[24px] sm:w-[30px] sm:h-[30px]"
       />

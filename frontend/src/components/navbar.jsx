@@ -36,9 +36,7 @@ const NavbarItem = ({ to, label, requiresAuth }) => {
 
 const Navbar = () => {
   return (
-
-    <nav
-      className=" max-w-[1920px] w-full h-[89px] 
+    <nav className="static top-0 inset-x-0 max-w-[1920px] w-full h-[89px] 
       flex justify-between items-center px-4 lg:px-[160px] py-[12px] 
       bg-white z-50  mx-auto"
     >
@@ -47,7 +45,7 @@ const Navbar = () => {
       {/* 로고 영역 */}
       <div className="w-[132px] h-[33px] flex justify-center items-center">
         <a href="/main" alt="홈으로">
-          <img src="./public/images/8+1bit-logo.png" alt="Logo" />
+          <img src="./public/images/8logo.png" alt="Logo" />
         </a>
       </div>
 
