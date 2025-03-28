@@ -49,7 +49,7 @@ export default function LiveSessionList({ token }) {
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-4">현재 라이브 중인 세션</h2>
+      <h2 className="text-3xl font-bold mb-4">현재 라이브 중인 세션</h2>
       <div className="grid justify-item-center xl:grid-cols-3 grid-cols-2 gap-8 mb-12">
         {liveSessions.map((session) => (
           <LiveSessionItem

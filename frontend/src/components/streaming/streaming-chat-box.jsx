@@ -1,4 +1,3 @@
-// src/components/StreamingChatBox.jsx
 import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
 import {
   createStompClient,
@@ -74,7 +73,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
 // StreamingChatBox Component
 // ────────────────────────────────────────────────
 const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(mode); // 초기값 mode
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -82,15 +81,15 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   const [message, setMessage] = useState('');
   const chatEndRef = useRef(null);
 
-  // WebSocket 연결 및 해제
   useEffect(() => {
-    if (!token || !sessionId) {
-      console.log('토큰없어서 종료');
-      return; // 🔐 토큰이 없으면 연결하지 않음
-    }
+    if (mode) setIsChatOpen(true);
+  }, [mode]);
+
+  useEffect(() => {
+    if (!token || !sessionId) return;
 
     const client = createStompClient(token, sessionId, (newMessage) =>
-      setMessages((prev) => [...prev, newMessage]),
+      setMessages((prev) => [...prev, newMessage])
     );
     setStompClient(client);
     return () => {
@@ -98,25 +97,16 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
     };
   }, [token, sessionId]);
 
-  // 메시지가 추가될 때 스크롤 자동 이동
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // 메시지 전송 핸들러
   const handleSendMessage = () => {
-    if (!stompClient?.connected) {
-      console.error('WebSocket not connected');
-      return;
-    }
-    console.log('stompClient', stompClient);
-    if (message.trim()) {
-      sendMessage(stompClient, token, sessionId, userId, message, category);
-      setMessage('');
-    }
+    if (!stompClient?.connected || !message.trim()) return;
+    sendMessage(stompClient, token, sessionId, userId, message, category);
+    setMessage('');
   };
 
-  // 엔터 키 입력 처리 (Shift + Enter는 줄바꿈)
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -124,41 +114,32 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
     }
   };
 
-  // 데스크탑과 모바일 채팅창 토글 함수 분리
   const toggleDesktopChat = useCallback(() => {
-    setIsChatOpen((prev) => !prev);
-  }, []);
+    if (!mode) setIsChatOpen((prev) => !prev);
+  }, [mode]);
 
   const toggleMobileChat = useCallback(() => {
     setIsMobileChatOpen((prev) => !prev);
   }, []);
 
-  // 좋아요 토글 처리 (실제 로직은 필요에 따라 구현)
   const handleLikeToggle = (messageId, likedByUser) => {
-    if (likedByUser) {
-      unlikeQuestion(messageId)
-        .then(() => {
-          // 메시지 상태 업데이트 로직 추가
-        })
-        .catch((err) => console.error('Unlike failed:', err));
-    } else {
-      likeQuestion(messageId)
-        .then(() => {
-          // 메시지 상태 업데이트 로직 추가
-        })
-        .catch((err) => console.error('Like failed:', err));
-    }
+    const action = likedByUser ? unlikeQuestion : likeQuestion;
+    action(messageId).catch((err) =>
+      console.error(`${likedByUser ? 'Unlike' : 'Like'} failed:`, err)
+    );
   };
 
   return (
     <>
       {/* 모바일 채팅 열기 버튼 */}
-      <button
-        onClick={() => setIsMobileChatOpen(true)}
-        className="md:hidden fixed bottom-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center"
-      >
-        <MessageSquare className="w-5 h-5" />
-      </button>
+      {!mode && (
+        <button
+          onClick={() => setIsMobileChatOpen(true)}
+          className="md:hidden fixed bottom-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center"
+        >
+          <MessageSquare className="w-5 h-5" />
+        </button>
+      )}
 
       {/* 데스크탑 채팅창 */}
       <div
@@ -167,21 +148,29 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
         }`}
       >
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">
+          {/* 상단 바 */}
           <div className="flex items-center justify-between p-3 border-b">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleDesktopChat}
-                className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100"
-              >
-                {isChatOpen ? (
-                  <ChevronLeft className="w-4 h-4" />
-                ) : (
-                  <ChevronRight className="w-4 h-4" />
-                )}
-              </button>
-              {isChatOpen && <h2 className="text-lg font-bold">채팅</h2>}
-            </div>
+            {mode ? (
+              <div className="w-full text-center">
+                <h2 className="text-lg font-bold">채팅</h2>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleDesktopChat}
+                  className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100"
+                >
+                  {isChatOpen ? (
+                    <ChevronRight className="w-4 h-4" />
+                  ) : (
+                    <ChevronLeft className="w-4 h-4" />
+                  )}
+                </button>
+                {isChatOpen && <h2 className="text-lg font-bold">채팅</h2>}
+              </div>
+            )}
           </div>
+
           {isChatOpen && (
             <>
               <QuestionList sessionId={sessionId} />
@@ -224,7 +213,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
         </div>
       </div>
 
-      {/* 모바일 채팅 Bottom Sheet */}
+      {/* 모바일 채팅창 */}
       <div
         className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${
           isMobileChatOpen ? 'translate-y-0' : 'translate-y-full'

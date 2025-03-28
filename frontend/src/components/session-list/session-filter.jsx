@@ -16,7 +16,6 @@ function SessionFilter({ onFilterChange, token }) {
     level: '',
   });
 
-  // ✅ 태그 옵션을 세션들에서 추출
   useEffect(() => {
     async function fetchTags() {
       try {
@@ -50,73 +49,74 @@ function SessionFilter({ onFilterChange, token }) {
     fetchTags();
   }, [token]);
 
-  // ✅ 필터 선택 시 상태 업데이트 및 상위로 전달
   const handleFilterChange = (field, value) => {
     const updatedFilters = { ...selectedFilters, [field]: value };
     setSelectedFilters(updatedFilters);
     onFilterChange(updatedFilters);
   };
 
+  const buttonStyle =
+    'border border-gray-300 rounded-md px-4 py-2 text-sm text-bold bg-white text-[#131212] min-w-[80px]';
+
   return (
-    <div className="flex flex-col items-start justify-start flex-wrap gap-4 p-4 bg-white rounded-lg w-fit">
-      <div className="flex gap-4 flex-wrap">
-        {/* 중점분야 필터 */}
-        <select
-          className="border border-gray-300 rounded-md px-4 py-2"
-          value={selectedFilters.category}
-          onChange={(e) => handleFilterChange('category', e.target.value)}
-        >
-          <option value="">중점분야 선택</option>
-          {tagOptions.fields.map((field) => (
-            <option key={field} value={field}>
-              {field}
-            </option>
-          ))}
-        </select>
+    <div className="flex gap-2 flex-wrap items-center">
+      {/* 분야 */}
+      <select
+        className={buttonStyle}
+        value={selectedFilters.category}
+        onChange={(e) => handleFilterChange('category', e.target.value)}
+      >
+        <option value="">분야</option>
+        {tagOptions.fields.map((field) => (
+          <option key={field} value={field}>
+            {field}
+          </option>
+        ))}
+      </select>
 
-        {/* 주제 필터 */}
-        <select
-          className="border border-gray-200 rounded-md px-4 py-2"
-          value={selectedFilters.topic}
-          onChange={(e) => handleFilterChange('topic', e.target.value)}
-        >
-          <option value="">주제 선택</option>
-          {tagOptions.topics.map((topic) => (
-            <option key={topic} value={topic}>
-              {topic}
-            </option>
-          ))}
-        </select>
+      {/* 주제 */}
+      <select
+        className={buttonStyle}
+        value={selectedFilters.topic}
+        onChange={(e) => handleFilterChange('topic', e.target.value)}
+      >
+        <option value="">주제</option>
+        {tagOptions.topics.map((topic) => (
+          <option key={topic} value={topic}>
+            {topic}
+          </option>
+        ))}
+      </select>
 
-        {/* 콘텐츠 유형 필터 */}
-        <select
-          className="border border-gray-200 rounded-md px-4 py-2"
-          value={selectedFilters.contentType}
-          onChange={(e) => handleFilterChange('contentType', e.target.value)}
-        >
-          <option value="">콘텐츠 유형 선택</option>
-          {tagOptions.types.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
+      {/* 유형 */}
+      <select
+        className={buttonStyle}
+        value={selectedFilters.contentType}
+        onChange={(e) => handleFilterChange('contentType', e.target.value)}
+      >
+        <option value="">유형</option>
+        {tagOptions.types.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
 
-        {/* 등급 필터 */}
-        <select
-          className="border border-gray-200 rounded-md px-4 py-2"
-          value={selectedFilters.level}
-          onChange={(e) => handleFilterChange('level', e.target.value)}
-        >
-          <option value="">등급 선택</option>
-          {tagOptions.levels.map((level) => (
-            <option key={level} value={level}>
-              {level}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* 난이도 */}
+      <select
+        className={buttonStyle}
+        value={selectedFilters.level}
+        onChange={(e) => handleFilterChange('level', e.target.value)}
+      >
+        <option value="">난이도</option>
+        {tagOptions.levels.map((level) => (
+          <option key={level} value={level}>
+            {level}
+          </option>
+        ))}
+      </select>
     </div>
+
   );
 }
 

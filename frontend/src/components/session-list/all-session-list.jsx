@@ -49,7 +49,7 @@ export default function AllSessionList({ token }) {
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-4">전체 세션</h2>
+      <h2 className="text-3xl font-bold mb-4">전체 세션</h2>
 
       <div className="mb-8">
         <SessionFilter onFilterChange={handleFilterChange} token={token} />

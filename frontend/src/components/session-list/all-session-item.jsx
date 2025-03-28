@@ -13,15 +13,11 @@ function AllSessionItem({
 }) {
   return (
     <div
-      className="overflow-hidden bg-white transition-shadow rounded-md shadow-sm cursor-pointer"
-      style={{ width: 'clamp(300px, 27.08vw, 520px)' }}
+      onClick={onClick}
+      className="w-[520px] bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
     >
       {/* 썸네일 */}
-      <div
-        className="w-full bg-gray-200"
-        style={{ height: 'clamp(200px, 15.2vw, 292px)' }}
-        onClick={onClick}
-      >
+      <div className="w-full h-[292px] bg-gray-100">
         {thumbnail ? (
           <img
             src={thumbnail}
@@ -29,64 +25,54 @@ function AllSessionItem({
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-500">
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
             이미지 없음
           </div>
         )}
       </div>
 
-      {/* 내용 */}
-      <div className="pt-3 px-4 pb-5 flex flex-col gap-2">
-        <h3
-          className="font-semibold line-clamp-2"
-          style={{ fontSize: 'clamp(18px, 1.6vw, 24px)' }}
-        >
-          {title}
-        </h3>
-
-        {/* speaker 객체 분해하여 렌더링 */}
-        <div className="flex items-center gap-2">
-          <p
-            className="text-gray-700 font-medium"
-            style={{ fontSize: 'clamp(14px, 1.2vw, 18px)' }}
-          >
-            {speaker?.name}
-          </p>
-        </div>
-
-        <p
-          className="text-gray-600 line-clamp-3"
-          style={{ fontSize: 'clamp(13px, 1vw, 16px)' }}
-        >
-          {description}
-        </p>
-
-        {/* 태그 */}
-        <div className="flex flex-wrap gap-2 pt-1">
-          {Array.isArray(tags) &&
-            tags.map((value, idx) => (
-              <span
-                key={idx}
-                className="px-2 py-[2px] bg-gray-100 text-gray-800 text-sm rounded-full"
-              >
-                {value}
-              </span>
-            ))}
-        </div>
-
-        {/* 미리 담기 버튼 */}
-        <div className="flex justify-end mt-2">
+      {/* 내용 영역 */}
+      <div className="p-5 flex flex-col gap-3">
+        {/* 제목 + 담기 버튼 */}
+        <div className="flex justify-between items-start gap-4">
+          <div className="text-[1.5rem] font-bold leading-snug text-[#131212]">
+            {title}
+          </div>
           <button
-            className={`px-3 py-1 rounded-md text-sm font-semibold ${
-              isScheduled ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
-            }`}
             onClick={(e) => {
               e.stopPropagation();
               onToggleSchedule(id);
             }}
+            className={`h-9 px-4 text-sm font-semibold rounded border ${
+              isScheduled
+                ? 'bg-black text-white border-black'
+                : 'text-[#85878d] border-[#85878d]'
+            }`}
           >
-            {isScheduled ? '담기 취소' : '미리 담기'}
+            {isScheduled ? '✓ 담은 강연' : '+ 담기'}
           </button>
+        </div>
+
+        {/* 강연자 이름 */}
+        <div className="text-[#131212] font-medium text-sm">
+          {speaker?.name}
+        </div>
+
+        {/* 설명 */}
+        <div className="text-[#85878d] text-sm leading-relaxed line-clamp-3">
+          {description}
+        </div>
+
+        {/* 태그 */}
+        <div className="flex flex-wrap gap-2 mt-1">
+          {tags?.map((tag, idx) => (
+            <div
+              key={idx}
+              className="h-8 bg-[#f4f4f4] rounded px-4 flex items-center text-sm font-medium text-[#606166]"
+            >
+              {tag}
+            </div>
+          ))}
         </div>
       </div>
     </div>
