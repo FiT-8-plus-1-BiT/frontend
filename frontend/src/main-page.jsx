@@ -1,12 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import axios from 'axios';
 
 const MainPage = () => {
   // 애니메이션 컨트롤러 생성
   const controls = useAnimation();
   // 화면에 요소가 보이는지 감지하는 훅 (threshold: 0.2 = 20% 보이면 트리거)
   const { ref, inView } = useInView({ threshold: 0.2 });
+  const [sessions, setSessions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://fit-conf.shop/api/v1/speaker');
+        if (response.data.success) {
+          // 시간 오름차순으로 정렬
+          const sortedSessions = response.data.response.sort((a, b) =>
+            a.startTime.localeCompare(b.startTime)
+          );
+          setSessions(sortedSessions);
+        } else {
+          console.error('API 요청 실패:', response.data.message);
+          // 에러 처리 로직 추가 (예: 사용자에게 메시지 표시)
+        }
+      } catch (error) {
+        console.error('API 요청 중 오류 발생:', error);
+        // 에러 처리 로직 추가 (예: 사용자에게 메시지 표시)
+      }
+    };
+  
+    fetchData();
+  }, []);
+
+  // const formatTime = (time) => {
+  //   const hour = time.slice(8, 10);
+  //   const minute = time.slice(10, 12);
+  //   return `${hour}:${minute}`;
+  // };
+
+  const fixedTimes = [
+    "10:00\n~\n10:50",
+    "11:05\n~\n11:55",
+    "13:30\n~\n14:20",
+    "14:35\n~\n15:25",
+    "15:40\n~\n16:30",
+    "16:40\n~\n17:30",
+  ];
 
   const questions = [
     "사일런트 컨퍼런스란 무엇인가요?",
@@ -286,273 +326,88 @@ const MainPage = () => {
             {/* 첫 줄: 101, 102, 103, 104, 105 (배경색 없음) */}
             <div className="flex w-full justify-between px-[16px]">
               {[101, 102, 103, 104, 105].map((roomNumber) => (
-                <div key={roomNumber} className="flex-1 text-center text-black text-[20px] font-bold leading-[150%] tracking-[-0.12px]">
+                <div
+                  key={roomNumber}
+                  className="flex-1 text-center text-black text-[28px] 
+                          font-bold leading-[150%] tracking-[-0.12px]"
+                >
                   {roomNumber}
                 </div>
               ))}
             </div>
 
             {/* 시간: 09:50 ~ 10:00 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              09:50 ~ 10:00
+            <div className="bg-[#131212] text-white text-[20px] font-bold leading-[150%] 
+              tracking-[-0.12px] flex items-center justify-center h-[40px] w-full">
+                09:50 ~ 10:00
             </div>
 
             {/* Opening Speech */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              Opening Speech
+            <div className="text-[#202023] text-[24px] font-bold leading-[150%] 
+              tracking-[-0.12px] flex items-center justify-center w-full pb-[34px]">
+                Opening Speech
             </div>
 
-            {/* 시간: 10:00 ~ 10:50 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              10:00 ~ 10:50
-            </div>
+            {/* 세션 데이터 */}
+            {sessions.reduce((acc, _, index) => {
+              if (index % 5 === 0) acc.push(sessions.slice(index, index + 5));
+              return acc;
+            }, []).map((sessionGroup, groupIndex) => (
+              <div key={groupIndex}>
+                {/* 시간 */}
+                <div className="w-[1480px] bg-[#131212] text-white text-[20px] font-bold leading-[150%]
+                tracking-[-0.12px] flex items-center justify-center h-[40px] w-full mb-[5px] mt-[-34px]">
+                  {fixedTimes[groupIndex]}
+                </div>
 
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
+                {/* 세션들 */}
+                <div className="flex space-x-[10px] justify-center">
+                  {sessionGroup.map((session, index) => (
+                    <div key={index} className="w-[288px] h-[300px] bg-[white] flex flex-col">
+                      <h1 className="w-[224px] h-[108px] text-[24px] font-bold leading-[150%]
+                      tracking-[-0.12px] mt-[16px] ml-[16px] mr-[16px]">
+                        {session.title}
+                      </h1>
 
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
+                      {/* Labels */}
+                      <div className="flex flex-wrap gap-x-2 gap-y-2 pl-[16px] pt-[20px] mt-[12px]">
+                        {Object.values(session.tags).map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            className="max-w-[180px] h-[29px] bg-[#F4F4F4] text-[#606166] text-[12px]
+                            font-semibold leading-[29px] tracking-[-0.5px] px-[12px]
+                            rounded-[4px] flex items-center justify-center"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* 강연자 프로필 및 이름 */}
+                      <div className="flex items-center pl-[16px] pt-[20px] pb-[16px]">
+                        <img 
+                          src={session.speaker.image} 
+                          alt="강연자 프로필"
+                          className="w-[40px] h-[40px] rounded-full mr-[12px]" 
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-[#131212] text-[16px] font-medium leading-[150%]">
+                            {session.speaker.name}
+                          </span>
+                          <span className="text-black text-[16px] font-medium leading-[150%]">
+                            ({session.speaker.description})
+                          </span>
+                        </div>
+                      </div>
                     </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ))}
-
-            {/* 시간: 11:05 ~ 11:55 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              11:05 ~ 11:55
-            </div>
-
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
-
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* 시간: 13:30 ~ 14:20 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              13:30 ~ 14:20
-            </div>
-
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
-
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* 시간: 14:35 ~ 15:25 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              14:35 ~ 15:25
-            </div>
-
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
-
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* 시간: 15:40 ~ 16:30 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              15:40 ~ 16:30
-            </div>
-
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
-
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* 시간: 16:45 ~ 17:35 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              16:45 ~ 17:35
-            </div>
-
-            {/* 세션들 (간격 10px) */}
-            {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
-                {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
-                    {/* Title */}
-                    <h3 className="text-black text-[24px] font-bold leading-[150%] 
-                      tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
-                      Title
-                    </h3>
-
-                    {/* Labels */}
-                    <div className="flex space-x-[8px] pl-[16px] pt-[20px]">
-                      {[...Array(3)].map((_, labelIndex) => (
-                        <span key={labelIndex} className="bg-[#45464A] text-white text-[14px] 
-                          font-semibold leading-[140%] tracking-[-0.5px] px-[12px] py-[6px] 
-                          rounded-[4px] flex items-center justify-center">
-                          Label
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 강연자 프로필 및 이름 */}
-                    <div className="flex items-center pl-[16px] pt-[20px] pb-[46px]">
-                      <div className="w-[48px] h-[48px] bg-gray-500 rounded-full mr-[12px]"></div>
-                      <span className="text-black text-[20px] font-medium leading-[150%]">
-                        강연자 이름
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* 시간: 17:35 ~ 17:50 */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
-              17:35 ~ 17:50
-            </div>
 
             {/* Opening Speech */}
-            <div className="bg-[#131212] text-white text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[60px] w-full">
+            <div className="bg-[#F4F4F4] text-[#131212] text-[24px] font-bold leading-[150%] 
+              tracking-[-0.12px] flex items-center justify-center h-[30px] w-full">
               Closing
             </div>
           </div>
