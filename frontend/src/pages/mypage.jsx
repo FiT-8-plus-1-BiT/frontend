@@ -232,14 +232,12 @@ const Mypage = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [mySchedule, setMySchedule] = useState([]);
-  const [allSessions, setAllSessions] = useState([]);
+  const [sessions, setSessions] = useState([]); // allSessions -> sessions로 통합
   // 이미지 로딩 상태를 저장하는 state 추가
   const [imageLoadStatus, setImageLoadStatus] = useState({});
 
   useEffect(() => {
     fetchMySchedule();
-    fetchAllSessions();
   }, []);
 
   const handleErrorResponse = (errorData) => {
@@ -266,7 +264,11 @@ const Mypage = () => {
       });
 
       if (response.data.success) {
-        setMySchedule(response.data.response.map(session => session.sessionId));
+        // 시간 오름차순으로 정렬
+        const sortedSessions = response.data.response.sort((a, b) =>
+          a.startTime.localeCompare(b.startTime)
+        );
+        setSessions(sortedSessions);
       } else {
         handleErrorResponse(response.data);
       }
@@ -275,27 +277,6 @@ const Mypage = () => {
       handleErrorResponse(error.response?.data);
     }
   }
-    
-  const fetchAllSessions = async () => {
-    try {
-      const response = await axios.get('https://fit-conf.shop/api/v1/session/all');
-      console.log(response.data); // API 응답 구조 확인
-      if (response.data.success) {
-        // API 응답 구조에 맞춰서 세션 데이터를 추출합니다.
-        setAllSessions(response.data.response.content || []);
-      } else {
-         handleErrorResponse(response.data);
-      }
-    } catch (error) {
-       console.error('API Error:', error);
-       handleErrorResponse(error.response?.data);
-    }
-  };
-
-  const getSessionOpacity = (session) =>
-    mySchedule.includes(session.sessionId)
-      ? 'opacity-100'
-      : 'opacity-50';
     
   const fetchUserProfile = useCallback(async () => {
     try {
@@ -364,35 +345,14 @@ const Mypage = () => {
     }));
   };  
 
-  const toggleSchedule = async (sessionId) => {
-    const accessToken = localStorage.getItem("access-token");
-    if (!accessToken) {
-      navigate('/login');
-      return;
-    }
-    try {
-      const method = mySchedule.includes(sessionId) ? 'delete' : 'post';
-      const response = await axios({
-        method,
-        url: `https://fit-conf.shop/api/v1/users/sessions/${sessionId}`,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if (response.data.success) {
-        setMySchedule(prevSchedule => 
-          method === 'post' 
-            ? [...prevSchedule, sessionId] 
-            : prevSchedule.filter(id => id !== sessionId)
-        );
-      } else {
-        handleErrorResponse(response.data);
-      }
-    } catch (error) {
-      console.error('API Error:', error);
-      handleErrorResponse(error.response?.data);
-    }
-  };
+  const fixedTimes = [
+    "10:00\n~\n10:50",
+    "11:05\n~\n11:55",
+    "13:30\n~\n14:20",
+    "14:35\n~\n15:25",
+    "15:40\n~\n16:30",
+    "16:40\n~\n17:30",
+  ];
 
   return (
     <>
@@ -499,7 +459,7 @@ const Mypage = () => {
           </div>
 
           <div className="text-black text-4xl font-bold leading-[150%] 
-          tracking-[-0.22px] text-left px-5 pt-[100px]">
+            tracking-[-0.22px] text-left px-5 pt-[100px]">
             나의 활동내역
           </div>
 
@@ -571,60 +531,52 @@ const Mypage = () => {
             <h2 className="text-black text-[40px] font-bold 
               leading-[150%] tracking-[-0.2px] px-[20px] pt-[32px] pb-[60px]"
             >
-              나의 스케줄
+              나의 시간표
             </h2>
 
-            <div className="space-y-[20px]">
-              {/* 세션 표시 영역 */}
-              {allSessions.map((session) => (
-                <div key={session.sessionId} className="flex items-start space-x-[20px] pl-[40px]">
+            {fixedTimes.map((time, index) => (
+              <div key={index} className="flex items-start space-x-[20px] pl-[40px] mb-4">
+                {/* 시간 블록 */}
                 <div className="flex-shrink-0 w-[100px] h-[288px] bg-white flex flex-col justify-center items-center text-black text-[22px] font-medium border border-black">
-                  <div>
-                    {session.startTime && new Date(session.startTime).toLocaleTimeString('ko-KR', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </div>
-                  <div>~</div>
-                  <div>
-                    {session.endTime && new Date(session.endTime).toLocaleTimeString('ko-KR', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </div>
+                  <div className="whitespace-pre-line text-center">{time}</div>
                 </div>
 
-                <div className={`flex-shrink-0 flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] ${getSessionOpacity(session)}`}>
-                  <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
-                  <div className="w-[216px] min-h-[60px] px-[12px] mb-[18px] text-black text-[18px] font-medium pt-[20px]">
-                    {session.title || '스피커 제목 없음'}
+                {/* 세션 블록들 (최대 5개) */}
+                {sessions.slice(index * 5, index * 5 + 5).map((session) => (
+                  <div key={session.sessionId} className="flex-shrink-0">
+                    <div className={`flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] 
+                      ${session.isMySchedule 
+                        ? 'opacity-100' 
+                        : 'opacity-50 border-t-[#CCCDD2]'}`}> 
+                      <div className="w-[240px] h-[8px] bg-[#CCCDD2]" />
+                      <div className="w-[216px] min-h-[60px] px-[12px] mb-[18px] text-black text-[18px] font-medium pt-[20px]">
+                        {session.title}
+                      </div>
+                      <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
+                        {session.speakerName}
+                      </div>
+                      {imageLoadStatus[session.sessionId] === 'loading' && <div>Loading...</div>}
+                      {imageLoadStatus[session.sessionId] === 'error' && <div>Error loading image</div>}
+                      <img
+                        src={session.speakerImage}
+                        alt={`${session.title} 이미지`}
+                        className="w-full h-[120px] h-full object-cover"
+                        onLoad={() => handleImageLoad(session.sessionId)}
+                        onError={() => handleImageError(session.sessionId)}
+                        style={{ display: imageLoadStatus[session.sessionId] === 'loaded' ? 'block' : 'none' }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full px-[12px] pb-[20px] text-[#85878D] text-[16px] font-medium">
-                    {session.speaker?.name || '스피커 이름 없음'}
-                  </div>
-                  {imageLoadStatus[session.sessionId] === 'loading' && <div>Loading...</div>}
-                  {imageLoadStatus[session.sessionId] === 'error' && <div>Error loading image</div>}
-                  <img
-                    src={session.speaker?.image || '/default-image.png'}
-                    alt={`${session.title || '세션'} 이미지`}
-                    className="w-full h-[120px] h-full object-cover"
-                    onLoad={() => handleImageLoad(session.sessionId)}
-                    onError={() => handleImageError(session.sessionId)}
-                    style={{ display: imageLoadStatus[session.sessionId] === 'loaded' ? 'block' : 'none' }}
-                  />
-                </div>
+                ))}
               </div>
             ))}
 
-            {allSessions?.length === 0 && (
+            {sessions.length === 0 && (
               <div className="text-center py-20 text-gray-500">
                 등록된 세션이 없습니다
               </div>
             )}
           </div>
-        </div>
-
-
         </div>
       )}
     </>

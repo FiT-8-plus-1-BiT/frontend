@@ -312,9 +312,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
@@ -352,9 +352,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
@@ -392,9 +392,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
@@ -432,9 +432,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
@@ -472,9 +472,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
@@ -512,9 +512,9 @@ const MainPage = () => {
 
             {/* 세션들 (간격 10px) */}
             {[...Array(1)].map((_, colIndex) => (
-              <div key={colIndex} className="flex space-x-[10px] w-full">
+              <div key={colIndex} className="flex space-x-[10px] w-full justify-center">
                 {[...Array(5)].map((_, index) => (
-                  <div key={index} className="w-[280px] bg-[#F4F4F4] flex flex-col">
+                  <div key={index} className="w-[280px] bg-[white] flex flex-col">
                     {/* Title */}
                     <h3 className="text-black text-[24px] font-bold leading-[150%] 
                       tracking-[-0.12px] pt-[50px] pl-[16px] pr-[58px]">
