@@ -87,13 +87,6 @@ function LiveSessionItem({
 
         {/* 강연자 */}
         <div className="flex items-center gap-2 text-[#131212] font-medium">
-          {speaker?.image && (
-            <img
-              src={speaker.image}
-              alt={speaker.name}
-              className="w-6 h-6 rounded-full"
-            />
-          )}
           {speaker?.name}
         </div>
 

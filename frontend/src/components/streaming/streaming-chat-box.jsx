@@ -1,9 +1,13 @@
 // src/components/StreamingChatBox.jsx
-import React, { useEffect, useState, useRef, useCallback, memo } from "react";
-import { createStompClient, sendMessage, disconnectStompClient } from "~/api/chat/stomp-client";
-import { likeQuestion, unlikeQuestion } from "~/api/chat/chat-like";
-import { Send, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react";
-import { QuestionList } from "~/components/streaming/streaming-chat-liked-question";
+import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
+import {
+  createStompClient,
+  sendMessage,
+  disconnectStompClient,
+} from '~/api/chat/stomp-client';
+import { likeQuestion, unlikeQuestion } from '~/api/chat/chat-like';
+import { Send, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
+import { QuestionList } from '~/components/streaming/streaming-chat-liked-question';
 
 // ────────────────────────────────────────────────
 // Memoized Message Item Component
@@ -12,8 +16,8 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
   const handleLikeClick = () => onLikeToggle(msg.messageId, msg.likedByUser);
 
   const formattedTime = new Date(msg.timestamp).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   });
 
@@ -28,14 +32,16 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
             <span className="text-[14px] font-semibold text-gray-800">
               {msg.sender}
             </span>
-            {msg.type === "question" && (
+            {msg.type === 'question' && (
               <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
                 질문
               </span>
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span className={`text-[14px] ${msg.type === "question" ? "text-blue-600" : "text-gray-800"}`}>
+            <span
+              className={`text-[14px] ${msg.type === 'question' ? 'text-blue-600' : 'text-gray-800'}`}
+            >
               {msg.content}
             </span>
           </div>
@@ -43,11 +49,11 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
       </div>
       <button
         onClick={handleLikeClick}
-        className={`ml-2 flex items-center gap-1 ${msg.likedByUser ? "text-red-500" : "text-gray-400"} hover:text-red-600 transition-colors`}
+        className={`ml-2 flex items-center gap-1 ${msg.likedByUser ? 'text-red-500' : 'text-gray-400'} hover:text-red-600 transition-colors`}
       >
         <svg
           className="w-4 h-4"
-          fill={msg.likedByUser ? "currentColor" : "none"}
+          fill={msg.likedByUser ? 'currentColor' : 'none'}
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
@@ -72,19 +78,19 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [stompClient, setStompClient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [category, setCategory] = useState("GENERAL");
-  const [message, setMessage] = useState("");
+  const [category, setCategory] = useState('GENERAL');
+  const [message, setMessage] = useState('');
   const chatEndRef = useRef(null);
 
   // WebSocket 연결 및 해제
   useEffect(() => {
     if (!token || !sessionId) {
-      console.log('토큰없어서 종료')
+      console.log('토큰없어서 종료');
       return; // 🔐 토큰이 없으면 연결하지 않음
     }
 
     const client = createStompClient(token, sessionId, (newMessage) =>
-      setMessages((prev) => [...prev, newMessage])
+      setMessages((prev) => [...prev, newMessage]),
     );
     setStompClient(client);
     return () => {
@@ -94,25 +100,25 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
 
   // 메시지가 추가될 때 스크롤 자동 이동
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   // 메시지 전송 핸들러
   const handleSendMessage = () => {
     if (!stompClient?.connected) {
-      console.error("WebSocket not connected");
+      console.error('WebSocket not connected');
       return;
     }
-    console.log('stompClient',stompClient)
+    console.log('stompClient', stompClient);
     if (message.trim()) {
-      sendMessage(stompClient, sessionId, userId, message, category);
-      setMessage("");
+      sendMessage(stompClient, token, sessionId, userId, message, category);
+      setMessage('');
     }
   };
 
   // 엔터 키 입력 처리 (Shift + Enter는 줄바꿈)
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -134,13 +140,13 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
         .then(() => {
           // 메시지 상태 업데이트 로직 추가
         })
-        .catch((err) => console.error("Unlike failed:", err));
+        .catch((err) => console.error('Unlike failed:', err));
     } else {
       likeQuestion(messageId)
         .then(() => {
           // 메시지 상태 업데이트 로직 추가
         })
-        .catch((err) => console.error("Like failed:", err));
+        .catch((err) => console.error('Like failed:', err));
     }
   };
 
@@ -157,7 +163,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
       {/* 데스크탑 채팅창 */}
       <div
         className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${
-          isChatOpen ? "w-[404px]" : "w-[56px]"
+          isChatOpen ? 'w-[404px]' : 'w-[56px]'
         }`}
       >
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">
@@ -221,7 +227,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
       {/* 모바일 채팅 Bottom Sheet */}
       <div
         className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${
-          isMobileChatOpen ? "translate-y-0" : "translate-y-full"
+          isMobileChatOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         <div className="flex items-center justify-between p-3 border-b">

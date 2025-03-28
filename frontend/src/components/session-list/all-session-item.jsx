@@ -23,7 +23,11 @@ function AllSessionItem({
         onClick={onClick}
       >
         {thumbnail ? (
-          <img src={thumbnail} alt={title} className="w-full h-full object-cover" />
+          <img
+            src={thumbnail}
+            alt={title}
+            className="w-full h-full object-cover"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
             이미지 없음
@@ -42,13 +46,6 @@ function AllSessionItem({
 
         {/* speaker 객체 분해하여 렌더링 */}
         <div className="flex items-center gap-2">
-          {speaker?.image && (
-            <img
-              src={speaker.image}
-              alt={speaker.name}
-              className="w-8 h-8 rounded-full"
-            />
-          )}
           <p
             className="text-gray-700 font-medium"
             style={{ fontSize: 'clamp(14px, 1.2vw, 18px)' }}

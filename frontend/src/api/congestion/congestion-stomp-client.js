@@ -7,9 +7,8 @@ export function createCongestionStompClient(token, onMessageReceived) {
   //   console.warn('⚠️ access-token 없음: 혼잡도 수신 불가');
   //   return;
   // }
-  console.log(token)
   const client = new Client({
-    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'), 
+    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
     // connectHeaders: {
     //   Authorization: `Bearer ${token}`,
     // },
@@ -30,9 +29,7 @@ export function createCongestionStompClient(token, onMessageReceived) {
         } catch (e) {
           console.error('❌ 메시지 파싱 실패:', e);
         }
-      },{
-        Authorization: `Bearer ${token}`,
-      },);
+      });
     },
 
     onStompError: (frame) => {
