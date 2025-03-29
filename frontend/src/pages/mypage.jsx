@@ -115,8 +115,8 @@ const EditProfile = ({ onProfileUpdate }) => {
   };
 
   return (
-    <div className="w-[1520px] h-[954px] mx-[200px] my-[36px] bg-white mb-[36px]">
-      <h1 className="h-[66px] text-black text-[44px] font-bold text-left pb-[80px] ml-[46px]">
+    <div className="flex flex-col items-center justify-center w-full max-w-[1520px] h-auto lg:h-[954px] mx-auto my-[36px] bg-white lg:mb-[200px]">
+      <h1 className="h-[66px] text-black text-[44px] font-bold pb-[80px] ml-[-1200px] mt-[170px]">
         프로필 수정
       </h1>
       
@@ -140,7 +140,7 @@ const EditProfile = ({ onProfileUpdate }) => {
               value={email}
               readOnly
               className="pl-[20px] pr-[20px] pt-[12px] pb-[12px] border bg-[#FAFAFA] text-[#A9ABB4]
-                w-[640px] h-[54px] text-[20px] font-medium leading-[150%] text-left"
+                w-[1180px] h-[54px] text-[20px] font-medium leading-[150%] text-left"
             />
             <p className='text-[#606166] mt-[12px] ml-[20px]'>
               간편 로그인으로 연결되었습니다.
@@ -171,7 +171,7 @@ const EditProfile = ({ onProfileUpdate }) => {
             type="text"
             placeholder={lastName ? `${lastName} ❌` : "성과 이름은 입력한 경우엔 텍스트 색이 바뀌고, 엑스가 떠요"}
             className="pl-[20px] pr-[20px] pt-[12px] pb-[12px] 
-              w-[640px] h-[54px] text-[20px] font-medium leading-[150%] text-left
+              w-[1320px] h-[54px] text-[20px] font-medium leading-[150%] text-left
               border bg-[#FAFAFA]"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -333,21 +333,22 @@ const EditProfile = ({ onProfileUpdate }) => {
 
       <div className="pb-[20px]" />
 
-      <label className="pl-[100px] w-[1320px] h-[33px] text-left 
+      <label className="pl-[50px] w-[1320px] h-[33px] text-left 
         text-[22px] text-[#131212] font-bold leading-[150%] pb-[16px] mb-[16px]">
           관심 분야
       </label>
 
-      <div className="flex flex-wrap align-center h-auto ml-[100px] mr-[100px] mt-[16px] p-[20px]">
+      <div className="flex flex-wrap align-center h-auto ml-[200px] mt-[16px] p-[20px]">
         <div className="flex flex-wrap gap-[20px] mr-[300px]">
           {tags.map((tag, index) => (
             <label
               key={index}
-              className={`w-[176px] w-full h-[32px] pt-[6px] pb-[6px] text-center text-[16px] font-medium leading-[150%] tracking-[-0.5px] rounded-[4px] cursor-pointer ${
-                selectedTags.includes(tag)
+              className={`w-[176px] h-[32px] pt-[6px] pb-[6px] text-center text-[16px] 
+                font-medium leading-[150%] tracking-[-0.5px] rounded-[4px] cursor-pointer 
+                ${selectedTags.includes(tag)
                   ? "bg-[#007AFF] text-white"
-                  : "bg-[#F4F4F4] text-[#606166]"
-              }`}
+                  : "bg-[#F4F4F4] text-[#606166]"}
+              `}
               onClick={() => handleTagClick(tag)}
             >
               {tag}
@@ -356,7 +357,8 @@ const EditProfile = ({ onProfileUpdate }) => {
         </div>
       </div>
 
-      <p className="pl-[120px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">
+      <p className="pl-[100px] pr-[120px] w-[1280px] h-[24px] text-left text-[#606166] 
+        text-[16px] font-medium leading-[150%] tracking-[-0.5px] mt-[16px] mb-[40px]">
         관심 분야 3가지 선택해주세요.
       </p>
 
