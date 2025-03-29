@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
 
 import { postLike, deleteLike } from '~/api/session/session-like-unlike'; // 이건 위 함수 저장한 파일 경로
@@ -15,6 +16,15 @@ const handleUnlike = async () => {
     console.log('좋아요 취소 성공:', result);
   }
 };
+=======
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getSessionInformation } from '~/api/session/get-session-information';
+import { postLike, deleteLike } from '~/api/session/session-like-unlike';
+// import { useAudienceStreaming } from '../../hooks/streaming/use-audience-streaming';
+import AudienceStreaming from './audience-streaming';
+>>>>>>> Stashed changes
 // 공통 스타일 변수
 const tagClasses =
   "flex justify-center items-center self-stretch rounded-lg border bg-[#efeffd] border-[#efeffd] py-1 px-4 h-8 text-[#4f5158] text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
@@ -41,7 +51,54 @@ const Icon = ({ color = '#171719' }) => (
 const tags = ['디자이너', '기술스택', '뭐든 배워가자'];
 
 function StreamingInformation({ mode }) {
+<<<<<<< Updated upstream
   const [muted, setMuted] = useState(false); // 음소거 상태 관리
+=======
+  const [muted, setMuted] = useState(false);
+  const [sessionInfo, setSessionInfo] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(null);
+
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get('session_id');
+  console.log('세션아이디', sessionId)
+  const token = useSelector((state) => state.auth.token); // 💡 리덕스에서 토큰 가져오기
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const data = await getSessionInformation(sessionId, token);
+        setSessionInfo(data);
+        setIsLiked(data.isLiked);
+        setLikesCount(data.likesCount);
+      } catch (e) {
+        console.error('❗ 세션 정보 로딩 실패:', e);
+      }
+    };
+
+    if (sessionId) fetchSession();
+  }, [sessionId]);
+  console.log('세션정보', sessionInfo)
+  const handleLike = async () => {
+    try {
+      await postLike(sessionId, token);
+      setIsLiked(true);
+      setLikesCount((prev) => prev + 1);
+    } catch (e) {
+      console.error('좋아요 실패', e);
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      await deleteLike(sessionId, token);
+      setIsLiked(false);
+      setLikesCount((prev) => Math.max(0, prev - 1));
+    } catch (e) {
+      console.error('좋아요 취소 실패', e);
+    }
+  };
+>>>>>>> Stashed changes
 
   return (
     <div className={`flex flex-col gap-6 mt-6`}>
