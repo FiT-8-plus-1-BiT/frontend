@@ -33,8 +33,8 @@ const EditProfile = ({ onProfileUpdate }) => {
   };  
 
   const tags = [
-    "규제 기술", "마이데이터", "개인 금융 관리", "크라우드펀딩", "대출", "핀테크 인프라", "투자 및 자산 관리",
-    "블록체인 및 암호화폐", "금융 포용", "결제 및 송금", "디지털 뱅킹", "대출", "보험 테크"
+    "결제 및 송금", "디지털 뱅킹", "대출", "투자 및 자산 관리", "보험 테크", "블록체인 및 암호화폐", 
+    "규제 기술(RegTech)", "크라우드펀딩", "개인 금융 관리", "마이데이터", "핀테크 인프라", "금융 포용", 
   ];
 
   const handleTagClick = (tag) => {
@@ -379,8 +379,32 @@ const Mypage = () => {
   const [imageLoadStatus, setImageLoadStatus] = useState({});
 
   const [likedSessions, setLikedSessions] = useState([]);
-
   const [showModal, setShowModal] = useState(false); // 모달 상태
+
+  const fetchRecommendedSessions = async () => {
+    const accessToken = localStorage.getItem('access-token');
+
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.get('https://fit-conf.shop/api/v1/session/recommended', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.success) {
+        setSessions(response.data.response);
+      } else {
+        console.error('Failed to fetch recommended sessions:', response.data.message);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+    }
+  };
 
   // 좋아요 표시된 세션 가져오기
   const fetchLikedSessions = async () => {
@@ -412,6 +436,7 @@ const Mypage = () => {
   useEffect(() => {
     fetchMySchedule();
     fetchLikedSessions();
+    fetchRecommendedSessions();
   }, []);
 
   const handleErrorResponse = (errorData) => {
@@ -638,110 +663,109 @@ const Mypage = () => {
           </div>
 
           <div className="px-5 py-16 flex flex-col">
-      <div
-        className="sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px] cursor-pointer"
-        onClick={() => setShowModal(true)} // 클릭 시 모달 열기
-      >
-        <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
-          좋아요 표시한 강연
-        </div>
-        <div className="flex gap-[20px] space-x-6 py-5 mb-[20px]">
-          {likedSessions.length > 0 ? (
-            likedSessions.slice(0, 3).map((session) => (
-              <div key={session.sessionId} className="flex items!-center justify-left space-x-4 mb-4">
-                {/* 프로필 이미지 */}
-                <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
-                  <img
-                    src={session.speakerImage}
-                    alt={session.speakerName}
-                    className="object-cover w-full h-full bg-[gray]"
-                  />
-                </div>
-                {/* 닉네임과 이메일 */}
-                <div className="flex flex-col gap-[2px]">
-                  <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
-                    {session.title}
-                  </div>
-                  <div className="text-[#606166] text-base font-medium leading-[150%]">
-                    {session.speakerName}
+            <div
+              className="sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px] cursor-pointer"
+              onClick={() => setShowModal(true)} // 클릭 시 모달 열기
+            >
+              <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
+                좋아요 표시한 강연
+              </div>
+              <div className="flex gap-[20px] space-x-6 py-5 mb-[20px]">
+                {likedSessions.length > 0 ? (
+                  likedSessions.slice(0, 3).map((session) => (
+                    <div key={session.sessionId} className="flex items!-center justify-left space-x-4 mb-4">
+                      {/* 프로필 이미지 */}
+                      <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                        <img
+                          src={session.speakerImage}
+                          alt={session.speakerName}
+                          className="object-cover w-full h-full bg-[gray]"
+                        />
+                      </div>
+                      {/* 닉네임과 이메일 */}
+                      <div className="flex flex-col gap-[2px]">
+                        <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                          {session.title}
+                        </div>
+                        <div className="text-[#606166] text-base font-medium leading-[150%]">
+                          {session.speakerName}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>좋아요 표시한 강연이 없습니다.</p>
+                )}
+              </div>
+            </div>
+
+            {/* 모달 창 */}
+            {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg p-6 w-[90%] max-w-[600px] relative">
+                  <button
+                    onClick={() => setShowModal(false)} // 모달 닫기 버튼
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                  >
+                    ✖️
+                  </button>
+                  <h2 className="text-xl font-bold mb-4">❤️좋아요 표시한 강연 전체 목록</h2>
+                  <hr  className='mb-[20px]' />
+                  <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+                    {likedSessions.map((session) => (
+                      <div key={session.sessionId} className="flex items-center space-x-4">
+                        {/* 프로필 이미지 */}
+                        <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                          <img
+                            src={session.speakerImage}
+                            alt={session.speakerName}
+                            className="object-cover w-full h-full bg-[gray]"
+                          />
+                        </div>
+                        {/* 닉네임과 이메일 */}
+                        <div className="flex flex-col gap-[2px]">
+                          <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                            {session.title}
+                          </div>
+                          <div className="text-[#606166] text-base font-medium leading-[150%]">
+                            {session.speakerName}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <p>좋아요 표시한 강연이 없습니다.</p>
-          )}
-        </div>
-      </div>
-
-      {/* 모달 창 */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 w-[90%] max-w-[600px] relative">
-            <button
-              onClick={() => setShowModal(false)} // 모달 닫기 버튼
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-            >
-              ✖️
-            </button>
-            <h2 className="text-xl font-bold mb-4">❤️좋아요 표시한 강연 전체 목록</h2>
-            <hr  className='mb-[20px]' />
-            <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
-              {likedSessions.map((session) => (
-                <div key={session.sessionId} className="flex items-center space-x-4">
-                  {/* 프로필 이미지 */}
-                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
-                    <img
-                      src={session.speakerImage}
-                      alt={session.speakerName}
-                      className="object-cover w-full h-full bg-[gray]"
-                    />
-                  </div>
-                  {/* 닉네임과 이메일 */}
-                  <div className="flex flex-col gap-[2px]">
-                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
-                      {session.title}
-                    </div>
-                    <div className="text-[#606166] text-base font-medium leading-[150%]">
-                      {session.speakerName}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+            )}
 
             <hr className="border-[#E0E0E0]" />
 
-            <div className="sm:flex-row items-start sm:items-center 
-              sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
-            >
+            <div className="sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]">
               <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
                 추천 강연
               </div>
-              <div className="space-x-6 py-5 mb-[20px]">
-                {/* 프로필 정보 */}
-                <div className="flex items-center space-x-4">
-                  {/* 프로필 이미지 */}
-                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
-                    <img
-                      src=''
-                      alt="profile"
-                      className="object-cover w-full h-full bg-[gray]"
-                    />
-                  </div>
-                  {/* 닉네임과 이메일 */}
-                  <div className="flex flex-col gap-[2px]">
-                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
-                      암호화폐 규제와 글로벌 시장 대용 전략
+              <div className="flex flex-row flex-wrap gap-[30px] w-[900px] py-5 mb-[20px]">
+                {sessions.map((session) => (
+                  <div key={session.id} className="flex items-center space-x-4">
+                    {/* 프로필 이미지 */}
+                    <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                      <img
+                        src={session.speaker?.image || 'default-image-url.jpg'} // 옵셔널 체이닝과 기본값 설정
+                        alt={session.speaker?.name || 'Unknown Speaker'}
+                        className="object-cover w-full h-full bg-[gray]"
+                      />
                     </div>
-                    <div className="text-[#606166] text-base font-medium leading-[150%]">
-                      James Lee
+                    {/* 닉네임과 이메일 */}
+                    <div className="flex flex-col gap-[2px]">
+                      <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                        {session.title || '제목 없음'}
+                      </div>
+                      <div className="text-[#606166] text-base font-medium leading-[150%]">
+                        {session.speaker?.name || '발표자 정보 없음'}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
