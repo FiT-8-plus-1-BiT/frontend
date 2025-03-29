@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getAllSessions } from '../../api/session/get-all-session';
-import { getLiveSessions } from '../../api/session/get-live-session';
+import { getAllSessions } from '~/api/session/get-all-session';
+import { getLiveSessions } from '~/api/session/get-live-session';
+import { getRecommendedSessions } from '~/api/session/get-recommended-session';
+
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -55,15 +57,25 @@ const SessionSection = ({ title, sessions }) => (
 // 전체 Navbar
 const StreamingSessionNavbar = () => {
   const [liveSessions, setLiveSessions] = useState([]);
-  const [popularSessions, setPopularSessions] = useState([]);
+  const [recommendedSessions, setRecommendedSessions] = useState([]);
+  const [allSessions, setAllSessions] = useState([]);
+
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const allSessions = await getAllSessions(token);
-        const liveSessionsData = await getLiveSessions(token);
+        const liveSessions = await getLiveSessions(token);
+        const recommendedSessions = await getRecommendedSessions(token);
 
+        const mappedRecommended = recommendedSessions.map((s) => ({
+          id: s.id,
+          sessionName: s.title,
+          speakerName: s.speaker.name,
+          imageUrl: s.speaker.image,
+          isLive: false,
+        }));
         const mappedAll = allSessions.map((s) => ({
           id: s.id,
           sessionName: s.title,
@@ -72,7 +84,7 @@ const StreamingSessionNavbar = () => {
           isLive: false,
         }));
 
-        const mappedLive = liveSessionsData.map((s) => ({
+        const mappedLive = liveSessions.map((s) => ({
           id: s.id,
           sessionName: s.title,
           speakerName: s.speaker.name,
@@ -80,7 +92,8 @@ const StreamingSessionNavbar = () => {
           isLive: true,
         }));
 
-        setPopularSessions(mappedAll);
+        setRecommendedSessions(mappedRecommended);
+        setAllSessions(mappedAll);
         setLiveSessions(mappedLive);
       } catch (e) {
         console.error('❗ 세션 정보 로딩 실패:', e);
@@ -93,7 +106,9 @@ const StreamingSessionNavbar = () => {
   return (
     <aside className="h-[768px] min-w-[132px] bg-white border-r border-gray-300 overflow-y-auto scrollbar-hide pt-[28px]">
       <SessionSection title="라이브 세션" sessions={liveSessions} />
-      <SessionSection title="전체 세션" sessions={popularSessions} />
+      <SessionSection title="전체 세션" sessions={allSessions} />
+      <SessionSection title="인기 세션" sessions={recommendedSessions} />
+
     </aside>
   );
 };

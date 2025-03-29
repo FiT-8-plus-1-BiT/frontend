@@ -144,7 +144,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
       {/* 데스크탑 채팅창 */}
       <div
         className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${
-          isChatOpen ? 'w-[404px]' : 'w-[56px]'
+          isChatOpen && mode ? 'w-[404px]' : 'w-[56px]'
         }`}
       >
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">

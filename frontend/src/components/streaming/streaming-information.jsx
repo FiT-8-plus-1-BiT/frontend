@@ -153,9 +153,7 @@ function StreamingInformation({ mode }) {
               {sessionInfo?.speaker?.name || '발표자'}
             </span>
           </div>
-          <span className="text-sm items-center text-black">
-            N 일차 · 00:00 - 00:00
-          </span>
+          
         </div>
 
         {/* 강연 제목 */}
