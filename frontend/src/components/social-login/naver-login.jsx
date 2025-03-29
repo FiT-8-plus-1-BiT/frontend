@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "~/redux/auth-slice";
 import "~/index.css";
-// import { useNavigate } from "react-router-dom";
 
 const NaverLogin = () => {
   const dispatch = useDispatch();
@@ -49,9 +48,8 @@ const NaverLogin = () => {
     }
   }, [dispatch]);
 
-  // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
   const onNaverLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/naver";
+    window.location.href = "https://fit-conf.shop/oauth2/authorization/naver";
   };
   
   return (
@@ -61,7 +59,7 @@ const NaverLogin = () => {
         flex items-center justify-center gap-4 p-2"
     >
       <img
-        src="/images/네이버 로고.png"
+        src="/images/NaverLogo.png"
         alt="네이버 로고"
         className="w-[24px] h-[24px] sm:w-[25px] sm:h-[25px]"
       />

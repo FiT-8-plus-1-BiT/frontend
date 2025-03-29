@@ -18,22 +18,29 @@ const loginMobilePage = () => {
             {/* 로고 영역 */}
             <div className="mt-[20px] ml-[20px] mb-[16px]">
                 <img
-                    src="./images/logo (1).png"
+                    src="/images/MobileLoginLogo.png"
                     alt="logo"
                     className="w-[60px] h-[60px]"
                 />
             </div>
 
             {/* 텍스트 영역 */}
-            <div className="w-[279px] ml-[40px] mr-[76px] mb-[266px]">
-                <p 
-                    className="text-[22px] font-medium leading-[150%] 
-                        tracking-[-0.12px] text-black"
-                >
-                    안녕하세요, <br />
-                    합반 프로젝트에서는 <br />
-                    총 4개의 직무가 함께해요!
-                </p>
+            <div className='flex flex-col ml-[20px]'>
+              <h1 className="text-black text-[28px] font-bold">
+                안녕하세요
+              </h1>
+              <h1 className="text-black text-[28px] font-bold">
+                FiT입니다
+              </h1>
+            </div>
+
+            <div className='flex flex-col ml-[20px] mt-[12px] mb-[238px] text-[#45464A]'>
+              <p className="text-black text-[12px]">
+                네이버, 카카오, 구글 계정으로
+              </p>
+              <p className="text-black text-[12px]">
+                3초안에 가입하고 바로 시작해보세요!
+              </p>
             </div>
 
             {/* 소셜 로그인 버튼 영역 */}

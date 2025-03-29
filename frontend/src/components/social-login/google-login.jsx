@@ -32,6 +32,7 @@ const GoogleLoginComponent = () => {
               accessToken = accessToken.substring(7);
             }
             localStorage.setItem("access-token", accessToken);
+            console.log("🔑 Access Token:", accessToken);
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
@@ -44,7 +45,14 @@ const GoogleLoginComponent = () => {
             );
 
             const userData = userResponse.data.response;
-            console.log("User Data:", userData);
+            console.log("👤 User Data:", userData);
+
+            // Google 기본 프로필 이미지 처리
+            if (!userData.imageUrl) {
+              console.log("⚠️ 프로필 이미지가 없습니다. Google 기본 이미지를 사용합니다.");
+              // 기본 이미지 URL
+              userData.imageUrl = `https://lh3.googleusercontent.com/a/default-user`; 
+            }
 
             // 사용자 정보와 토큰을 Redux 상태에 저장
             dispatch(loginSuccess({ user: userData, token: accessToken }));
@@ -61,12 +69,10 @@ const GoogleLoginComponent = () => {
 
     // URL 쿼리 파라미터에서 error 확인
     const params = new URLSearchParams(window.location.search);
-    const error = params.get('error');
-
-    if (error) {
-      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
-    } else {
+    if (!params.get("error")) {
       exchangeToken();
+    } else {
+      alert("이메일이 중복되었습니다. 다른 계정으로 회원가입해주세요.");
     }
   }, [dispatch, navigate]);
 
@@ -81,7 +87,7 @@ const GoogleLoginComponent = () => {
         flex items-center justify-center gap-4 p-2 border border-gray-300"
     >
       <img
-        src="/images/google-logo.png"
+        src="/images/GoogleLogo.png"
         alt="구글 로고"
         className="w-[24px] h-[24px] sm:w-[35px] sm:h-[35px]"
       />

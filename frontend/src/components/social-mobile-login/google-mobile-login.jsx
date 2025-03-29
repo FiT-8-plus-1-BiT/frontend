@@ -83,7 +83,7 @@ const GoogleMobileLoginComponent = () => {
         w-full h-[48px] bg-[#FFFFFF] border border-gray-300 text-black"
     >
       <img
-        src="./images/구글 로고.png"
+        src="./images/GoogleLogo.png"
         alt="Google"
         className="w-[20px] h-[20px] mr-[20px]"
       />
