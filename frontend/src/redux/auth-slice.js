@@ -7,6 +7,10 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  name: null,
+  job: null,
+  experience: null,
+  interests: [],
 };
 
 // authSlice 생성
@@ -58,6 +62,13 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
     },
+    // 프로필 업데이트
+    updateProfile(state, action) {
+      state.name = action.payload.name;
+      state.job = action.payload.job;
+      state.experience = action.payload.experience;
+      state.interests = action.payload.interests;
+    },
   },
 });
 
@@ -71,6 +82,7 @@ export const {
   setError,
   logout,
   setIsAuthenticated,
+  updateProfile,
 } = authSlice.actions;
 
 // 리듀서 내보내기

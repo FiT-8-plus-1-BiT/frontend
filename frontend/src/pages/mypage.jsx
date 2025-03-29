@@ -3,7 +3,7 @@ import Navbar from "~/components/navbar.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { loginSuccess, logout } from "~/redux/auth-slice.js";
+import { loginSuccess, logout, updateProfile } from "~/redux/auth-slice.js";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const EditProfile = ({ onProfileUpdate }) => {
@@ -21,6 +21,9 @@ const EditProfile = ({ onProfileUpdate }) => {
   const [selectedValue2, setSelectedValue2] = useState("");
 
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleOptionClick = (value) => {
     setSelectedValue(value); // 선택된 값을 상태에 저장
@@ -143,6 +146,15 @@ const EditProfile = ({ onProfileUpdate }) => {
   };
 
   const handleSave = () => {
+    // Redux에 dispatch하여 프로필 정보 업데이트
+    dispatch(
+      updateProfile({
+        name: lastName,
+        job: selectedValue,
+        experience: selectedValue2,
+        interests: selectedTags,
+      })
+    );
     onProfileUpdate();
   };
 
@@ -381,6 +393,12 @@ const Mypage = () => {
   const [likedSessions, setLikedSessions] = useState([]);
   const [showModal, setShowModal] = useState(false); // 모달 상태
 
+   // Redux 스토어에서 이름, 직무, 연차, 관심 분야 가져오기
+   const name = useSelector((state) => state.auth.name);
+   const job = useSelector((state) => state.auth.job);
+   const experience = useSelector((state) => state.auth.experience);
+   const interests = useSelector((state) => state.auth.interests);
+
   const fetchRecommendedSessions = async () => {
     const accessToken = localStorage.getItem('access-token');
 
@@ -582,7 +600,8 @@ const Mypage = () => {
               {/* 닉네임과 이메일 */}
               <div className="flex flex-col">
                 <div className="text-black text-2xl font-bold leading-[150%] tracking-[-0.14px]">
-                  {user?.name || "이름을 가져오지 못 했습니다"}
+                  {/* {user?.name || "이름을 가져오지 못 했습니다"} */}
+                  {name || user?.name || '이름 없음'}
                 </div>
                 <div className="text-[#606166] text-base font-medium leading-[150%]">
                   {user?.email || "이메일을 가져오지 못 했습니다"}
@@ -625,7 +644,7 @@ const Mypage = () => {
               </span>
               <span className="text-[#606166] text-lg pl-[60px] leading-[150%] 
                 tracking-[-0.22px] font-bold py-[20px]">
-                
+                {job || '직무 없음'}
               </span>
             </div>
 
@@ -639,7 +658,7 @@ const Mypage = () => {
               </span>
               <span className="text-[#606166] text-lg pl-[60px] 
                 leading-[150%] tracking-[-0.22px] font-bold">
-                
+                {experience || '연차 없음'}
               </span>
             </div>
 
@@ -650,9 +669,20 @@ const Mypage = () => {
                 관심 분야
               </div>
               <div className="flex flex-wrap my-[20px] gap-2 sm:gap-5">
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
-                <label className="bg-[#131212] text-white py-2 px-5 text-xl font-medium rounded-[4px]">Label</label>
+                {interests && interests.length > 0 ? (
+                  interests.map((interest, index) => (
+                    <div 
+                      key={index} 
+                      className='flex align-center justify-center max-w-[250px] h-auto py-2 
+                        px-4 bg-gray-200 text-[#606166] text-base font-bold ml-[-6px] mb-[-10px]
+                        rounded-lg cursor-pointer border border-gray-400 hover:bg-gray-200 transition'
+                    >
+                      {interest}
+                    </div>
+                  ))
+                ) : (
+                  <div>관심 분야 없음</div>
+                )}
               </div>
             </div>
           </div>
