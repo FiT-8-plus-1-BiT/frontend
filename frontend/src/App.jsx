@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SpeakerPage from "./pages/speaker";
 
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
@@ -57,6 +58,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/speaker"
+              element={
+                <ProtectedRoute>
+                  <SpeakerPage />
+                </ProtectedRoute>
+              }
+            />
+
           </Routes>
         </Router>
       </GoogleOAuthProvider>

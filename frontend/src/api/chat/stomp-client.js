@@ -78,7 +78,7 @@ export function sendMessage(
   };
 
   stompClient.publish({
-    destination: `/pub/chat/${sessionId}`,
+    destination: `/pub/chat-pub/${sessionId}`,
     body: JSON.stringify(messages),
     headers: {
       'Content-Type': 'application/json',
