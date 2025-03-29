@@ -3,8 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getSessionInformation } from '~/api/session/get-session-information';
 import { postLike, deleteLike } from '~/api/session/session-like-unlike';
-import { useAudienceStreaming } from '../../hooks/streaming/use-audience-streaming';
+
 import AudienceStreaming from './audience-streaming';
+
 // 공통 스타일 변수
 const tagClasses =
   "flex justify-center items-center self-stretch rounded-lg border bg-[#efeffd] border-[#efeffd] py-1 px-4 h-8 text-[#4f5158] text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
@@ -37,7 +38,6 @@ function StreamingInformation({ mode }) {
   const sessionId = searchParams.get('session_id');
   console.log('세션아이디', sessionId)
   const token = useSelector((state) => state.auth.token); // 💡 리덕스에서 토큰 가져오기
-  const { remoteAudioRef } = useAudienceStreaming(sessionId, token, mode); // mode가 true일 때만 start
 
   useEffect(() => {
     const fetchSession = async () => {

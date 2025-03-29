@@ -1,4 +1,3 @@
-// src/components/AudienceStreaming.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -8,11 +7,12 @@ import { useSelector } from 'react-redux';
 function AudienceStreaming() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const token = useSelector((state) => state.auth.token); // Redux에서 토큰 가져오기
+  const token = useSelector((state) => state.auth.token);
   const [stompClient, setStompClient] = useState(null);
 
   const pcRef = useRef(null);
   const remoteAudioRef = useRef(null);
+  const pendingCandidates = useRef([]); // 💡 ICE 후보 저장용 큐
 
   // STOMP 연결
   useEffect(() => {
@@ -22,47 +22,78 @@ function AudienceStreaming() {
       brokerURL: '',
       webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
       connectHeaders: {
-        Authorization: `Bearer ${token}`, // ✅ Bearer 포함
+        Authorization: `Bearer ${token}`, // ✅ Bearer 포함 필수
       },
       onConnect: () => {
         console.log(`✅ STOMP 연결됨: sessionId=${sessionId}`);
+        setStompClient(client);
 
-        // SDP Answer 수신
-        client.subscribe(`/sub/room/${sessionId}/audience/answer`, (message) => {
-          const sdpAnswer = message.body;
-          if (pcRef.current) {
-            pcRef.current.setRemoteDescription({ type: 'answer', sdp: sdpAnswer })
-              .then(() => console.log('✅ setRemoteDescription 성공'))
-              .catch(err => console.error('❗ setRemoteDescription 실패', err));
-          }
-        }, { Authorization: `Bearer ${token}` });
+        // ✅ SDP Answer 수신
+        client.subscribe(
+          `/sub/room/${sessionId}/audience/answer`,
+          (message) => {
+            const sdpAnswer = message.body;
+            if (pcRef.current) {
+              pcRef.current
+                .setRemoteDescription({ type: 'answer', sdp: sdpAnswer })
+                .then(() => {
+                  console.log('✅ SDP setRemoteDescription 성공');
 
-        // ICE Candidate 수신
-        client.subscribe(`/sub/room/${sessionId}/audience/iceCandidate`, (message) => {
-          const candidateDto = JSON.parse(message.body);
-          if (pcRef.current) {
+                  // ICE 후보 처리
+                  pendingCandidates.current.forEach((candidate) => {
+                    pcRef.current
+                      .addIceCandidate(candidate)
+                      .then(() => console.log('✅ 대기 중 ICE 추가됨'))
+                      .catch((err) => console.error('❗ ICE 추가 실패', err));
+                  });
+                  pendingCandidates.current = [];
+                })
+                .catch((err) =>
+                  console.error('❗ setRemoteDescription 실패', err)
+                );
+            }
+          },
+          { Authorization: `Bearer ${token}` }
+        );
+
+        // ✅ ICE 수신
+        client.subscribe(
+          `/sub/room/${sessionId}/audience/iceCandidate`,
+          (message) => {
+            const candidateDto = JSON.parse(message.body);
             const candidate = new RTCIceCandidate(candidateDto);
-            pcRef.current.addIceCandidate(candidate)
-              .then(() => console.log('✅ ICE 추가됨'))
-              .catch((err) => console.error('❗ ICE 추가 실패', err));
-          }
-        }, { Authorization: `Bearer ${token}` });
+            if (pcRef.current) {
+              if (
+                pcRef.current.remoteDescription &&
+                pcRef.current.remoteDescription.type
+              ) {
+                pcRef.current
+                  .addIceCandidate(candidate)
+                  .then(() => console.log('✅ ICE 추가됨'))
+                  .catch((err) => console.error('❗ ICE 추가 실패', err));
+              } else {
+                console.warn('⏳ SDP 미설정 → ICE 후보 보류');
+                pendingCandidates.current.push(candidate);
+              }
+            }
+          },
+          { Authorization: `Bearer ${token}` }
+        );
       },
       onStompError: (frame) => {
         console.error('❗ STOMP 오류:', frame.headers['message']);
       },
       onWebSocketClose: () => {
-        console.warn('❗ WebSocket 연결 종료');
+        console.warn('❗ WebSocket 연결 종료됨');
       },
     });
 
     client.activate();
-    setStompClient(client);
   }, [sessionId, token]);
 
   // 오디오 수신 시작
   const startAudience = async () => {
-    if (!stompClient || !sessionId) return alert('STOMP 연결 또는 세션 ID가 없습니다.');
+    if (!stompClient || !sessionId) return alert('STOMP 연결 또는 세션 ID 없음');
 
     const pc = new RTCPeerConnection({
       iceServers: [
@@ -85,11 +116,12 @@ function AudienceStreaming() {
           sdpMid: event.candidate.sdpMid,
           sdpMLineIndex: event.candidate.sdpMLineIndex,
         };
-
         stompClient.publish({
           destination: `/pub/room/${sessionId}/audience/ice`,
           body: JSON.stringify(candidateDto),
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
       }
     };
@@ -97,8 +129,8 @@ function AudienceStreaming() {
     pc.ontrack = (event) => {
       if (remoteAudioRef.current) {
         remoteAudioRef.current.srcObject = event.streams[0];
-        remoteAudioRef.current.play().catch(err => {
-          console.warn('브라우저 재생 차단:', err);
+        remoteAudioRef.current.play().catch((err) => {
+          console.warn('브라우저 자동재생 차단:', err);
         });
       }
     };
@@ -111,20 +143,56 @@ function AudienceStreaming() {
     stompClient.publish({
       destination: `/pub/room/${sessionId}/audience`,
       body: offer.sdp,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   };
 
+  const leaveAudience = () => {
+    if (!stompClient || !sessionId) {
+      alert('STOMP 연결 또는 세션 ID 없음');
+      return;
+    }
+
+    stompClient.publish({
+      destination: `/pub/room/${sessionId}/audience/leave`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (pcRef.current) {
+      pcRef.current.close();
+      pcRef.current = null;
+    }
+
+    if (remoteAudioRef.current?.srcObject) {
+      remoteAudioRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      remoteAudioRef.current.srcObject = null;
+    }
+
+    console.log('👋 청중 나감');
+  };
+
   return (
-    <div className="p-4 border rounded-lg bg-white my-4">
-      <h2 className="text-xl font-bold mb-2">🎧 Audience Streaming</h2>
-      <p className="text-sm text-gray-600 mb-3">Session ID: {sessionId}</p>
+    <div className="p-6 bg-white rounded border shadow">
+      <h2 className="text-xl font-bold mb-3">🎧 Audience Streaming</h2>
+      <p className="text-sm mb-2">Session ID: {sessionId}</p>
+
       <button
         onClick={startAudience}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
       >
         Start Listening
       </button>
+      <button
+        onClick={leaveAudience}
+        className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+      >
+        Leave
+      </button>
+
       <audio ref={remoteAudioRef} autoPlay controls className="mt-4 w-full" />
     </div>
   );
