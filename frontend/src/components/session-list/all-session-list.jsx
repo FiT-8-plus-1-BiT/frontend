@@ -10,11 +10,11 @@ export default function AllSessionList({ token }) {
     topic: '',
     contentType: '',
     level: '',
-
   });
 
   const navigate = useNavigate();
-  const { sessions, loading, error, toggleSchedule } = useAllSessionsWithSchedule(token);
+  const { sessions, loading, error, toggleSchedule } =
+    useAllSessionsWithSchedule(token);
 
   const filteredSessions = useMemo(() => {
     return sessions.filter((session) => {
@@ -23,8 +23,7 @@ export default function AllSessionList({ token }) {
         (filters.category ? tags.field === filters.category : true) &&
         (filters.topic ? tags.topic === filters.topic : true) &&
         (filters.contentType ? tags.type === filters.contentType : true) &&
-        (filters.level ? tags.level === filters.level : true) 
-        
+        (filters.level ? tags.level === filters.level : true)
       );
     });
   }, [sessions, filters]);
@@ -50,7 +49,7 @@ export default function AllSessionList({ token }) {
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-4">전체 세션</h2>
+      <h2 className="text-3xl font-bold mb-4">전체 세션</h2>
 
       <div className="mb-8">
         <SessionFilter onFilterChange={handleFilterChange} token={token} />
@@ -62,7 +61,7 @@ export default function AllSessionList({ token }) {
             key={session.id}
             id={session.id}
             title={session.title}
-            thumbnail={session.thumbnail}
+            thumbnail={session.speaker.image}
             speaker={session.speaker}
             description={session.summary}
             tags={Object.values(session.tags)}

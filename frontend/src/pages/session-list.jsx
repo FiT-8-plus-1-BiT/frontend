@@ -6,7 +6,7 @@ export default function SessionList() {
   const token = useSelector((state) => state.auth.token);
 
   return (
-    <div className="flex flex-col min-h-screen mx-[8.4vw] pt-24 py-8">
+    <div className="flex flex-col min-h-screen mx-[8.4vw] py-8">
       <LiveSessionList token={token} />
       <AllSessionList token={token} />
     </div>

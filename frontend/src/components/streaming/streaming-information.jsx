@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
-
-import { postLike, deleteLike } from '~/api/session/session-like-unlike'; // 이건 위 함수 저장한 파일 경로
-
-const handleLike = async () => {
-  const result = await postLike(1); // 세션 ID에 따라 변경
-  if (result) {
-    console.log('좋아요 성공:', result);
-  }
-};
-
-const handleUnlike = async () => {
-  const result = await deleteLike(1);
-  if (result) {
-    console.log('좋아요 취소 성공:', result);
-  }
-};
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getSessionInformation } from '~/api/session/get-session-information';
+import { postLike, deleteLike } from '~/api/session/session-like-unlike';
+import { useAudienceStreaming } from '../../hooks/streaming/use-audience-streaming';
+import AudienceStreaming from './audience-streaming';
 // 공통 스타일 변수
 const tagClasses =
   "flex justify-center items-center self-stretch rounded-lg border bg-[#efeffd] border-[#efeffd] py-1 px-4 h-8 text-[#4f5158] text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
@@ -37,11 +27,52 @@ const Icon = ({ color = '#171719' }) => (
   </svg>
 );
 
-// 태그 리스트
-const tags = ['디자이너', '기술스택', '뭐든 배워가자'];
-
 function StreamingInformation({ mode }) {
-  const [muted, setMuted] = useState(false); // 음소거 상태 관리
+  const [muted, setMuted] = useState(false);
+  const [sessionInfo, setSessionInfo] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(null);
+
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get('session_id');
+  console.log('세션아이디', sessionId)
+  const token = useSelector((state) => state.auth.token); // 💡 리덕스에서 토큰 가져오기
+  const { remoteAudioRef } = useAudienceStreaming(sessionId, token, mode); // mode가 true일 때만 start
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const data = await getSessionInformation(sessionId, token);
+        setSessionInfo(data);
+        setIsLiked(data.isLiked);
+        setLikesCount(data.likesCount);
+      } catch (e) {
+        console.error('❗ 세션 정보 로딩 실패:', e);
+      }
+    };
+
+    if (sessionId) fetchSession();
+  }, [sessionId]);
+  console.log('세션정보', sessionInfo)
+  const handleLike = async () => {
+    try {
+      await postLike(sessionId, token);
+      setIsLiked(true);
+      setLikesCount((prev) => prev + 1);
+    } catch (e) {
+      console.error('좋아요 실패', e);
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      await deleteLike(sessionId, token);
+      setIsLiked(false);
+      setLikesCount((prev) => Math.max(0, prev - 1));
+    } catch (e) {
+      console.error('좋아요 취소 실패', e);
+    }
+  };
 
   return (
     <div className={`flex flex-col gap-6 mt-6`}>
@@ -51,31 +82,30 @@ function StreamingInformation({ mode }) {
       >
         {/* 태그 리스트 */}
         <div className="flex gap-2 pb-[12px]">
-          {tags.map((tag, idx) => (
-            <span key={idx} className={tagClasses}>
-              {tag}
-            </span>
-          ))}
+          {sessionInfo?.tags &&
+            Object.values(sessionInfo.tags).map((tag, idx) => (
+              <span key={idx} className={tagClasses}>
+                {tag}
+              </span>
+            ))}
         </div>
 
         {/* 강연 제목 & 버튼 그룹 */}
         <div className="flex flex-col xl:flex-row xl:justify-between gap-[20px] xl:gap-[40px]">
           {/* 제목 */}
           <h1 className="md:text-3xl text-xl font-semibold text-[#0e0e0e]">
-            예비 토스 디자이너의 컨포넌트 만든 척 해보기
+            {sessionInfo?.title || '로딩 중...'}
           </h1>
 
           {/* 버튼 그룹 */}
           <div className="flex md:flex-row gap-2 xl:gap-3">
             <button
+              onClick={isLiked ? handleUnlike : handleLike}
               className={`${buttonClasses} text-[#383de7] whitespace-nowrap`}
             >
               <Icon color="#383de7" />
-              좋아요 <span className="text-xs text-[#9fa0a3]">n.nn</span>
-            </button>
-            <button className={`${buttonClasses} whitespace-nowrap`}>
-              <Icon />
-              싫어요 <span className="text-xs text-[#9fa0a3]">n.nn</span>
+              좋아요
+              <span className="text-xs text-[#9fa0a3]">{likesCount}</span>
             </button>
             <button className={`${buttonClasses} whitespace-nowrap`}>
               <Icon />
@@ -91,15 +121,13 @@ function StreamingInformation({ mode }) {
       >
         {mode && (
           <div className="flex items-center justify-between gap-2">
-            {/* 프로그레시브 바 */}
+            <AudienceStreaming />
             <div className="w-full h-2 bg-gray-200 rounded-full flex items-center">
               <div
                 className="h-full bg-blue-500 rounded-full"
                 style={{ width: '50%' }}
               ></div>
             </div>
-
-            {/* 음소거 버튼 */}
             <button
               className="px-4 py-2 rounded bg-gray-0 hover:bg-gray-200 transition"
               onClick={() => setMuted(!muted)}
@@ -111,10 +139,19 @@ function StreamingInformation({ mode }) {
 
         {/* 강연자 정보 */}
         <div className="flex justify-between pb-[20px] border-b border-black">
-          {/* 프로필 이미지 */}
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-black rounded-full"></div>
-            <span className="text-lg font-medium text-[#131212]">박수연</span>
+            <div className="w-12 h-12 bg-black rounded-full overflow-hidden">
+              {sessionInfo?.speaker?.image && (
+                <img
+                  src={sessionInfo.speaker.image}
+                  alt="speaker"
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+            <span className="text-lg font-medium text-[#131212]">
+              {sessionInfo?.speaker?.name || '발표자'}
+            </span>
           </div>
           <span className="text-sm items-center text-black">
             N 일차 · 00:00 - 00:00
@@ -123,13 +160,12 @@ function StreamingInformation({ mode }) {
 
         {/* 강연 제목 */}
         <h2 className="mt-6 text-xl font-bold text-[#000000]">
-          토스는 원래 디자인을 잘하지 않았다
+          {sessionInfo?.title || '강연 제목'}
         </h2>
 
         {/* 강연 설명 */}
         <p className="text-sm text-[#000000] leading-[150%] mt-2">
-          10년의 고군분투 끝에 얻게 된 ‘좋은 디자인’을 위한 8가지 능력치. 최초
-          공개하는 디자인 B안과 함께 톺아보는 토스 디자인 성장기.
+          {sessionInfo?.summary || '강연 요약이 없습니다.'}
         </p>
       </div>
     </div>
