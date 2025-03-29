@@ -34,7 +34,9 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
         <span className="text-sm font-semibold text-[#2c2e31] truncate max-w-[96px]">
           {sessionName}
         </span>
-        <span className="text-xs text-[#9fa0a3] font-medium">{speakerName}</span>
+        <span className="text-xs text-[#9fa0a3] font-medium">
+          {speakerName}
+        </span>
       </div>
     </div>
   );
@@ -43,9 +45,7 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
 // 카테고리별 세션 목록
 const SessionSection = ({ title, sessions }) => (
   <div className="flex flex-col gap-2 mb-4">
-    <h3 className="text-[#797677] text-sm font-semibold px-4 pt-2">
-      {title}
-    </h3>
+    <h3 className="text-[#797677] text-sm font-semibold px-4 pt-2">{title}</h3>
     <div className="flex flex-col gap-3 px-4">
       {sessions.map((session) => (
         <SessionItem key={session.id} {...session} />
@@ -67,21 +67,22 @@ const StreamingSessionNavbar = () => {
       try {
         const allSessions = await getAllSessions(token);
         const liveSessions = await getLiveSessions(token);
-        const recommendedSessions = await getRecommendedSessions(token);
+        // const recommendedSessions = await getRecommendedSessions(token);
 
-        const mappedRecommended = recommendedSessions.map((s) => ({
-          id: s.id,
-          sessionName: s.title,
-          speakerName: s.speaker.name,
-          imageUrl: s.speaker.image,
-          isLive: false,
-        }));
+        // const mappedRecommended = recommendedSessions.map((s) => ({
+        //   id: s.id,
+        //   sessionName: s.title,
+        //   speakerName: s.speaker.name,
+        //   imageUrl: s.speaker.image,
+        //   isLive: s.isLive,
+        // }));
+
         const mappedAll = allSessions.map((s) => ({
           id: s.id,
           sessionName: s.title,
           speakerName: s.speaker.name,
           imageUrl: s.speaker.image,
-          isLive: false,
+          isLive: s.isLive,
         }));
 
         const mappedLive = liveSessions.map((s) => ({
@@ -89,10 +90,10 @@ const StreamingSessionNavbar = () => {
           sessionName: s.title,
           speakerName: s.speaker.name,
           imageUrl: s.speaker.image,
-          isLive: true,
+          isLive: s.isLive,
         }));
 
-        setRecommendedSessions(mappedRecommended);
+        // setRecommendedSessions(mappedRecommended);
         setAllSessions(mappedAll);
         setLiveSessions(mappedLive);
       } catch (e) {
@@ -107,8 +108,7 @@ const StreamingSessionNavbar = () => {
     <aside className="h-[768px] min-w-[132px] bg-white border-r border-gray-300 overflow-y-auto scrollbar-hide pt-[28px]">
       <SessionSection title="라이브 세션" sessions={liveSessions} />
       <SessionSection title="전체 세션" sessions={allSessions} />
-      <SessionSection title="인기 세션" sessions={recommendedSessions} />
-
+      {/* <SessionSection title="인기 세션" sessions={recommendedSessions} /> */}
     </aside>
   );
 };

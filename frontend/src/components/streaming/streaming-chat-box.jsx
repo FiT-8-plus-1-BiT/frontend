@@ -29,7 +29,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="text-[14px] font-semibold text-gray-800">
-              {msg.sender}
+              {msg.name}
             </span>
             {msg.type === 'question' && (
               <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
@@ -41,7 +41,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
             <span
               className={`text-[14px] ${msg.type === 'question' ? 'text-blue-600' : 'text-gray-800'}`}
             >
-              {msg.content}
+              {msg.message}
             </span>
           </div>
         </div>
@@ -89,7 +89,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
     if (!token || !sessionId) return;
 
     const client = createStompClient(token, sessionId, (newMessage) =>
-      setMessages((prev) => [...prev, newMessage])
+      setMessages((prev) => [...prev, newMessage]),
     );
     setStompClient(client);
     return () => {
@@ -125,7 +125,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   const handleLikeToggle = (messageId, likedByUser) => {
     const action = likedByUser ? unlikeQuestion : likeQuestion;
     action(messageId).catch((err) =>
-      console.error(`${likedByUser ? 'Unlike' : 'Like'} failed:`, err)
+      console.error(`${likedByUser ? 'Unlike' : 'Like'} failed:`, err),
     );
   };
 
@@ -144,7 +144,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
       {/* 데스크탑 채팅창 */}
       <div
         className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${
-          isChatOpen && mode ? 'w-[404px]' : 'w-[56px]'
+          isChatOpen ? 'w-[404px]' : 'w-[56px]'
         }`}
       >
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">
@@ -233,7 +233,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
           {messages.map((msg) => (
             <MessageItem
               key={msg.messageId}
-              msg={msg}
+              msg={msg.message}
               onLikeToggle={handleLikeToggle}
             />
           ))}
