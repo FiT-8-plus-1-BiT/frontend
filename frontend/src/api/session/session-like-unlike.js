@@ -1,8 +1,7 @@
 const baseURL = 'https://fit-conf.shop';
 
 // 좋아요 추가
-export async function postLike(sessionId) {
-  const token = localStorage.getItem('accessToken');
+export async function postLike(sessionId,token) {
   if (!token) {
     alert('로그인 후 이용 가능합니다.');
     return;
@@ -29,8 +28,7 @@ export async function postLike(sessionId) {
 }
 
 // 좋아요 취소 (DELETE)
-export async function deleteLike(sessionId) {
-  const token = localStorage.getItem('accessToken');
+export async function deleteLike(sessionId,token) {
   if (!token) {
     alert('로그인 후 이용 가능합니다.');
     return;

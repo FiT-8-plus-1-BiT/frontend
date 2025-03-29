@@ -55,7 +55,7 @@ const GoogleSignup = () => {
   const onGoogleSignup = () => {
     // const redirectUri = "http://localhost:5173/login"; // 회원가입 후 리디렉션할 URI
     // window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-    window.location.href = 'http://fit-conf.shop/oauth2/authorization/google';
+    window.location.href = 'https://fit-conf.shop/oauth2/authorization/google';
   };
 
   return (
