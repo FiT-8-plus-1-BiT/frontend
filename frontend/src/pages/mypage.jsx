@@ -380,6 +380,8 @@ const Mypage = () => {
 
   const [likedSessions, setLikedSessions] = useState([]);
 
+  const [showModal, setShowModal] = useState(false); // 모달 상태
+
   // 좋아요 표시된 세션 가져오기
   const fetchLikedSessions = async () => {
     const accessToken = localStorage.getItem('access-token');
@@ -406,6 +408,7 @@ const Mypage = () => {
     }
   };
 
+  // 컴포넌트가 렌더링될 때 호출
   useEffect(() => {
     fetchMySchedule();
     fetchLikedSessions();
@@ -636,16 +639,16 @@ const Mypage = () => {
 
           <div className="px-5 py-16 flex flex-col">
       <div
-        className="sm:flex-row items-start sm:items-center 
-              sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
+        className="sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px] cursor-pointer"
+        onClick={() => setShowModal(true)} // 클릭 시 모달 열기
       >
         <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
           좋아요 표시한 강연
         </div>
-        <div className="space-x-6 py-5 mb-[20px]">
+        <div className="flex gap-[20px] space-x-6 py-5 mb-[20px]">
           {likedSessions.length > 0 ? (
-            likedSessions.map((session) => (
-              <div key={session.sessionId} className="flex items-center space-x-4 mb-4">
+            likedSessions.slice(0, 3).map((session) => (
+              <div key={session.sessionId} className="flex items!-center justify-left space-x-4 mb-4">
                 {/* 프로필 이미지 */}
                 <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
                   <img
@@ -670,6 +673,45 @@ const Mypage = () => {
           )}
         </div>
       </div>
+
+      {/* 모달 창 */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-[600px] relative">
+            <button
+              onClick={() => setShowModal(false)} // 모달 닫기 버튼
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+            >
+              ✖️
+            </button>
+            <h2 className="text-xl font-bold mb-4">❤️좋아요 표시한 강연 전체 목록</h2>
+            <hr  className='mb-[20px]' />
+            <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+              {likedSessions.map((session) => (
+                <div key={session.sessionId} className="flex items-center space-x-4">
+                  {/* 프로필 이미지 */}
+                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                    <img
+                      src={session.speakerImage}
+                      alt={session.speakerName}
+                      className="object-cover w-full h-full bg-[gray]"
+                    />
+                  </div>
+                  {/* 닉네임과 이메일 */}
+                  <div className="flex flex-col gap-[2px]">
+                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                      {session.title}
+                    </div>
+                    <div className="text-[#606166] text-base font-medium leading-[150%]">
+                      {session.speakerName}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
             <hr className="border-[#E0E0E0]" />
 
