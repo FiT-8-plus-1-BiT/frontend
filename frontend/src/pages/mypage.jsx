@@ -408,6 +408,7 @@ const Mypage = () => {
 
   useEffect(() => {
     fetchMySchedule();
+    fetchLikedSessions();
   }, []);
 
   const handleErrorResponse = (errorData) => {
