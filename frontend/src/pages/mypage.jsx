@@ -45,6 +45,38 @@ const EditProfile = ({ onProfileUpdate }) => {
     }
   };
 
+  const listItemsData = [
+    { title: "백엔드 개발자", description: "거래 처리, 인증, 결제 API 등 서버 사이드 로직 개발" },
+    { title: "프론트엔드 개발자", description: "사용자-facing 금융 UI 구현 (웹/모바일 뱅킹 등)" },
+    { title: "풀스택 개발자", description: "프론트/백 모두 가능, 스타트업 중심 전체 흐름 담당" },
+    { title: "블록체인 개발자", description: "블록체인 개발자 암호화폐, 스마트컨트랙트, Web3 솔루션 개발" },
+    { title: "데이터 분석가 / 데이터 사이언티스트", description: "고객 행동 분석, 금융 데이터 기반 인사이트 도출" },
+    { title: "AI / 머신러닝 엔지니어", description: "이상거래 탐지, 자동화된 신용평가 시스템 개발" },
+    { title: "보안 전문가", description: "금융 보안 설계, 인증 체계 구축, 보안 솔루션 도입" },
+    { title: "금융 상품 기획자", description: "디지털 대출, 보험, 자산관리 상품 설계 및 운영" },
+    { title: "리스크 분석가 / 매니저", description: "신용·시장·운영 리스크 모델링 및 관리" },
+    { title: "전략 기획자", description: "핀테크 서비스 확장 및 비즈니스 전략 수립" },
+    { title: "브랜드 마케터 / 디지털 마케터", description: "마케팅 전략 수립, 브랜드 캠페인 운영" },
+    { title: "운영 매니저 / 운영 기획자", description: "컨퍼런스 및 플랫폼 운영 전략 및 실무" },
+    { title: "고객 경험(CX) 전문가", description: "고객 응대, VOC 수집 및 개선 기획" },
+    { title: "UX/UI 디자이너", description: "금융 특화 UI/UX 설계, 사용자 흐름 최적화" },
+    { title: "법무 전문가", description: "전자금융, 지급결제 등 핀테크 관련 법률 자문" },
+    { title: "규제정책 전문가 / 컴플라이언스 담당자", description: "전자금융법, 금융당국 규제 대응 및 자문" },
+    { title: "핀테크 창업가", description: "MVP 설계, 투자 유치, 시장 검증 중심의 창업자" },
+    { title: "투자자 / VC", description: "핀테크 스타트업 투자 및 액셀러레이팅 관심자" },
+    { title: "학계 연구자 / 강사", description: "핀테크 관련 정책, 기술, 교육 연구자 및 교수진" },
+    { title: "학생 / 취준생", description: "핀테크 업계 진입을 희망하는 초기 관심자" }
+  ];
+
+  const listItemsData2 = [
+    { title2: "연차 선택 안함"},
+    { title2: "연차 없음", description2: "아직 재직 경험이 없어요" },
+    { title2: "신입", description2: "일한지 1년도 안 됐어요" },
+    { title2: "주니어", description2: "1~3년간 일하고 있어요" },
+    { title2: "미들", description2: "4~7년간 일하고 있어요" },
+    { title2: "시니어", description2: "7년 이상 일하고 있어요" }
+  ];
+
   useEffect(() => {
     fetchUserAccount();
   }, []);
@@ -182,154 +214,112 @@ const EditProfile = ({ onProfileUpdate }) => {
       <div className="pb-[20px]" />
 
       <div className="flex flex-col">
-        <div className="flex flex-col ml-[100px]">
-          <label
-            className="w-[640px] h-[33px] text-left text-[22px] 
-              text-[#131212] font-bold leading-[150%] mb-[16px]">
-                직무
-          </label>
-          <div className="relative w-[1320px] h-[54px] mb-[10px]">
-            <input
-              type="text"
-              placeholder="직무를 선택해주세요"
-              value={selectedValue} // 선택된 값 표시
-              // onChange={(e) => setSelectedValue(e.target.value)} // 직접 입력 가능하도록
-              className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full 
-                text-[20px] font-medium leading-[150%] text-left 
-                placeholder:text-[#85878D]"
-            />
-            {/* 아이콘 이미지 */}
-            <motion.img
-              src="/images/show-icon.png"
-              alt="아이콘"
-              className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
-              onClick={toggleOpen}
-              animate={{ rotate: isOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
+      <div className="flex flex-col ml-[100px] relative">
+        <label className="w-[640px] h-[33px] text-left text-[22px] text-[#131212] font-bold leading-[150%] mb-[16px]">
+          직무
+        </label>
+        <div className="relative w-[1320px] h-[54px] mb-[10px]">
+          <input
+            type="text"
+            placeholder="직무를 선택해주세요"
+            value={selectedValue}
+            className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full text-[20px] font-medium leading-[150%] text-left placeholder:text-[#85878D]"
+          />
+          <motion.img
+            src="/images/show-icon.png"
+            alt="아이콘"
+            className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
+            onClick={toggleOpen}
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
 
         <AnimatePresence>
           {isOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col ml-[100px] w-[1320px] overflow-hidden border border-[#E0E0E0]"
+              className="absolute top-[100%] left-0 w-[1320px] overflow-hidden border border-[#E0E0E0] bg-white shadow-md z-10"
             >
               <div className="pt-[12px] pb-[12px] pl-[28px] pr-[28px]">
-                {/* 목록 아이템 */}
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("직무 선택 안함")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    직무 선택 안함
-                  </span>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("직무 없음")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    직무 없음
-                  </span>
-                  <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
-                    ( 아직 재직 경험이 없어요 )
-                  </p>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("주니어 직무")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    주니어 직무
-                  </span>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick("미들 직무")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    미들 직무
-                  </span>
-                </div>
-                <div className="py-[12px]" onClick={() => handleOptionClick("시니어 직무")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    시니어 직무
-                  </span>
-                </div>
+                {listItemsData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="border-b border-[#E0E0E0] py-[12px]"
+                    onClick={() => handleOptionClick(item.title)}
+                  >
+                    <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                      {item.title}
+                    </span>
+                    <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+    </div>
 
       <div className="pb-[20px]" />
 
       <div className="flex flex-col">
-        <div className="flex flex-col ml-[100px]">
-          <label
-            className="w-[640px] h-[33px] text-left text-[22px] 
-              text-[#131212] font-bold leading-[150%] mb-[16px]">
-                연차
-          </label>
-          <div className="relative w-[1320px] h-[54px] mb-[10px]">
-            <input
-              type="text"
-              placeholder="직무를 선택해주세요"
-              value={selectedValue2} // 선택된 값 표시
-              // onChange={(e) => setSelectedValue2(e.target.value)}
-              className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full 
-                text-[20px] font-medium leading-[150%] text-left 
-                placeholder:text-[#85878D]"
-            />
-            {/* 아이콘 이미지 */}
-            <motion.img
-              src="/images/show-icon.png"
-              alt="아이콘"
-              className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
-              onClick={toggleOpen2}
-              animate={{ rotate: isOpen2 ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
+      <div className="flex flex-col ml-[100px] relative">
+        <label className="w-[640px] h-[33px] text-left text-[22px] text-[#131212] font-bold leading-[150%] mb-[16px]">
+          연차
+        </label>
+        <div className="relative w-[1320px] h-[54px] mb-[10px]">
+          <input
+            type="text"
+            placeholder="연차를 선택해주세요"
+            value={selectedValue2}
+            className="bg-[#FAFAFA] pl-[20px] pr-[20px] pt-[12px] pb-[12px] w-full h-full text-[20px] font-medium leading-[150%] text-left placeholder:text-[#85878D]"
+          />
+          <motion.img
+            src="/images/show-icon.png"
+            alt="아이콘"
+            className="absolute top-[12px] right-[20px] w-[24px] h-[24px] cursor-pointer"
+            onClick={toggleOpen2}
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
 
         <AnimatePresence>
           {isOpen2 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col ml-[100px] w-[1320px] overflow-hidden border border-[#E0E0E0]"
+              className="absolute top-[100%] left-0 w-[1320px] overflow-hidden border border-[#E0E0E0] bg-white shadow-md z-10"
             >
               <div className="pt-[12px] pb-[12px] pl-[28px] pr-[28px]">
-                {/* 목록 아이템 */}
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("연차 선택 안함")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    연차 선택 안함
-                  </span>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("연차 없음")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    연차 없음
-                  </span>
-                  <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
-                    ( 아직 재직 경험이 없어요 )
-                  </p>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("주니어 연차")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    주니어 연차
-                  </span>
-                </div>
-                <div className="border-b border-[#E0E0E0] py-[12px]" onClick={() => handleOptionClick2("미들")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    미들
-                  </span>
-                </div>
-                <div className="py-[12px]" onClick={() => handleOptionClick2("시니어 연차")}>
-                  <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
-                    시니어 연차
-                  </span>
-                </div>
+                {listItemsData2.map((item2, index2) => (
+                  <div
+                    key={index2}
+                    className="border-b border-[#E0E0E0] py-[12px]"
+                    onClick={() => handleOptionClick2(item2.title2)}
+                  >
+                    <span className="text-left text-[#131212] font-medium text-[20px] leading-[150%] cursor-pointer">
+                      {item2.title2}
+                    </span>
+                    <p className="text-left text-[#85878D] font-normal text-[16px] leading-[150%] mt-1">
+                      {item2.description2}
+                    </p>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+    </div>
 
       <div className="pb-[20px]" />
 
@@ -367,7 +357,13 @@ const EditProfile = ({ onProfileUpdate }) => {
           취소하기
         </button>
         <div className="w-[40px]" />
-        <button className="w-[640px] h-[52px] bg-[#131212] text-white text-center text-[24px] font-medium leading-[150%] tracking-[-0.12px]" onClick={handleSave}>저장하기</button>
+        <button 
+          className="w-[640px] h-[52px] bg-[#131212] text-white 
+          text-center text-[24px] font-medium leading-[150%] tracking-[-0.12px]" 
+          onClick={handleSave}
+        >
+          저장하기
+        </button>
       </div>
     </div>
   );
@@ -381,6 +377,34 @@ const Mypage = () => {
   const [sessions, setSessions] = useState([]); // allSessions -> sessions로 통합
   // 이미지 로딩 상태를 저장하는 state 추가
   const [imageLoadStatus, setImageLoadStatus] = useState({});
+
+  const [likedSessions, setLikedSessions] = useState([]);
+
+  // 좋아요 표시된 세션 가져오기
+  const fetchLikedSessions = async () => {
+    const accessToken = localStorage.getItem('access-token');
+
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.get('https://fit-conf.shop/api/v1/users/sessions/like', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.success) {
+        setLikedSessions(response.data.response);
+      } else {
+        console.error('Failed to fetch liked sessions:', response.data.message);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+    }
+  };
 
   useEffect(() => {
     fetchMySchedule();
@@ -572,7 +596,7 @@ const Mypage = () => {
               </span>
               <span className="text-[#606166] text-lg pl-[60px] leading-[150%] 
                 tracking-[-0.22px] font-bold py-[20px]">
-                연차
+                
               </span>
             </div>
 
@@ -586,7 +610,7 @@ const Mypage = () => {
               </span>
               <span className="text-[#606166] text-lg pl-[60px] 
                 leading-[150%] tracking-[-0.22px] font-bold">
-                연차
+                
               </span>
             </div>
 
@@ -610,35 +634,41 @@ const Mypage = () => {
           </div>
 
           <div className="px-5 py-16 flex flex-col">
-            <div className="sm:flex-row items-start sm:items-center 
+      <div
+        className="sm:flex-row items-start sm:items-center 
               sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
-            >
-              <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
-                좋아요 표시한 강연
-              </div>
-              <div className="space-x-6 py-5 mb-[20px]">
-                {/* 프로필 정보 */}
-                <div className="flex items-center space-x-4">
-                  {/* 프로필 이미지 */}
-                  <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
-                    <img
-                      src=''
-                      alt="profile"
-                      className="object-cover w-full h-full bg-[gray]"
-                    />
+      >
+        <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
+          좋아요 표시한 강연
+        </div>
+        <div className="space-x-6 py-5 mb-[20px]">
+          {likedSessions.length > 0 ? (
+            likedSessions.map((session) => (
+              <div key={session.sessionId} className="flex items-center space-x-4 mb-4">
+                {/* 프로필 이미지 */}
+                <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                  <img
+                    src={session.speakerImage}
+                    alt={session.speakerName}
+                    className="object-cover w-full h-full bg-[gray]"
+                  />
+                </div>
+                {/* 닉네임과 이메일 */}
+                <div className="flex flex-col gap-[2px]">
+                  <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                    {session.title}
                   </div>
-                  {/* 닉네임과 이메일 */}
-                  <div className="flex flex-col gap-[2px]">
-                    <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
-                      암호화폐 규제와 글로벌 시장 대용 전략
-                    </div>
-                    <div className="text-[#606166] text-base font-medium leading-[150%]">
-                      James Lee
-                    </div>
+                  <div className="text-[#606166] text-base font-medium leading-[150%]">
+                    {session.speakerName}
                   </div>
                 </div>
               </div>
-            </div>
+            ))
+          ) : (
+            <p>좋아요 표시한 강연이 없습니다.</p>
+          )}
+        </div>
+      </div>
 
             <hr className="border-[#E0E0E0]" />
 
