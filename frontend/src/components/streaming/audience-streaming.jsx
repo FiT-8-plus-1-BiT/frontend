@@ -186,6 +186,7 @@ function AudienceStreaming() {
       >
         Start Listening
       </button>
+      <WaveBars/>
       <button
         onClick={leaveAudience}
         className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
@@ -199,3 +200,22 @@ function AudienceStreaming() {
 }
 
 export default AudienceStreaming;
+function WaveBars() {
+  return (
+    <div className="flex gap-1 items-end h-20">
+      {Array.from({ length: 20 }).map((_, i) => {
+        const initialScale = (0.4 + Math.random() * 0.6).toFixed(2); // 0.4 ~ 1.0
+        return (
+          <div
+            key={i}
+            className="w-2 h-16 bg-blue-700 rounded  animate-wave"
+            style={{
+              '--start-scale': initialScale,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+

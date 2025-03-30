@@ -122,12 +122,6 @@ function StreamingInformation({ mode }) {
         {mode && (
           <div className="flex items-center justify-between gap-2">
             <AudienceStreaming />
-            <div className="w-full h-2 bg-gray-200 rounded-full flex items-center">
-              <div
-                className="h-full bg-blue-500 rounded-full"
-                style={{ width: '50%' }}
-              ></div>
-            </div>
             <button
               className="px-4 py-2 rounded bg-gray-0 hover:bg-gray-200 transition"
               onClick={() => setMuted(!muted)}
@@ -153,7 +147,7 @@ function StreamingInformation({ mode }) {
               {sessionInfo?.speaker?.name || '발표자'}
             </span>
           </div>
-          
+
         </div>
 
         {/* 강연 제목 */}

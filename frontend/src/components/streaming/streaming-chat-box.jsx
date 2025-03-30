@@ -143,10 +143,14 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
 
       {/* 데스크탑 채팅창 */}
       <div
-        className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${
-          isChatOpen ? 'w-[404px]' : 'w-[56px]'
-        }`}
+        className={`hidden md:flex transition-all duration-300 md:h-[42.6vw] h-[79.8vw] ease-in-out ${mode
+          ? 'w-[44vw] h-[42vw]'
+          : isChatOpen
+            ? 'w-[404px]'
+            : 'w-[56px]'
+          }`}
       >
+
         <div className="flex flex-col border border-gray-300 bg-gray-90 w-full">
           {/* 상단 바 */}
           <div className="flex items-center justify-between p-3 border-b">
@@ -215,9 +219,8 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
 
       {/* 모바일 채팅창 */}
       <div
-        className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${
-          isMobileChatOpen ? 'translate-y-0' : 'translate-y-full'
-        }`}
+        className={`md:hidden fixed bottom-0 left-0 right-0 min-h-[50vh] bg-white border-t shadow-lg transition-transform duration-300 ease-in-out ${isMobileChatOpen ? 'translate-y-0' : 'translate-y-full'
+          }`}
       >
         <div className="flex items-center justify-between p-3 border-b">
           <h2 className="text-lg font-bold">채팅</h2>

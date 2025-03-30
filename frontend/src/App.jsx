@@ -12,11 +12,9 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import SpeakerPage from "./pages/speaker";
-
 import MobileLoginPage from '~/pages/login-mobilepage.jsx';
-
+import { useFetchUserProfile } from "./hooks/user/use-fetch-user-profile";
 // 보호된 라우트 컴포넌트
 const ProtectedRoute = ({ children }) => {
   // 로그인 상태
@@ -36,6 +34,8 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const token = useSelector(state => state.auth.token); // 추가
+  useFetchUserProfile(token); // 추가
   return (
     <Provider store={store}>
       <GoogleOAuthProvider>

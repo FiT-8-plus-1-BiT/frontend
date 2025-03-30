@@ -3,6 +3,18 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      keyframes: {
+        wave: {
+          '0%, 100%': { transform: 'scaleY(0.7)' },
+          '50%': { transform: 'scaleY(1)' },
+        },
+      },
+      animation: {
+        wave: 'wave 2s  ease-in-out infinite',
+      },
+      fontFamily: {
+        pretendard: ['Pretendard', 'sans-serif'],
+      },
       colors: {
         blue : {
           0:"#FAFAFE",
@@ -24,11 +36,15 @@ module.exports = {
           300: "#9FA0A3",
           400: "#727577",
           500: "#4F5158",
+          550:"#606166",
           600: "#2C2E31",
           700: "#131212",
           800: "#000000",
+        },
+        red:{
+          300:"#F54434"
         }
-        ,
+        
       },
     },
   },

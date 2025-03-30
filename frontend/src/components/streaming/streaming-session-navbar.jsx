@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAllSessions } from '~/api/session/get-all-session';
 import { getLiveSessions } from '~/api/session/get-live-session';
-import { getRecommendedSessions } from '~/api/session/get-recommended-session';
-
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { selectIsProfileComplete } from '~/redux/user-slice';
 
 // 개별 세션 항목
 const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
@@ -54,28 +53,20 @@ const SessionSection = ({ title, sessions }) => (
   </div>
 );
 
-// 전체 Navbar
+
 const StreamingSessionNavbar = () => {
   const [liveSessions, setLiveSessions] = useState([]);
   const [recommendedSessions, setRecommendedSessions] = useState([]);
   const [allSessions, setAllSessions] = useState([]);
 
   const token = useSelector((state) => state.auth.token);
+  const isProfileComplete = useSelector(selectIsProfileComplete);
 
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const allSessions = await getAllSessions(token);
         const liveSessions = await getLiveSessions(token);
-        // const recommendedSessions = await getRecommendedSessions(token);
-
-        // const mappedRecommended = recommendedSessions.map((s) => ({
-        //   id: s.id,
-        //   sessionName: s.title,
-        //   speakerName: s.speaker.name,
-        //   imageUrl: s.speaker.image,
-        //   isLive: s.isLive,
-        // }));
 
         const mappedAll = allSessions.map((s) => ({
           id: s.id,
@@ -93,22 +84,38 @@ const StreamingSessionNavbar = () => {
           isLive: s.isLive,
         }));
 
-        // setRecommendedSessions(mappedRecommended);
         setAllSessions(mappedAll);
         setLiveSessions(mappedLive);
+
+        // 🔥 프로필이 채워져 있을 때만 추천 세션 요청
+        if (isProfileComplete) {
+          const recommendedSessions = await getRecommendedSessions(token);
+          const mappedRecommended = recommendedSessions.map((s) => ({
+            id: s.id,
+            sessionName: s.title,
+            speakerName: s.speaker.name,
+            imageUrl: s.speaker.image,
+            isLive: s.isLive,
+          }));
+          setRecommendedSessions(mappedRecommended);
+        }
+
       } catch (e) {
         console.error('❗ 세션 정보 로딩 실패:', e);
       }
     };
 
-    fetchSessions();
-  }, [token]);
+    if (token) fetchSessions();
+  }, [token, isProfileComplete]);
+
 
   return (
     <aside className="h-[768px] min-w-[132px] bg-white border-r border-gray-300 overflow-y-auto scrollbar-hide pt-[28px]">
       <SessionSection title="라이브 세션" sessions={liveSessions} />
       <SessionSection title="전체 세션" sessions={allSessions} />
-      {/* <SessionSection title="인기 세션" sessions={recommendedSessions} /> */}
+      {isProfileComplete && (
+        <SessionSection title="인기 세션" sessions={recommendedSessions} />
+      )}
     </aside>
   );
 };
