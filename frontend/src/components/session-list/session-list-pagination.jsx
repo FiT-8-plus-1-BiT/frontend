@@ -1,15 +1,10 @@
 import React from 'react';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from 'lucide-react';
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const pageNumbers = [];
 
-  const startPage = Math.max(1, currentPage - 2);
+  const startPage = 1;
   const endPage = Math.min(totalPages, startPage + 4);
 
   for (let i = startPage; i <= endPage; i++) {
@@ -27,7 +22,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <ChevronsLeft size={20} />
       </button>
 
-
       {/* 숫자 버튼 */}
       <div className="flex items-center gap-6">
         {pageNumbers.map((page) => (
@@ -41,8 +35,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
           </button>
         ))}
       </div>
-
-  
 
       {/* 마지막으로 */}
       <button

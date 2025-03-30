@@ -19,20 +19,31 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
       title={sessionName}
       onClick={handleClick}
     >
-      <div className="relative w-8 h-8 rounded-[6px] overflow-hidden border border-[#E73323]">
+      <div
+        className={`relative w-8 h-8 rounded-[6px] overflow-hidden border ${
+          isLive ? 'border-red-300 border-[1px]' : ''
+        }`}
+      >
         <img
           src={imageUrl}
           alt={sessionName}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover aspect-square"
         />
-        {isLive && (
-          <span className="absolute top-[-2px] right-[-2px] w-2 h-2 bg-[#E73323] rounded-full" />
-        )}
       </div>
+
       <div className="flex flex-col">
-        <span className="text-sm font-semibold text-[#2c2e31] truncate max-w-[96px]">
-          {sessionName}
-        </span>
+        <div className="relative w-fit max-w-[96px]">
+          <span
+            className="text-sm font-semibold text-[#2c2e31] truncate block pr-3"
+            title={sessionName}
+          >
+            {sessionName}
+          </span>
+          {isLive && (
+            <div className="absolute -top-1 -right-0 w-2 h-2 bg-red-500 rounded-full" />
+          )}
+        </div>
+
         <span className="text-xs text-[#9fa0a3] font-medium">
           {speakerName}
         </span>
@@ -52,7 +63,6 @@ const SessionSection = ({ title, sessions }) => (
     </div>
   </div>
 );
-
 
 const StreamingSessionNavbar = () => {
   const [liveSessions, setLiveSessions] = useState([]);
@@ -99,7 +109,6 @@ const StreamingSessionNavbar = () => {
           }));
           setRecommendedSessions(mappedRecommended);
         }
-
       } catch (e) {
         console.error('❗ 세션 정보 로딩 실패:', e);
       }
@@ -107,7 +116,6 @@ const StreamingSessionNavbar = () => {
 
     if (token) fetchSessions();
   }, [token, isProfileComplete]);
-
 
   return (
     <aside className="h-[768px] min-w-[132px] bg-white border-r border-gray-300 overflow-y-auto scrollbar-hide pt-[28px]">

@@ -29,30 +29,39 @@ function PresenterStreaming() {
         setConnected(true);
 
         // SDP Answer
-        client.subscribe(`/sub/room/${roomId}/presenterAnswer`, (msg) => {
-          const sdp = msg.body;
-          if (pcRef.current) {
-            pcRef.current.setRemoteDescription({ type: 'answer', sdp })
-              .then(() => {
-                console.log('✅ SDP 설정 완료');
-                pendingCandidates.current.forEach(c => {
-                  pcRef.current.addIceCandidate(c).catch(console.error);
-                });
-                pendingCandidates.current = [];
-              })
-              .catch(console.error);
-          }
-        }, { Authorization: `Bearer ${token}` });
+        client.subscribe(
+          `/sub/room/${roomId}/presenterAnswer`,
+          (msg) => {
+            const sdp = msg.body;
+            if (pcRef.current) {
+              pcRef.current
+                .setRemoteDescription({ type: 'answer', sdp })
+                .then(() => {
+                  console.log('✅ SDP 설정 완료');
+                  pendingCandidates.current.forEach((c) => {
+                    pcRef.current.addIceCandidate(c).catch(console.error);
+                  });
+                  pendingCandidates.current = [];
+                })
+                .catch(console.error);
+            }
+          },
+          { Authorization: `Bearer ${token}` },
+        );
 
         // ICE Candidate
-        client.subscribe(`/sub/room/${roomId}/presenterIceCandidate`, (msg) => {
-          const ice = new RTCIceCandidate(JSON.parse(msg.body));
-          if (pcRef.current?.remoteDescription?.type) {
-            pcRef.current.addIceCandidate(ice).catch(console.error);
-          } else {
-            pendingCandidates.current.push(ice);
-          }
-        }, { Authorization: `Bearer ${token}` });
+        client.subscribe(
+          `/sub/room/${roomId}/presenterIceCandidate`,
+          (msg) => {
+            const ice = new RTCIceCandidate(JSON.parse(msg.body));
+            if (pcRef.current?.remoteDescription?.type) {
+              pcRef.current.addIceCandidate(ice).catch(console.error);
+            } else {
+              pendingCandidates.current.push(ice);
+            }
+          },
+          { Authorization: `Bearer ${token}` },
+        );
       },
       onStompError: (frame) => {
         console.error('❗ STOMP 오류:', frame.headers['message']);
@@ -113,7 +122,9 @@ function PresenterStreaming() {
     pcRef.current?.close();
     pcRef.current = null;
 
-    localAudioRef.current?.srcObject?.getTracks().forEach((track) => track.stop());
+    localAudioRef.current?.srcObject
+      ?.getTracks()
+      .forEach((track) => track.stop());
     localAudioRef.current.srcObject = null;
 
     if (stompClient?.connected) {

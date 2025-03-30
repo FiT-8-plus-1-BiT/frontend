@@ -49,11 +49,11 @@ function AudienceStreaming() {
                   pendingCandidates.current = [];
                 })
                 .catch((err) =>
-                  console.error('❗ setRemoteDescription 실패', err)
+                  console.error('❗ setRemoteDescription 실패', err),
                 );
             }
           },
-          { Authorization: `Bearer ${token}` }
+          { Authorization: `Bearer ${token}` },
         );
 
         // ✅ ICE 수신
@@ -77,7 +77,7 @@ function AudienceStreaming() {
               }
             }
           },
-          { Authorization: `Bearer ${token}` }
+          { Authorization: `Bearer ${token}` },
         );
       },
       onStompError: (frame) => {
@@ -93,7 +93,8 @@ function AudienceStreaming() {
 
   // 오디오 수신 시작
   const startAudience = async () => {
-    if (!stompClient || !sessionId) return alert('STOMP 연결 또는 세션 ID 없음');
+    if (!stompClient || !sessionId)
+      return alert('STOMP 연결 또는 세션 ID 없음');
 
     const pc = new RTCPeerConnection({
       iceServers: [
@@ -168,7 +169,9 @@ function AudienceStreaming() {
     }
 
     if (remoteAudioRef.current?.srcObject) {
-      remoteAudioRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      remoteAudioRef.current.srcObject
+        .getTracks()
+        .forEach((track) => track.stop());
       remoteAudioRef.current.srcObject = null;
     }
 
@@ -186,7 +189,7 @@ function AudienceStreaming() {
       >
         Start Listening
       </button>
-      <WaveBars/>
+      <WaveBars />
       <button
         onClick={leaveAudience}
         className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
@@ -218,4 +221,3 @@ function WaveBars() {
     </div>
   );
 }
-

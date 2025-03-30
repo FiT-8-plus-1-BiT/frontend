@@ -4,7 +4,7 @@ import SessionFilter from '~/components/session-list/session-filter';
 import { AllSessionItem } from '~/components/session-list/all-session-item';
 import { useAllSessionsWithSchedule } from '~/hooks/session/use-all-sessions-with-schedule';
 import Pagination from './session-list-pagination';
-import { SkeletonAllSessionList } from  '~/components/session-list/skeleton-all-session-list';
+import { SkeletonAllSessionList } from '~/components/session-list/skeleton-all-session-list';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -47,10 +47,11 @@ export default function AllSessionList({ token }) {
   };
 
   const handleSessionClick = (session) => {
-    if(session.isLive){
-      navigate(`/streaming?session_id=${id}`);
+    if (session.isLive) {
+      navigate(`/streaming?session_id=${session.id}`);
+    } else {
+      window.alert('강연 시간이 아닙니다!');
     }
-    window.alert('강연 시간이 아닙니다!')
   };
 
   const handleToggleSchedule = async (sessionId) => {
@@ -66,7 +67,7 @@ export default function AllSessionList({ token }) {
   };
 
   if (error) return <div>{error.toString()}</div>;
-  if (loading) return <SkeletonAllSessionList/>
+  if (loading) return <SkeletonAllSessionList />;
   return (
     <>
       <h2 className="text-[44px] font-bold mb-4">전체 세션</h2>
