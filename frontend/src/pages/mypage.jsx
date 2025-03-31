@@ -393,6 +393,8 @@ const Mypage = () => {
   const [likedSessions, setLikedSessions] = useState([]);
   const [showModal, setShowModal] = useState(false); // 모달 상태
 
+  const [myScheduleSessions, setMyScheduleSessions] = useState([]); // 나의 시간표 세션 
+
    // Redux 스토어에서 이름, 직무, 연차, 관심 분야 가져오기
    const name = useSelector((state) => state.auth.name);
    const job = useSelector((state) => state.auth.job);
@@ -485,7 +487,7 @@ const Mypage = () => {
         const sortedSessions = response.data.response.sort((a, b) =>
           a.startTime.localeCompare(b.startTime)
         );
-        setSessions(sortedSessions);
+        setMyScheduleSessions(sortedSessions);
       } else {
         handleErrorResponse(response.data);
       }
@@ -775,7 +777,7 @@ const Mypage = () => {
                 추천 강연
               </div>
 
-              <div className="flex flex-row flex-wrap gap-[30px] w-[900px] py-5 mb-[20px]">
+              <div className="flex flex-row flex-wrap gap-[30px] w-[800px] py-5 mb-[20px]">
                 {sessions.map((session) => (
                   <div key={session.id} className="w-[330px] w-full flex items-center space-x-4">
                     {/* 프로필 이미지 */}
@@ -816,7 +818,7 @@ const Mypage = () => {
                 </div>
 
                 {/* 세션 블록들 (최대 5개) */}
-                {sessions.slice(index * 5, index * 5 + 5).map((session) => (
+                {myScheduleSessions.slice(index * 5, index * 5 + 5).map((session) => (
                   <div key={session.sessionId} className="flex-shrink-0">
                     <div className={`flex flex-col w-[240px] h-[288px] border border-[#CCCDD2] 
                       ${session.isMySchedule 
@@ -845,7 +847,7 @@ const Mypage = () => {
               </div>
             ))}
 
-            {sessions.length === 0 && (
+            {myScheduleSessions.length === 0 && (
               <div className="text-center py-20 text-gray-500">
                 등록된 세션이 없습니다
               </div>
