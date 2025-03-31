@@ -37,7 +37,7 @@ const EditProfile = ({ onProfileUpdate }) => {
 
   const tags = [
     "결제 및 송금", "디지털 뱅킹", "대출", "투자 및 자산 관리", "보험 테크", "블록체인 및 암호화폐", 
-    "규제 기술(RegTech)", "크라우드펀딩", "개인 금융 관리", "마이데이터", "핀테크 인프라", "금융 포용", 
+    "규제 기술", "크라우드펀딩", "개인 금융 관리", "마이데이터", "핀테크 인프라", "금융 포용", 
   ];
 
   const handleTagClick = (tag) => {
@@ -774,9 +774,10 @@ const Mypage = () => {
               <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
                 추천 강연
               </div>
+
               <div className="flex flex-row flex-wrap gap-[30px] w-[900px] py-5 mb-[20px]">
                 {sessions.map((session) => (
-                  <div key={session.id} className="flex items-center space-x-4">
+                  <div key={session.id} className="w-[330px] w-full flex items-center space-x-4">
                     {/* 프로필 이미지 */}
                     <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
                       <img

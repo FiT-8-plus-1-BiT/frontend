@@ -33,19 +33,13 @@ const MainPage = () => {
     fetchData();
   }, []);
 
-  // const formatTime = (time) => {
-  //   const hour = time.slice(8, 10);
-  //   const minute = time.slice(10, 12);
-  //   return `${hour}:${minute}`;
-  // };
-
   const fixedTimes = [
-    "10:00\n~\n10:50",
     "11:05\n~\n11:55",
     "13:30\n~\n14:20",
     "14:35\n~\n15:25",
     "15:40\n~\n16:30",
-    "16:40\n~\n17:30",
+    "16:45\n~\n17:35",
+    "17:35\n~\n17:50",
   ];
 
   const questions = [
@@ -126,26 +120,33 @@ const MainPage = () => {
       </div>
 
       <div 
-        className="w-[1920px] w-full h-[690px] flex mb-[100px] bg-cover"
-        style={{ backgroundImage: "url('/images/FitBanner.png')" }} // 배경 이미지 적용
+        className="w-full h-[690px] flex justify-center items-center bg-cover bg-center mb-[100px]"
+        style={{ 
+          backgroundImage: "url('/images/FitBanner.png')", 
+          backgroundSize: "cover",
+          backgroundPosition: "center"
+        }}
       >
-        {/* 왼쪽 텍스트 영역 */}
-        <div className="flex flex-col lg:w-[50%] 
-          lg:px-[40px] p-6 rounded-lg mt-[148px] ml-[280px]">
-          <h1 className="text-[24px] lg:text-[40px] font-[700] 
-            leading-[150%] tracking-[-0.2px] text-left">
-              그 동안 경험하지 못한 컨퍼런스
-          </h1>
+        {/* 내부 컨테이너 */}
+        <div className="max-w-[1920px] w-full flex flex-col lg:flex-row items-start lg:items-center px-6 lg:px-[80px]">
+          {/* 왼쪽 텍스트 영역 */}
+          <div className="flex flex-col lg:w-[50%] mt-12 lg:mt-[148px]">
+            <h1 className="text-[20px] md:text-[24px] lg:text-[40px]
+              font-bold leading-[150%] tracking-[-0.2px] text-left">
+                그 동안 경험하지 못한 컨퍼런스
+            </h1>
 
-          <p className="text-[24px] lg:text-[24px] font-[500] leading-[150%] 
-            tracking-[-0.12px] text-left w-full pt-6">
-              최첨단 사일런트 기술을 활용해 참가자들에게<br />
-              몰입감있는 경험을 제공합니다.<br /><br />
-              한 공간에서 여러 세션이 동시에 진행되며,<br />
-              개인 이어폰을 통해 원하는 세션을 자유롭게 선택할 수 있습니다.<br /><br />
-              FiT에서 최신 핀테크 트렌드를 탐구하고,<br />
-              네트워킹 기회를 누려보세요.<br /><br />
-          </p>
+            <p className="text-[16px] md:text-[20px] lg:text-[24px]
+              font-medium leading-[150%]
+              tracking-[-0.12px] text-left w-full pt-4 md:pt-6">
+                최첨단 사일런트 기술을 활용해 참가자들에게<br />
+                몰입감있는 경험을 제공합니다.<br /><br />
+                한 공간에서 여러 세션이 동시에 진행되며,<br />
+                개인 이어폰을 통해 원하는 세션을 자유롭게 선택할 수 있습니다.<br /><br />
+                FiT에서 최신 핀테크 트렌드를 탐구하고,<br />
+                네트워킹 기회를 누려보세요.<br /><br />
+            </p>
+          </div>
         </div>
       </div>
 
@@ -316,9 +317,9 @@ const MainPage = () => {
               연사 정보
           </h2>
 
-          <div className="flex flex-col items-center space-y-[40px] pb-[40px] overflow-x-auto">
+          <div className="flex flex-col items-center pb-[40px] overflow-x-auto">
             {/* 첫 줄: 101, 102, 103, 104, 105 (배경색 없음) */}
-            <div className="flex w-full justify-between px-[16px]">
+            <div className="flex w-full justify-between px-[16px] mb-[40px]">
               {[101, 102, 103, 104, 105].map((roomNumber) => (
                 <div
                   key={roomNumber}
@@ -338,8 +339,13 @@ const MainPage = () => {
 
             {/* Opening Speech */}
             <div className="text-[#202023] text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center w-full pb-[34px]">
+              tracking-[-0.12px] flex items-center justify-center w-full my-[36px]">
                 Opening Speech
+            </div>
+
+            <div className="bg-[#131212] text-white text-[20px] font-bold leading-[150%] 
+              tracking-[-0.12px] flex items-center justify-center h-[40px] w-full">
+                10:00 ~ 10:50
             </div>
 
             {/* 세션 데이터 */}
@@ -347,30 +353,28 @@ const MainPage = () => {
               if (index % 5 === 0) acc.push(sessions.slice(index, index + 5));
               return acc;
             }, []).map((sessionGroup, groupIndex) => (
-              <div key={groupIndex}>
-                {/* 시간 */}
-                <div className="w-[1480px] bg-[#131212] text-white text-[20px] font-bold leading-[150%]
-                tracking-[-0.12px] flex items-center justify-center h-[40px] w-full mb-[5px] mt-[-34px]">
-                  {fixedTimes[groupIndex]}
-                </div>
-
+              <div key={groupIndex} className="w-full">
                 {/* 세션들 */}
-                <div className="flex space-x-[10px] justify-center">
+                <div className="flex justify-between space-x-[10px]">
                   {sessionGroup.map((session, index) => (
-                    <div key={index} className="w-[288px] h-[300px] bg-[white] flex flex-col">
-                      <h1 className="w-[224px] h-[108px] text-[24px] font-bold leading-[150%]
-                      tracking-[-0.12px] mt-[16px] ml-[16px] mr-[16px]">
+                    <div 
+                      key={index} 
+                      className="w-[288px] h-auto bg-white flex flex-col"
+                    >
+                      <h1 className="w-[224px] w-full h-[108px] text-[24px] font-bold leading-[150%]
+                      tracking-[-0.12px] mt-[16px] px-[16px]">
                         {session.title}
                       </h1>
 
                       {/* Labels */}
-                      <div className="flex flex-wrap gap-x-2 gap-y-2 pl-[16px] pt-[20px] mt-[12px]">
+                      <div className="flex flex-wrap gap-x-2 gap-y-2 px-[16px] pt-[20px] mt-[12px]">
                         {Object.values(session.tags).map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
-                            className="max-w-[180px] h-[29px] bg-[#F4F4F4] text-[#606166] text-[12px]
-                            font-semibold leading-[29px] tracking-[-0.5px] px-[12px]
-                            rounded-[4px] flex items-center justify-center"
+                            className="max-w-[180px] h-[29px] bg-[#F4F4F4] text-[#606166]
+                            text-[12px] font-semibold leading-[29px]
+                            tracking-[-0.5px] px-[12px]
+                            rounded-[4px]"
                           >
                             {tag}
                           </span>
@@ -378,17 +382,21 @@ const MainPage = () => {
                       </div>
 
                       {/* 강연자 프로필 및 이름 */}
-                      <div className="flex items-center pl-[16px] pt-[20px] pb-[16px]">
+                      <div className="flex items-center px-[16px] pt-[24px] mb-[20px]">
                         <img 
                           src={session.speaker.image} 
                           alt="강연자 프로필"
                           className="w-[40px] h-[40px] rounded-full mr-[12px]" 
                         />
                         <div className="flex flex-col">
-                          <span className="text-[#131212] text-[16px] font-medium leading-[150%]">
+                          <span className="text-[#131212] text-[16px]
+                            font-medium leading-[150%]"
+                          >
                             {session.speaker.name}
                           </span>
-                          <span className="text-black text-[16px] font-medium leading-[150%]">
+                          <span className="text-black text-[16px]
+                            font-medium leading-[150%]"
+                          >
                             ({session.speaker.description})
                           </span>
                         </div>
@@ -396,13 +404,23 @@ const MainPage = () => {
                     </div>
                   ))}
                 </div>
+                {/* 시간 */}
+                <div className="bg-[#131212] text-white text-[20px]
+                  font-bold leading-[150%] tracking-[-0.12px]
+                  flex items-center justify-center h-[40px] w-full">
+                  {fixedTimes[groupIndex]}
+                </div>
               </div>
             ))}
 
-            {/* Opening Speech */}
-            <div className="bg-[#F4F4F4] text-[#131212] text-[24px] font-bold leading-[150%] 
-              tracking-[-0.12px] flex items-center justify-center h-[30px] w-full">
-              Closing
+            {/* Closing Speech */}
+            <div className="bg-[#F4F4F4]
+              text-[#131212]
+              text-[24px] font-bold
+              leading-[150%] tracking-[-0.12px]
+              flex items-center justify-center h-[30px]
+              w-full mt-6">
+                Closing
             </div>
           </div>
         </div>
