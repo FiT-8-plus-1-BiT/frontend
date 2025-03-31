@@ -110,6 +110,12 @@ function AudienceStreaming() {
 
     pcRef.current = pc;
 
+    // ICE 상태 변화 로그
+    pc.oniceconnectionstatechange = () => {
+      console.log('Audience ICE state:', pc.iceConnectionState);
+      console.log('Audience dtlsState', pc?.dtlsState);
+    };
+
     pc.onicecandidate = (event) => {
       if (event.candidate) {
         const candidateDto = {
@@ -148,6 +154,15 @@ function AudienceStreaming() {
         Authorization: `Bearer ${token}`,
       },
     });
+  };
+
+  // 수동 재생 버튼 (자동재생 정책 때문에)
+  const playAudioManually = () => {
+    if (remoteAudioRef.current) {
+      remoteAudioRef.current.play().catch((err) => {
+        console.error('Manual play error:', err);
+      });
+    }
   };
 
   const leaveAudience = () => {
