@@ -10,7 +10,6 @@ const tagClasses =
   "flex justify-center items-center self-stretch rounded-[4px] border bg-gray-500 py-1 px-4 h-8 text-white text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
 
 function StreamingInformation({ mode }) {
-  const [muted, setMuted] = useState(false);
   const [sessionInfo, setSessionInfo] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -128,12 +127,6 @@ function StreamingInformation({ mode }) {
 
       {/* 상세 정보 박스 */}
       <div className={`p-6 mb-10 bg-gray-0 ${mode ? 'order-1' : 'order-2'}`}>
-        {mode && (
-          <div className="flex items-center justify-between gap-2">
-            <AudienceStreaming />
-          </div>
-        )}
-
         <div className="flex justify-between pb-[20px] border-b border-black">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-black rounded-full overflow-hidden">
@@ -149,6 +142,11 @@ function StreamingInformation({ mode }) {
               {sessionInfo?.speaker?.name || '발표자'}
             </span>
           </div>
+          {mode && (
+            <div className="flex items-center justify-between gap-2">
+              <AudienceStreaming />
+            </div>
+          )}
         </div>
 
         <h2 className="mt-6 text-xl font-bold text-[#000000]">
