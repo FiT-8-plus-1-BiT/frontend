@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import SessionFilter from '~/components/session-list/session-filter';
 import { AllSessionItem } from '~/components/session-list/all-session-item';
 import { useAllSessionsWithSchedule } from '~/hooks/session/use-all-sessions-with-schedule';
+import Pagination from './session-list-pagination';
+import { SkeletonAllSessionList } from '~/components/session-list/skeleton-all-session-list';
+
+const ITEMS_PER_PAGE = 6;
 
 export default function AllSessionList({ token }) {
   const [filters, setFilters] = useState({
@@ -11,6 +15,7 @@ export default function AllSessionList({ token }) {
     contentType: '',
     level: '',
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
   const { sessions, loading, error, toggleSchedule } =
@@ -28,12 +33,25 @@ export default function AllSessionList({ token }) {
     });
   }, [sessions, filters]);
 
+  // 페이징 계산
+  const totalPages = Math.ceil(filteredSessions.length / ITEMS_PER_PAGE);
+  const paginatedSessions = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    return filteredSessions.slice(start, end);
+  }, [filteredSessions, currentPage]);
+
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
+    setCurrentPage(1); // 필터 변경 시 1페이지로 리셋
   };
 
-  const handleSessionClick = (id) => {
-    navigate(`/streaming?session_id=${id}`);
+  const handleSessionClick = (session) => {
+    if (session.isLive) {
+      navigate(`/streaming?session_id=${session.id}`);
+    } else {
+      window.alert('강연 시간이 아닙니다!');
+    }
   };
 
   const handleToggleSchedule = async (sessionId) => {
@@ -44,19 +62,22 @@ export default function AllSessionList({ token }) {
     await toggleSchedule(sessionId);
   };
 
-  if (loading) return <div>Loading sessions...</div>;
-  if (error) return <div>{error.toString()}</div>;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
+  if (error) return <div>{error.toString()}</div>;
+  if (loading) return <SkeletonAllSessionList />;
   return (
     <>
-      <h2 className="text-3xl font-bold mb-4">전체 세션</h2>
+      <h2 className="text-[44px] font-bold mb-4">전체 세션</h2>
 
       <div className="mb-8">
         <SessionFilter onFilterChange={handleFilterChange} token={token} />
       </div>
 
       <div className="grid place-items-center xl:grid-cols-3 grid-cols-2 gap-8 mb-12">
-        {filteredSessions.map((session) => (
+        {paginatedSessions.map((session) => (
           <AllSessionItem
             key={session.id}
             id={session.id}
@@ -67,10 +88,15 @@ export default function AllSessionList({ token }) {
             tags={Object.values(session.tags)}
             isScheduled={session.isMySession}
             onToggleSchedule={() => handleToggleSchedule(session.id)}
-            onClick={() => handleSessionClick(session.id)}
+            onClick={() => handleSessionClick(session)}
           />
         ))}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </>
   );
 }

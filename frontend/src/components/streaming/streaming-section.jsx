@@ -1,21 +1,16 @@
-import React from "react";
-import { StreamingInformation } from "~/components/streaming/streaming-information";
-import { StreamingScreen } from "~/components/streaming/streaming-screen"
+import React from 'react';
+import { StreamingInformation } from '~/components/streaming/streaming-information';
+import { StreamingScreen } from '~/components/streaming/streaming-screen';
 
 const StreamingSection = ({ mode }) => {
-    return (
-        <div 
-            className={`flex-1 ${mode ? "bg-blue-0 rounded-lg py-[56px] px-[20px]" : ""}`}
-            style={
-                mode
-                    ? { height: "clamp(500px, calc(500px + (818 - 500) * ((100vw - 1400px)/(1920 - 1400))), 818px)" }
-                    : {}
-            }
-        >
-            {!mode && <StreamingScreen />}
-            <StreamingInformation mode={mode}/>
-        </div>
-    )
-}
+  return (
+    <div
+      className={`flex-1 ${mode ? 'bg-blue-0 rounded-lg py-[56px] px-[20px]' : ''}`}
+    >
+      {!mode && <StreamingScreen />}
+      <StreamingInformation mode={mode} />
+    </div>
+  );
+};
 
-export { StreamingSection }
+export { StreamingSection };

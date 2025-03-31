@@ -1,4 +1,4 @@
-import { useTopQuestions } from "~/hooks/chat/use-top-question";
+import { useTopQuestions } from '~/hooks/chat/use-top-question';
 
 const QuestionList = ({ sessionId }) => {
   const { topQuestions, loading, error } = useTopQuestions(sessionId);
@@ -11,9 +11,14 @@ const QuestionList = ({ sessionId }) => {
       <h2 className="font-bold mb-2">🔥 인기 질문 TOP 3</h2>
       <ul className="space-y-2">
         {topQuestions.map((q) => (
-          <li key={q.messageId} className="p-2 border rounded-md bg-white shadow-sm">
+          <li
+            key={q.messageId}
+            className="p-2 border rounded-md bg-white shadow-sm"
+          >
             <div className="text-sm text-gray-800">{q.message}</div>
-            <div className="text-xs text-gray-500 mt-1">❤️ {q.likes} · {q.name}</div>
+            <div className="text-xs text-gray-500 mt-1">
+              ❤️ {q.likes} · {q.name}
+            </div>
           </li>
         ))}
       </ul>
@@ -21,5 +26,4 @@ const QuestionList = ({ sessionId }) => {
   );
 };
 
-
-export {QuestionList}
+export { QuestionList };

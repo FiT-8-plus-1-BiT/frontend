@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { StreamingSwitchButton } from '~/components/streaming/streaming-switch-button';
 import { StreamingSessionNavbar } from '~/components/streaming/streaming-session-navbar';
-import { StreamingChatBox } from '~/components/streaming/streaming-chat-box';
+import { StreamingChatBox } from '~/components/chatting/streaming-chat-box';
 import { StreamingSection } from '~/components/streaming/streaming-section';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
-import {useCreateChatSession} from '~/hooks/chat/use-make-chattingroom';
+import { useCreateChatSession } from '~/hooks/chat/use-make-chattingroom';
 
 export default function Streaming() {
   const [isAudioMode, setIsAudioMode] = useState(false);

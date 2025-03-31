@@ -14,7 +14,7 @@ function AllSessionItem({
   return (
     <div
       onClick={onClick}
-      className="w-[520px] bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
+      className="w-[520px] h-[558px] bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
     >
       {/* 썸네일 */}
       <div className="w-full h-[292px] bg-gray-100">
@@ -35,7 +35,7 @@ function AllSessionItem({
       <div className="p-5 flex flex-col gap-3">
         {/* 제목 + 담기 버튼 */}
         <div className="flex justify-between items-start gap-4">
-          <div className="text-[1.5rem] font-bold leading-snug text-[#131212]">
+          <div className="text-[24px] !font-black leading-snug text-gray-900">
             {title}
           </div>
           <button
@@ -43,24 +43,19 @@ function AllSessionItem({
               e.stopPropagation();
               onToggleSchedule(id);
             }}
-            className={`h-9 px-4 text-sm font-semibold rounded border ${
+            className={`text-[14px] font-semibold border ${
               isScheduled
-                ? 'bg-black text-white border-black'
-                : 'text-[#85878d] border-[#85878d]'
+                ? 'bg-black text-white border-black w-[116px] h-[36px]'
+                : 'text-gray-800 border-gray-800 w-[90px] h-[36px]'
             }`}
           >
             {isScheduled ? '✓ 담은 강연' : '+ 담기'}
           </button>
         </div>
 
-        {/* 강연자 이름 */}
-        <div className="text-[#131212] font-medium text-sm">
+        {/* 강연자 */}
+        <div className="text-gray-700 font-semibold text-[16px] pb-[0.833vw] border-b">
           {speaker?.name}
-        </div>
-
-        {/* 설명 */}
-        <div className="text-[#85878d] text-sm leading-relaxed line-clamp-3">
-          {description}
         </div>
 
         {/* 태그 */}
@@ -68,11 +63,16 @@ function AllSessionItem({
           {tags?.map((tag, idx) => (
             <div
               key={idx}
-              className="h-8 bg-[#f4f4f4] rounded px-4 flex items-center text-sm font-medium text-[#606166]"
+              className="h-8 bg-gray-100 rounded px-4 flex items-center text-[14px] font-semibold text-gray-550"
             >
               {tag}
             </div>
           ))}
+        </div>
+
+        {/* 설명 */}
+        <div className="text-[14px] text-gray-550 leading-relaxed line-clamp-4">
+          {description}
         </div>
       </div>
     </div>

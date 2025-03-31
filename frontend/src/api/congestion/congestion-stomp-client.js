@@ -3,15 +3,11 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
 export function createCongestionStompClient(token, onMessageReceived) {
-  // if (!token) {
-  //   console.warn('⚠️ access-token 없음: 혼잡도 수신 불가');
-  //   return;
-  // }
   const client = new Client({
     webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
-    // connectHeaders: {
-    //   Authorization: `Bearer ${token}`,
-    // },
+    connectHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
     debug: (str) => console.log(`📡 DEBUG: ${str}`),
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
@@ -20,7 +16,6 @@ export function createCongestionStompClient(token, onMessageReceived) {
     onConnect: () => {
       console.log('🟢 STOMP 연결됨. 혼잡도 구독 시작');
 
-      // ✅ 이 부분만 신경 쓰면 됨
       client.subscribe('/sub/session', (message) => {
         try {
           const data = JSON.parse(message.body);

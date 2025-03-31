@@ -49,11 +49,11 @@ function AudienceStreaming() {
                   pendingCandidates.current = [];
                 })
                 .catch((err) =>
-                  console.error('❗ setRemoteDescription 실패', err)
+                  console.error('❗ setRemoteDescription 실패', err),
                 );
             }
           },
-          { Authorization: `Bearer ${token}` }
+          { Authorization: `Bearer ${token}` },
         );
 
         // ✅ ICE 수신
@@ -77,7 +77,7 @@ function AudienceStreaming() {
               }
             }
           },
-          { Authorization: `Bearer ${token}` }
+          { Authorization: `Bearer ${token}` },
         );
       },
       onStompError: (frame) => {
@@ -93,7 +93,8 @@ function AudienceStreaming() {
 
   // 오디오 수신 시작
   const startAudience = async () => {
-    if (!stompClient || !sessionId) return alert('STOMP 연결 또는 세션 ID 없음');
+    if (!stompClient || !sessionId)
+      return alert('STOMP 연결 또는 세션 ID 없음');
 
     const pc = new RTCPeerConnection({
       iceServers: [
@@ -108,6 +109,12 @@ function AudienceStreaming() {
     });
 
     pcRef.current = pc;
+
+    // ICE 상태 변화 로그
+    pc.oniceconnectionstatechange = () => {
+      console.log('Audience ICE state:', pc.iceConnectionState);
+      console.log('Audience dtlsState', pc?.dtlsState);
+    };
 
     pc.onicecandidate = (event) => {
       if (event.candidate) {
@@ -149,6 +156,15 @@ function AudienceStreaming() {
     });
   };
 
+  // 수동 재생 버튼 (자동재생 정책 때문에)
+  const playAudioManually = () => {
+    if (remoteAudioRef.current) {
+      remoteAudioRef.current.play().catch((err) => {
+        console.error('Manual play error:', err);
+      });
+    }
+  };
+
   const leaveAudience = () => {
     if (!stompClient || !sessionId) {
       alert('STOMP 연결 또는 세션 ID 없음');
@@ -168,7 +184,9 @@ function AudienceStreaming() {
     }
 
     if (remoteAudioRef.current?.srcObject) {
-      remoteAudioRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      remoteAudioRef.current.srcObject
+        .getTracks()
+        .forEach((track) => track.stop());
       remoteAudioRef.current.srcObject = null;
     }
 
@@ -186,6 +204,7 @@ function AudienceStreaming() {
       >
         Start Listening
       </button>
+      <WaveBars />
       <button
         onClick={leaveAudience}
         className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
@@ -199,3 +218,21 @@ function AudienceStreaming() {
 }
 
 export default AudienceStreaming;
+function WaveBars() {
+  return (
+    <div className="flex gap-1 items-end h-20">
+      {Array.from({ length: 20 }).map((_, i) => {
+        const initialScale = (0.4 + Math.random() * 0.6).toFixed(2); // 0.4 ~ 1.0
+        return (
+          <div
+            key={i}
+            className="w-2 h-16 bg-blue-700 rounded  animate-wave"
+            style={{
+              '--start-scale': initialScale,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}

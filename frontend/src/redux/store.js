@@ -3,7 +3,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // localStorage 사용
-
+import userReducer from '~/redux/user-slice'; // 🧠 이거 추가
 import likedSessionsReducer from '~/redux/liked-sessions-slice';
 import authReducer from '~/redux/auth-slice';
 
@@ -18,6 +18,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   likedSessions: likedSessionsReducer,
+  user: userReducer, 
+
 });
 
 // 3. persist된 리듀서 만들기
