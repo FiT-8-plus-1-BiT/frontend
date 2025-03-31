@@ -4,6 +4,7 @@ import { LiveSessionItem } from '~/components/session-list/live-session-item';
 import { useLiveSessionsWithSchedule } from '~/hooks/session/use-live-sessions-with-schedule';
 import { createCongestionStompClient } from '~/api/congestion/congestion-stomp-client';
 import { SkeletonLiveSessionList } from '~/components/session-list/skeleton-live-session-list';
+
 export default function LiveSessionList({ token }) {
   const navigate = useNavigate();
   const [congestionMap, setCongestionMap] = useState({}); // 혼잡도 저장
@@ -30,11 +31,29 @@ export default function LiveSessionList({ token }) {
   useEffect(() => {
     if (!token || liveSessions.length === 0) return;
 
+    // 💡 초기값 설정: 모든 세션에 대해 기본 혼잡도를 "알 수 없음"으로 설정
+    const initialCongestionMap = liveSessions.reduce((acc, session) => {
+      acc[session.id] = '적정'; // 초기값 (원하는 값으로 변경 가능)
+      return acc;
+    }, {});
+
+    setCongestionMap(initialCongestionMap);
+
     const client = createCongestionStompClient(token, (data) => {
-      setCongestionMap((prev) => ({
-        ...prev,
-        [data.sessionId]: data.congestionLevel,
-      }));
+      if (!data.congestionLevel) return; // 💡 undefined 방지
+
+      setCongestionMap((prev) => {
+        const newMap = { ...prev };
+
+        // 혼잡도 데이터가 존재하는 경우에만 처리
+        Object.entries(data.congestionLevel || {}).forEach(
+          ([sessionId, congestion]) => {
+            newMap[sessionId] = congestion.level; // 💡 level 값만 저장
+          },
+        );
+
+        return newMap;
+      });
     });
 
     return () => {
@@ -42,6 +61,8 @@ export default function LiveSessionList({ token }) {
       client.deactivate();
     };
   }, [token, liveSessions]);
+
+  console.log(congestionMap);
   if (liveLoading) return <SkeletonLiveSessionList />;
 
   return (
