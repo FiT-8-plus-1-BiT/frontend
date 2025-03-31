@@ -393,6 +393,8 @@ const Mypage = () => {
   const [likedSessions, setLikedSessions] = useState([]);
   const [showModal, setShowModal] = useState(false); // 모달 상태
 
+  const [showModal2, setShowModal2] = useState(false);
+
   const [myScheduleSessions, setMyScheduleSessions] = useState([]); // 나의 시간표 세션 
 
    // Redux 스토어에서 이름, 직무, 연차, 관심 분야 가져오기
@@ -772,18 +774,25 @@ const Mypage = () => {
 
             <hr className="border-[#E0E0E0]" />
 
-            <div className="sm:flex-row items-start sm:items-center sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]">
-              <div className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]">
+            <div 
+              className="sm:flex-row items-start sm:items-center 
+                sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
+              onClick={() => setShowModal2(true)}
+            >
+              <div 
+                className="text-2xl font-bold text-[#606166] w-full sm:w-[240px] mb-[20px]"
+              >
                 추천 강연
               </div>
 
               <div className="flex flex-row flex-wrap gap-[30px] w-[800px] py-5 mb-[20px]">
-                {sessions.map((session) => (
-                  <div key={session.id} className="w-[330px] w-full flex items-center space-x-4">
+              {sessions.length > 0 ? (
+                sessions.slice(0, 3).map((session) => (
+                  <div key={session.sessionId} className="flex items!-center justify-left space-x-4 mb-4">
                     {/* 프로필 이미지 */}
                     <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
                       <img
-                        src={session.speaker?.image || 'default-image-url.jpg'} // 옵셔널 체이닝과 기본값 설정
+                        src={session.speaker?.image || 'default-image-url.jpg'}
                         alt={session.speaker?.name || 'Unknown Speaker'}
                         className="object-cover w-full h-full bg-[gray]"
                       />
@@ -798,10 +807,52 @@ const Mypage = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                 ))
+                ) : (
+                  <p>추천 강연이 없습니다.</p>
+                )}
               </div>
             </div>
           </div>
+
+          {/* 모달 창 */}
+          {showModal2 && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white rounded-lg p-6 w-[90%] max-w-[600px] relative">
+                <button
+                  onClick={() => setShowModal2(false)} // 모달 닫기 버튼
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                >
+                  ✖️
+                </button>
+                <h2 className="text-xl font-bold mb-4">👍추천 강연 전체 목록</h2>
+                <hr  className='mb-[20px]' />
+                <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+                  {sessions.map((session) => (
+                    <div key={session.sessionId} className="flex items-center space-x-4">
+                      {/* 프로필 이미지 */}
+                      <div className="w-[32px] h-[32px] overflow-hidden rounded-[6px]">
+                        <img
+                          src={session.speaker?.image || 'default-image-url.jpg'}
+                          alt={session.speaker?.name || 'Unknown Speaker'}
+                          className="object-cover w-full h-full bg-[gray]"
+                        />
+                      </div>
+                      {/* 닉네임과 이메일 */}
+                      <div className="flex flex-col gap-[2px]">
+                        <div className="text-[14px] text-[#202023] font-bold leading-[150%] tracking-[-0.14px]">
+                          {session.title || '제목 없음'}
+                        </div>
+                        <div className="text-[#606166] text-base font-medium leading-[150%]">
+                          {session.speaker?.name || '발표자 정보 없음'}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="w-full max-w-[1520px] min-h-[1836px] mx-auto overflow-x-auto">
             <h2 className="text-black text-[40px] font-bold 
