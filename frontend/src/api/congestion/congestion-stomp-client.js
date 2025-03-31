@@ -16,22 +16,15 @@ export function createCongestionStompClient(token, onMessageReceived) {
     onConnect: () => {
       console.log('🟢 STOMP 연결됨. 혼잡도 구독 시작');
 
-      // ✅ 이 부분만 신경 쓰면 됨
-      client.subscribe(
-        '/sub/session',
-        (message) => {
-          try {
-            const data = JSON.parse(message.body);
-            console.log('📩 혼잡도 수신:', data);
-            onMessageReceived?.(data);
-          } catch (e) {
-            console.error('❌ 메시지 파싱 실패:', e);
-          }
-        },
-        {
-          Authorization: `Bearer ${token}`,
-        },
-      );
+      client.subscribe('/sub/session', (message) => {
+        try {
+          const data = JSON.parse(message.body);
+          console.log('📩 혼잡도 수신:', data);
+          onMessageReceived?.(data);
+        } catch (e) {
+          console.error('❌ 메시지 파싱 실패:', e);
+        }
+      });
     },
 
     onStompError: (frame) => {

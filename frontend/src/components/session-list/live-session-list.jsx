@@ -42,9 +42,8 @@ export default function LiveSessionList({ token }) {
       client.deactivate();
     };
   }, [token, liveSessions]);
-
   if (liveLoading) return <SkeletonLiveSessionList />;
-  
+
   return (
     <>
       <h2 className="text-[44px] font-bold mb-4">현재 라이브 중인 세션</h2>
