@@ -31,7 +31,7 @@ export default function LiveSessionList({ token }) {
   useEffect(() => {
     if (!token || liveSessions.length === 0) return;
 
-    // 💡 초기값 설정: 모든 세션에 대해 기본 혼잡도를 "알 수 없음"으로 설정
+    // 💡 초기값 설정: 모든 세션에 대해 기본 혼잡도를 "적정"으로 설정
     const initialCongestionMap = liveSessions.reduce((acc, session) => {
       acc[session.id] = '적정'; // 초기값 (원하는 값으로 변경 가능)
       return acc;

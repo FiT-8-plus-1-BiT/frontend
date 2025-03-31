@@ -5,7 +5,7 @@ import { StreamingScreen } from '~/components/streaming/streaming-screen';
 const StreamingSection = ({ mode }) => {
   return (
     <div
-      className={`flex-1 ${mode ? 'bg-blue-0 rounded-lg py-[56px] px-[20px]' : ''}`}
+      className={`flex-1 bg-gray-90 border-[1px] border-gray-200 ${mode ? ' py-[56px] px-[20px]' : ''}`}
     >
       {!mode && <StreamingScreen />}
       <StreamingInformation mode={mode} />
