@@ -776,7 +776,7 @@ const Mypage = () => {
 
             <div 
               className="sm:flex-row items-start sm:items-center 
-                sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px]"
+                sm:space-x-5 mb-4 mt-[40px] sm:ml-[40px] cursor-pointer"
               onClick={() => setShowModal2(true)}
             >
               <div 
