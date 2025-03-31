@@ -194,7 +194,7 @@ function AudienceStreaming() {
   };
 
   return (
-    <div className="p-6 bg-white flex items-center gap-4">
+    <div className="p-6 mb-6 w-full bg-gray-90 rounded-2xl flex items-center justify-between gap-4">
       {/* Start Listening / Pause 버튼 */}
       <button
         onClick={isListening ? leaveAudience : startAudience}
@@ -204,13 +204,18 @@ function AudienceStreaming() {
       </button>
 
       {/* 오디오 스트리밍 애니메이션 */}
-      {isListening && (
-        <div className="flex gap-1">
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span>
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping delay-200"></span>
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping delay-400"></span>
-        </div>
-      )}
+      <div className="flex gap-1 h-5 items-end ">
+        {[2, 4, 6, 4, 2].map((height, index) => (
+          <span
+            key={index}
+            className={`
+        w-1 h-${height} 
+        ${isListening ? 'bg-blue-500 animate-wave origin-bottom' : 'bg-gray-500'}
+        ${isListening ? `delay-${index * 100}` : ''}
+      `}
+          ></span>
+        ))}
+      </div>
 
       {/* 음소거 버튼 */}
       <button
