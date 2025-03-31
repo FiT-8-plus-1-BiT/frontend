@@ -6,7 +6,7 @@ const SwitchButton = ({ label, active, onClick, width }) => {
       className={`h-[46px] border font-bold transition 
         ${width} 
         md:text-xl text-xs 
-        ${active ? 'bg-black text-white' : 'text-black'}`}
+        ${active ? 'bg-gray-900 text-gray-90' : 'text-gray-900'}`}
       onClick={onClick}
     >
       {label}

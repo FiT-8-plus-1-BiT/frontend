@@ -3,12 +3,15 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Play, Pause } from 'lucide-react'; // Pause 아이콘을 사용
 
 function AudienceStreaming() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const token = useSelector((state) => state.auth.token);
   const [stompClient, setStompClient] = useState(null);
+  const [muted, setMuted] = useState(false); // 음소거 상태 관리
+  const [isListening, setIsListening] = useState(false); // 재생 여부 상태 관리
 
   const pcRef = useRef(null);
   const remoteAudioRef = useRef(null);
@@ -148,6 +151,8 @@ function AudienceStreaming() {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    setIsListening(true); // 재생 시작 상태로 변경
   };
 
   const leaveAudience = () => {
@@ -175,28 +180,61 @@ function AudienceStreaming() {
       remoteAudioRef.current.srcObject = null;
     }
 
+    setIsListening(false); // 재생 중지 상태로 변경
+
     console.log('👋 청중 나감');
   };
 
+  // 음소거 토글 함수
+  const toggleMute = () => {
+    if (remoteAudioRef.current) {
+      remoteAudioRef.current.muted = !muted; // 음소거 상태 변경
+      setMuted((prev) => !prev); // 상태 업데이트
+    }
+  };
+
   return (
-    <div className="p-6 bg-white rounded border shadow">
-      <h2 className="text-xl font-bold mb-3">🎧 Audience Streaming</h2>
-      <p className="text-sm mb-2">Session ID: {sessionId}</p>
-
+    <div className="p-6 bg-white flex items-center gap-4">
+      {/* Start Listening / Pause 버튼 */}
       <button
-        onClick={startAudience}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+        onClick={isListening ? leaveAudience : startAudience}
+        className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-700"
       >
-        Start Listening
-      </button>
-      <button
-        onClick={leaveAudience}
-        className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-      >
-        Leave
+        {isListening ? <Pause size={20} /> : <Play size={20} />}
       </button>
 
-      <audio ref={remoteAudioRef} autoPlay controls className="mt-4 w-full" />
+      {/* 오디오 스트리밍 애니메이션 */}
+      {isListening && (
+        <div className="flex gap-1">
+          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span>
+          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping delay-200"></span>
+          <span className="w-2 h-2 bg-blue-500 rounded-full animate-ping delay-400"></span>
+        </div>
+      )}
+
+      {/* 음소거 버튼 */}
+      <button
+        onClick={toggleMute}
+        className="w-10 h-10 rounded-full flex items-center justify-center"
+      >
+        <img
+          src={
+            muted
+              ? '/public/assets/muteButton1.svg'
+              : '/public/assets/muteButton2.svg'
+          }
+          alt={muted ? '음소거됨' : '음소거 아님'}
+          className="w-6 h-6"
+        />
+      </button>
+
+      <audio
+        ref={remoteAudioRef}
+        autoPlay
+        hidden
+        controls
+        className="mt-4 w-full"
+      />
     </div>
   );
 }

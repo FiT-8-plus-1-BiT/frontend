@@ -44,7 +44,7 @@ const LiveSessionItem = React.memo(function LiveSessionItem({
       <span key={n} className={`w-3 h-3 rounded-full ${getDotColor(n)}`} />
     ));
   };
-  console.log('congestion', congestion);
+  console.log('각 세션의 congestion', congestion);
   return (
     <div
       className="relative flex flex-col md:w-[520px] md:h-[558px] rounded-xl overflow-hidden shadow hover:shadow-md cursor-pointer bg-white"
@@ -116,10 +116,8 @@ const LiveSessionItem = React.memo(function LiveSessionItem({
         </div>
 
         {/* 혼잡도 */}
-        <div className="flex items-center w-[138px]  h-[38px] rounded-[4px] bg-gray-100 gap-[8px] py-[4px] px-[16px]">
-          <span className="text-[#131212] w-[52px] h-[30px] text-[16px]">
-            혼잡도
-          </span>
+        <div className="flex items-center justify-center w-[138px] h-[38px] rounded-[4px] bg-gray-100 gap-[8px] py-[4px] px-[16px]">
+          <span className="text-[#131212] text-[16px]">혼잡도</span>
           <div className="flex gap-1">{renderCongestionDots()}</div>
         </div>
       </div>
