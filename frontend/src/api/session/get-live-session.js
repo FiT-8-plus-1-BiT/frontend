@@ -1,6 +1,6 @@
 // src/api/session/getLive.js
 
-const BASE_URL = 'https://fit-conference.shop/';
+const BASE_URL = 'https://fit-conference.shop';
 
 export const getLiveSessions = async (token) => {
   try {

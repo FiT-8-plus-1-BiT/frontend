@@ -1,6 +1,6 @@
 // src/api/session/get-recommended-session.js
 
-const BASE_URL = 'https://fit-conference.shop/';
+const BASE_URL = 'https://fit-conference.shop';
 
 export const getRecommendedSessions = async (token) => {
   try {

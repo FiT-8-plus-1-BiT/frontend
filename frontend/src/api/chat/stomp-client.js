@@ -9,7 +9,7 @@ export function createStompClient(token, sessionId, onMessageReceived) {
   }
   const stompClient = new Client({
     // SockJS를 사용하므로 webSocketFactory만 사용합니다.
-    webSocketFactory: () => new SockJS('https://https://fit-conference.shop/ws'),
+    webSocketFactory: () => new SockJS('https://fit-conference.shop/ws'),
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },

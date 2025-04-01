@@ -32,7 +32,6 @@ const GoogleLoginComponent = () => {
               accessToken = accessToken.substring(7);
             }
             localStorage.setItem("access-token", accessToken);
-            console.log("🔑 Access Token:", accessToken);
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
@@ -45,7 +44,6 @@ const GoogleLoginComponent = () => {
             );
 
             const userData = userResponse.data.response;
-            console.log("👤 User Data:", userData);
 
             // Google 기본 프로필 이미지 처리
             if (!userData.imageUrl) {

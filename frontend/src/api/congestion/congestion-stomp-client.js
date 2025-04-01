@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 
 export function createCongestionStompClient(token, onMessageReceived) {
   const client = new Client({
-    webSocketFactory: () => new SockJS('https://fit-conference.shop//ws'),
+    webSocketFactory: () => new SockJS('https://fit-conference.shop/ws'),
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },

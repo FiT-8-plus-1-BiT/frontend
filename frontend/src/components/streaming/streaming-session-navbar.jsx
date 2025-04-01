@@ -4,78 +4,7 @@ import { getLiveSessions } from '~/api/session/get-live-session';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectIsProfileComplete } from '~/redux/user-slice';
-const mockSessions = [
-  {
-    id: 1,
-    sessionName: "세션 1",
-    speakerName: "스피커 1",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: true,
-  },
-  {
-    id: 2,
-    sessionName: "세션 2",
-    speakerName: "스피커 2",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: false,
-  },
-  {
-    id: 3,
-    sessionName: "세션 3",
-    speakerName: "스피커 3",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: true,
-  },
-  {
-    id: 4,
-    sessionName: "세션 4",
-    speakerName: "스피커 4",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: false,
-  },
-  {
-    id: 5,
-    sessionName: "세션 5",
-    speakerName: "스피커 5",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: true,
-  },
-  {
-    id: 6,
-    sessionName: "세션 6",
-    speakerName: "스피커 6",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: false,
-  },
-  {
-    id: 7,
-    sessionName: "세션 7",
-    speakerName: "스피커 7",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: true,
-  },
-  {
-    id: 8,
-    sessionName: "세션 8",
-    speakerName: "스피커 8",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: false,
-  },
-  {
-    id: 9,
-    sessionName: "세션 9",
-    speakerName: "스피커 9",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: true,
-  },
-  {
-    id: 10,
-    sessionName: "세션 10",
-    speakerName: "스피커 10",
-    imageUrl: "https://via.placeholder.com/100",
-    isLive: false,
-  },
-];
+
 // 개별 세션 항목
 const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
   const navigate = useNavigate();
@@ -95,8 +24,9 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
       onClick={handleClick}
     >
       <div
-        className={`relative w-8 h-8 rounded-[6px] overflow-hidden border ${isLive ? 'border-red-300 border-[1px]' : ''
-          }`}
+        className={`relative w-8 h-8 rounded-[6px] overflow-hidden border ${
+          isLive ? 'border-red-300 border-[1px]' : ''
+        }`}
       >
         <img
           src={imageUrl}
@@ -149,14 +79,9 @@ const StreamingSessionNavbar = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        // 라이브 세션
-        const liveSessions = mockSessions.filter(session => session.isLive);
+        const allSessions = await getAllSessions(token);
+        const liveSessions = await getLiveSessions(token);
 
-        // 전체 세션
-        const allSessions = mockSessions;
-
-        // 인기 세션
-        const recommendedSessions = mockSessions.filter(session => !session.isLive);
         const mappedAll = allSessions.map((s) => ({
           id: s.id,
           sessionName: s.title,

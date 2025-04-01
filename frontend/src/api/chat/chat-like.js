@@ -1,4 +1,4 @@
-const API_BASE = 'https://https://fit-conference.shop/api/v1/chat';
+const API_BASE = 'https://fit-conference.shop/api/v1/chat';
 
 export const likeQuestion = async (sessionId, messageId, token) => {
   const res = await fetch(`${API_BASE}/like/${sessionId}/${messageId}`, {
