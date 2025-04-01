@@ -221,7 +221,7 @@ const MainPage = () => {
 
 
           <div 
-            className="bg-white pl-[40px] pr-[40px] py-[24px] h-[612px] h-full w-[452px] 
+            className="bg-white pl-[40px] pr-[40px] py-[24px] h-[581px] h-full w-[452px] 
               w-full rounded-t-[12px] rounded-b-[12px] sm:w-[300px] md:w-[340px] 
               lg:w-[440px] flex flex-col items-start"
           >
@@ -234,7 +234,7 @@ const MainPage = () => {
             </p>
 
             <h3 className="text-[#2A2EAD] text-[36px] font-bold leading-[150%] 
-              tracking-[-0.18px] w-full mb-[100px]">
+              tracking-[-0.18px] w-full h-[100px]">
                 모바일 결제의 미래
             </h3>
 
