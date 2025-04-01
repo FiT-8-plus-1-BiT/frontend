@@ -1,7 +1,9 @@
 import React from 'react';
 
 const StreamingScreen = () => {
+
     const videoId = 'ydR5Zt1X8_M'; // 🎯 YouTube video ID (from the URL: https://www.youtube.com/watch?v=ydR5Zt1X8_M)
+
 
     return (
         <div className="w-full bg-gray-200 md:h-[42.6vw] h-[79.8vw] flex justify-center items-center">
