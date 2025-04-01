@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import Navbar from "~/components/navbar.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
@@ -80,9 +80,56 @@ const EditProfile = ({ onProfileUpdate }) => {
     { title2: "시니어", description2: "7년 이상 일하고 있어요" }
   ];
 
+  // 상태 변수를 useRef로 감싸기
+  const lastNameRef = React.useRef(lastName);
+  const selectedValueRef = React.useRef(selectedValue);
+  const selectedValue2Ref = React.useRef(selectedValue2);
+  const selectedTagsRef = React.useRef(selectedTags);
+
   useEffect(() => {
+    fetchUserProfile(); // 컴포넌트 마운트 시 프로필 정보 가져오기
     fetchUserAccount();
   }, []);
+
+  useEffect(() => {
+    lastNameRef.current = lastName;
+    selectedValueRef.current = selectedValue;
+    selectedValue2Ref.current = selectedValue2;
+    selectedTagsRef.current = selectedTags;
+  }, [lastName, selectedValue, selectedValue2, selectedTags]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await axios.get('https://fit-conf.shop/api/v1/users/profile', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.success) {
+        const profileData = response.data.response;
+        setLastName(profileData.name || ''); // 이름 설정
+        setSelectedValue(profileData.job || ''); // 직무 설정
+        setSelectedValue2(profileData.years || ''); // 연차 설정
+        setSelectedTags(profileData.interests || []); // 관심분야 설정
+
+        // Redux 상태 업데이트
+        dispatch(updateProfile({
+          name: profileData.name || '',
+          job: profileData.job || '',
+          experience: profileData.years || '',
+          interests: profileData.interests || [],
+        }));
+      } else {
+        console.error('Failed to fetch user profile:', response.data.message);
+        alert('프로필 정보를 불러오는데 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      alert('프로필 정보를 불러오는 중 오류가 발생했습니다.');
+    }
+  };
 
   const fetchUserAccount = async () => {
     try {
@@ -145,17 +192,49 @@ const EditProfile = ({ onProfileUpdate }) => {
     onProfileUpdate();
   };
 
-  const handleSave = () => {
-    // Redux에 dispatch하여 프로필 정보 업데이트
-    dispatch(
-      updateProfile({
-        name: lastName,
-        job: selectedValue,
-        experience: selectedValue2,
-        interests: selectedTags,
-      })
-    );
-    onProfileUpdate();
+  const handleSave = async () => {
+    const profileData = {
+      name: lastNameRef.current, 
+      job: selectedValueRef.current,
+      years: selectedValue2Ref.current,
+      interests: selectedTagsRef.current,
+    };
+
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await axios.put(
+        'https://fit-conf.shop/api/v1/users/profile',
+        profileData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // API 호출 성공 후 Redux 상태 업데이트
+        dispatch(
+          updateProfile({
+            name: lastNameRef.current,
+            job: selectedValueRef.current,
+            experience: selectedValue2Ref.current,
+            interests: selectedTagsRef.current,
+          })
+        );
+        alert('프로필이 성공적으로 업데이트되었습니다.');
+        
+        onProfileUpdate(); // Profile page로 navigate
+
+        // 프로필 수정 후 상태를 다시 불러오기
+        fetchUserProfile();
+      } else {
+        alert('프로필 업데이트에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('프로필 업데이트 실패', error);
+      alert('프로필 업데이트 중 오류가 발생했습니다.');
+    }
   };
 
   return (
