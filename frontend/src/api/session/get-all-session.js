@@ -1,6 +1,6 @@
 // src/api/session/getAll.js
 
-const BASE_URL = 'https://fit-conf.shop';
+const BASE_URL = 'https://fit-conference.shop';
 
 export const getAllSessions = async (token) => {
   try {

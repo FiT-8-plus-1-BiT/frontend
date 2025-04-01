@@ -29,7 +29,7 @@ export default function Streaming() {
       <div className="order-last md:order-none">
         <StreamingSessionNavbar />
       </div>
-      <div className="flex flex-1 flex-col gap-[20px]">
+      <div className="flex flex-1 flex-col gap-[20px] mr-2">
         <StreamingSwitchButton handleToggle={handleToggle} />
         <div className="flex flex-1 gap-[8px] h-full">
           <StreamingSection mode={isAudioMode} />

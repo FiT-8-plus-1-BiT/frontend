@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchLikedSessions = createAsyncThunk(
   'likedSessions/fetch',
   async () => {
-    const res = await fetch('https://fit-conf.shop/api/v1/users/sessions/like');
+    const res = await fetch('https://fit-conference.shop/api/v1/users/sessions/like');
     const data = await res.json();
     return data.response.map((session) => session.id); // ID만 추출해서 저장
   },

@@ -13,7 +13,7 @@ const GoogleLoginComponent = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "https://fit-conf.shop/api/v1/auth/token-exchange",
+          "https://fit-conference.shop/api/v1/auth/token-exchange",
           {
             method: 'POST',
             headers: {
@@ -32,11 +32,10 @@ const GoogleLoginComponent = () => {
               accessToken = accessToken.substring(7);
             }
             localStorage.setItem("access-token", accessToken);
-            console.log("🔑 Access Token:", accessToken);
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
-              "https://fit-conf.shop/api/v1/users/account",
+              "https://fit-conference.shop/api/v1/users/account",
               {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -45,7 +44,6 @@ const GoogleLoginComponent = () => {
             );
 
             const userData = userResponse.data.response;
-            console.log("👤 User Data:", userData);
 
             // Google 기본 프로필 이미지 처리
             if (!userData.imageUrl) {
@@ -77,7 +75,7 @@ const GoogleLoginComponent = () => {
   }, [dispatch, navigate]);
 
   const onGoogleLogin = () => {
-    window.location.href = "https://fit-conf.shop/oauth2/authorization/google";
+    window.location.href = "https://fit-conference.shop/oauth2/authorization/google";
   };
 
   return (

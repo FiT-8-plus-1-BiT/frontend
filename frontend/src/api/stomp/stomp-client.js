@@ -18,7 +18,7 @@ export function initStompClient(token) {
   }
 
   stompClient = new Client({
-    webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
+    webSocketFactory: () => new SockJS('https://fit-conference.shop/ws'),
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },

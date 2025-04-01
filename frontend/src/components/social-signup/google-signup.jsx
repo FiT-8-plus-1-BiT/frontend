@@ -12,7 +12,7 @@ const GoogleSignup = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          'https://fit-conf.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
+          'https://fit-conference.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
           {
             method: 'POST',
             headers: {
@@ -53,9 +53,8 @@ const GoogleSignup = () => {
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
   const onGoogleSignup = () => {
-    // const redirectUri = "http://localhost:5173/login"; // 회원가입 후 리디렉션할 URI
-    // window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-    window.location.href = 'https://fit-conf.shop/oauth2/authorization/google';
+    
+    window.location.href = 'https://fit-conference.shop/oauth2/authorization/google';
   };
 
   return (

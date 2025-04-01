@@ -1,7 +1,7 @@
 // ~/hooks/session/use-scheduled-session.jsx
 import { useEffect, useState } from 'react';
 
-const BASE_URL = 'https://fit-conf.shop';
+const BASE_URL = 'https://fit-conference.shop';
 
 export function useScheduledSessions(token) {
   const [scheduledSessions, setScheduledSessions] = useState([]);

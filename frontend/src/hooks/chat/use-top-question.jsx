@@ -4,7 +4,7 @@ import isEqual from 'lodash.isequal';
 
 // ✅ API 호출 함수 (목데이터 제거 + sessionId 필터)
 async function fetchQuestions(sessionId, token, page = 0, size = 6) {
-  const url = `https://fit-conf.shop/api/v1/chat/questions/zset/${sessionId}?page=${page}&size=${size}`;
+  const url = `https://fit-conference.shop/api/v1/chat/questions/zset/${sessionId}?page=${page}&size=${size}`;
 
   try {
     const response = await fetch(url, {

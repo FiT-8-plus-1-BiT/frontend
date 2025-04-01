@@ -1,4 +1,4 @@
-const baseURL = 'https://fit-conf.shop';
+const baseURL = 'https://fit-conference.shop';
 
 // 좋아요 추가
 export async function postLike(sessionId,token) {

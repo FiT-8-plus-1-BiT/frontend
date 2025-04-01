@@ -10,7 +10,7 @@ const NaverMobileLogin = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://fit-conf.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          "https://fit-conference.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
           {
             method: "POST",
             headers: {
@@ -49,7 +49,7 @@ const NaverMobileLogin = () => {
 
   // OAuth 회원가입 버튼 클릭 시 해당 소셜 로그인 URL로 이동
   const onNaverMobileLogin = () => {
-    window.location.href = "http://fit-conf.shop/oauth2/authorization/naver";
+    window.location.href = "https://fit-conference.shop/oauth2/authorization/naver";
   };
   
   return (

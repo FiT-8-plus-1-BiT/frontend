@@ -1,7 +1,7 @@
 // ~/api/user/get-user-profile.js
 export async function getUserProfile(token) {
     try {
-      const response = await fetch('https://fit-conf.shop/api/v1/users/profile', {
+      const response = await fetch('https://fit-conference.shop/api/v1/users/profile', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
