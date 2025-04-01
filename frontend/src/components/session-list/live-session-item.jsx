@@ -1,9 +1,6 @@
 import React from 'react';
 
-/**
- * 단일 라이브 세션 아이템을 보여주는 컴포넌트
- */
-function LiveSessionItem({
+const LiveSessionItem = React.memo(function LiveSessionItem({
   sessionId,
   isScheduled,
   thumbnail,
@@ -11,22 +8,43 @@ function LiveSessionItem({
   description,
   speaker,
   tags,
-  congestion = 2, // 혼잡도: 1~3
+  congestion, // 혼잡도: "여유", "적정", "혼잡"
   onToggleSchedule,
   onClick,
   isLive = true,
 }) {
-  // 혼잡도 점 생성 함수
-  const renderCongestionDots = () => {
-    return [1, 2, 3].map((n) => (
-      <span
-        key={n}
-        className={`w-2 h-2 rounded-full ${n <= congestion ? 'bg-red-500' : 'bg-gray-300'
-          }`}
-      />
-    ));
+  // 혼잡도 점수 계산
+  const getCongestionLevel = () => {
+    switch (congestion) {
+      case '여유':
+        return 1;
+      case '적정':
+        return 2;
+      case '혼잡':
+        return 3;
+      default:
+        return 0; // 기본값 (알 수 없음)
+    }
   };
 
+  // 혼잡도 색상
+  const getDotColor = (index) => {
+    const level = getCongestionLevel();
+    if (index <= level) {
+      if (level === 1) return 'bg-green-500'; // 여유 (초록색)
+      if (level === 2) return 'bg-yellow-500'; // 적정ㅇ (노랑색)
+      if (level === 3) return 'bg-red-500'; // 혼잡 (빨간색)
+    }
+    return 'bg-gray-300'; // 기본 비활성 색상
+  };
+
+  // 혼잡도 점 렌더링 함수
+  const renderCongestionDots = () => {
+    return [1, 2, 3].map((n) => (
+      <span key={n} className={`w-3 h-3 rounded-full ${getDotColor(n)}`} />
+    ));
+  };
+  console.log('각 세션의 congestion', congestion);
   return (
     <div
       className="relative flex flex-col md:w-[520px] md:h-[558px] rounded-xl overflow-hidden shadow hover:shadow-md cursor-pointer bg-white"
@@ -67,10 +85,11 @@ function LiveSessionItem({
               e.stopPropagation();
               onToggleSchedule(sessionId);
             }}
-            className={`h-9 px-4 text-[14px] font-semibold border ${isScheduled
+            className={`h-9 px-4 text-[14px] font-semibold border ${
+              isScheduled
                 ? 'bg-black text-white border-black w-[116px] h-[36px]'
                 : 'text-gray-800 border-gray-800 w-[90px] h-[36px]'
-              }`}
+            }`}
           >
             {isScheduled ? '✓ 담은 강연' : '+ 담기'}
           </button>
@@ -92,20 +111,18 @@ function LiveSessionItem({
           ))}
         </div>
         {/* 설명 */}
-        <div className="text-[14px] text-gray-550 text-[14px] leading-relaxed line-clamp-4">
+        <div className="text-[14px] text-gray-550  leading-relaxed line-clamp-4">
           {description}
         </div>
 
         {/* 혼잡도 */}
-        <div className="flex items-center w-[138px] items-center h-[38px] rounded-[4px] bg-gray-100 gap-[8px] py-[4px] px-[16px]">
-          <span className="text-[#131212] w-[52px] h-[30px] font-medium text-[20px]">혼잡도</span>
+        <div className="flex items-center justify-center w-[138px] h-[38px] rounded-[4px] bg-gray-100 gap-[8px] py-[4px] px-[16px]">
+          <span className="text-[#131212] text-[16px]">혼잡도</span>
           <div className="flex gap-1">{renderCongestionDots()}</div>
         </div>
-
-
       </div>
     </div>
   );
-}
+});
 
 export { LiveSessionItem };

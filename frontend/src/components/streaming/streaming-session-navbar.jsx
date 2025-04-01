@@ -10,12 +10,16 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/streaming?session_id=${id}`);
+    if (isLive) {
+      navigate(`/streaming?session_id=${id}`);
+    } else {
+      window.alert('라이브 시작 전 입니다');
+    }
   };
 
   return (
     <div
-      className="flex items-center gap-3 cursor-pointer"
+      className="flex items-center gap-[16px] cursor-pointer"
       title={sessionName}
       onClick={handleClick}
     >
@@ -54,9 +58,9 @@ const SessionItem = ({ sessionName, speakerName, imageUrl, isLive, id }) => {
 
 // 카테고리별 세션 목록
 const SessionSection = ({ title, sessions }) => (
-  <div className="flex flex-col gap-2 mb-4">
+  <div className="flex flex-col gap-[16px] mb-4">
     <h3 className="text-[#797677] text-sm font-semibold px-4 pt-2">{title}</h3>
-    <div className="flex flex-col gap-3 px-4">
+    <div className="flex flex-col gap-[16px] px-4">
       {sessions.map((session) => (
         <SessionItem key={session.id} {...session} />
       ))}

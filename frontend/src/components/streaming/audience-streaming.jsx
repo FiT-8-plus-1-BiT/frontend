@@ -3,12 +3,15 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Play, Pause } from 'lucide-react'; // Pause 아이콘을 사용
 
 function AudienceStreaming() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const token = useSelector((state) => state.auth.token);
   const [stompClient, setStompClient] = useState(null);
+  const [muted, setMuted] = useState(false); // 음소거 상태 관리
+  const [isListening, setIsListening] = useState(false); // 재생 여부 상태 관리
 
   const pcRef = useRef(null);
   const remoteAudioRef = useRef(null);
@@ -110,12 +113,6 @@ function AudienceStreaming() {
 
     pcRef.current = pc;
 
-    // ICE 상태 변화 로그
-    pc.oniceconnectionstatechange = () => {
-      console.log('Audience ICE state:', pc.iceConnectionState);
-      console.log('Audience dtlsState', pc?.dtlsState);
-    };
-
     pc.onicecandidate = (event) => {
       if (event.candidate) {
         const candidateDto = {
@@ -154,15 +151,8 @@ function AudienceStreaming() {
         Authorization: `Bearer ${token}`,
       },
     });
-  };
 
-  // 수동 재생 버튼 (자동재생 정책 때문에)
-  const playAudioManually = () => {
-    if (remoteAudioRef.current) {
-      remoteAudioRef.current.play().catch((err) => {
-        console.error('Manual play error:', err);
-      });
-    }
+    setIsListening(true); // 재생 시작 상태로 변경
   };
 
   const leaveAudience = () => {
@@ -190,49 +180,68 @@ function AudienceStreaming() {
       remoteAudioRef.current.srcObject = null;
     }
 
+    setIsListening(false); // 재생 중지 상태로 변경
+
     console.log('👋 청중 나감');
   };
 
+  // 음소거 토글 함수
+  const toggleMute = () => {
+    if (remoteAudioRef.current) {
+      remoteAudioRef.current.muted = !muted; // 음소거 상태 변경
+      setMuted((prev) => !prev); // 상태 업데이트
+    }
+  };
+
   return (
-    <div className="p-6 bg-white rounded border shadow">
-      <h2 className="text-xl font-bold mb-3">🎧 Audience Streaming</h2>
-      <p className="text-sm mb-2">Session ID: {sessionId}</p>
-
+    <div className="p-6 mb-6 w-full bg-gray-90 rounded-2xl flex items-center justify-between gap-4">
+      {/* Start Listening / Pause 버튼 */}
       <button
-        onClick={startAudience}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+        onClick={isListening ? leaveAudience : startAudience}
+        className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-700"
       >
-        Start Listening
-      </button>
-      <WaveBars />
-      <button
-        onClick={leaveAudience}
-        className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-      >
-        Leave
+        {isListening ? <Pause size={20} /> : <Play size={20} />}
       </button>
 
-      <audio ref={remoteAudioRef} autoPlay controls className="mt-4 w-full" />
+      {/* 오디오 스트리밍 애니메이션 */}
+      <div className="flex gap-1 h-5 items-end ">
+        {[2, 4, 6, 4, 2].map((height, index) => (
+          <span
+            key={index}
+            className={`
+        w-1 h-${height} 
+        ${isListening ? 'bg-blue-500 animate-wave origin-bottom' : 'bg-gray-500'}
+        ${isListening ? `delay-${index * 100}` : ''}
+      `}
+          ></span>
+        ))}
+      </div>
+
+      {/* 음소거 버튼 */}
+      <button
+        onClick={toggleMute}
+        className="w-10 h-10 rounded-full flex items-center justify-center"
+      >
+        <img
+          src={
+            muted
+              ? '/public/assets/muteButton1.svg'
+              : '/public/assets/muteButton2.svg'
+          }
+          alt={muted ? '음소거됨' : '음소거 아님'}
+          className="w-6 h-6"
+        />
+      </button>
+
+      <audio
+        ref={remoteAudioRef}
+        autoPlay
+        hidden
+        controls
+        className="mt-4 w-full"
+      />
     </div>
   );
 }
 
 export default AudienceStreaming;
-function WaveBars() {
-  return (
-    <div className="flex gap-1 items-end h-20">
-      {Array.from({ length: 20 }).map((_, i) => {
-        const initialScale = (0.4 + Math.random() * 0.6).toFixed(2); // 0.4 ~ 1.0
-        return (
-          <div
-            key={i}
-            className="w-2 h-16 bg-blue-700 rounded  animate-wave"
-            style={{
-              '--start-scale': initialScale,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}

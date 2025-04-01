@@ -10,7 +10,6 @@ const tagClasses =
   "flex justify-center items-center self-stretch rounded-[4px] border bg-gray-500 py-1 px-4 h-8 text-white text-center font-['Pretendard'] text-sm font-semibold leading-[140%]";
 
 function StreamingInformation({ mode }) {
-  const [muted, setMuted] = useState(false);
   const [sessionInfo, setSessionInfo] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -69,18 +68,19 @@ function StreamingInformation({ mode }) {
             ))}
         </div>
 
-        {/* 제목 + 버튼 */}
-        <div className="flex flex-col xl:flex-row xl:justify-between gap-[20px] xl:gap-[40px]">
-          <h1 className="md:text-3xl text-xl font-semibold text-[#0e0e0e]">
-            {sessionInfo?.title || '로딩 중...'}
-          </h1>
+        {/* 제목 */}
+        <h1 className="md:text-3xl text-xl font-semibold text-[#0e0e0e]">
+          {sessionInfo?.title || '로딩 중...'}
+        </h1>
 
-          <div className="flex md:flex-row gap-2 xl:gap-3">
+        {/* 좋아요/공유하기 버튼 */}
+        {mode ? (
+          <div className="flex md:flex-row gap-2 xl:gap-3 mt-2">
             <button
               onClick={isLiked ? handleUnlike : handleLike}
               className={`flex items-center gap-2 py-2 px-5 border rounded-md transition 
-                ${isLiked ? 'border-blue-700 bg-blue-50 text-blue-700' : 'border-gray-300 bg-white text-gray-500'}
-              `}
+        ${isLiked ? 'border-blue-700 bg-blue-50 text-blue-700' : 'border-gray-300 bg-white text-gray-500'}
+      `}
             >
               <ThumbsUp
                 size={16}
@@ -98,23 +98,35 @@ function StreamingInformation({ mode }) {
               공유하기
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* 상세 정보 박스 */}
-      <div className={`p-6 mb-10 bg-gray-50 ${mode ? 'order-1' : 'order-2'}`}>
-        {mode && (
-          <div className="flex items-center justify-between gap-2">
-            <AudienceStreaming />
+        ) : (
+          <div className="flex md:flex-row gap-2 xl:gap-3">
             <button
-              className="px-4 py-2 rounded bg-gray-0 hover:bg-gray-200 transition"
-              onClick={() => setMuted(!muted)}
+              onClick={isLiked ? handleUnlike : handleLike}
+              className={`flex items-center gap-2 py-2 px-5 border rounded-md transition 
+        ${isLiked ? 'border-blue-700 bg-blue-50 text-blue-700' : 'border-gray-300 bg-white text-gray-500'}
+      `}
             >
-              {muted ? '🔇' : '🔊'}
+              <ThumbsUp
+                size={16}
+                strokeWidth={2}
+                className={
+                  isLiked ? 'fill-blue-700 text-blue-700' : 'text-gray-500'
+                }
+              />
+              좋아요
+              <span className="text-xs text-[#9fa0a3]">{likesCount}</span>
+            </button>
+
+            <button className="flex items-center gap-2 py-2 px-5 border border-gray-300 rounded-md bg-white text-gray-500">
+              <Share size={16} strokeWidth={2} />
+              공유하기
             </button>
           </div>
         )}
+      </div>
 
+      {/* 상세 정보 박스 */}
+      <div className={`p-6 mb-10 bg-gray-0 ${mode ? 'order-1' : 'order-2'}`}>
         <div className="flex justify-between pb-[20px] border-b border-black">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-black rounded-full overflow-hidden">
@@ -126,10 +138,15 @@ function StreamingInformation({ mode }) {
                 />
               )}
             </div>
-            <span className="text-lg font-medium text-[#131212]">
+            <span className="text-xl font-bold text-[#131212]">
               {sessionInfo?.speaker?.name || '발표자'}
             </span>
           </div>
+          {mode && (
+            <div className="flex items-center justify-between gap-2">
+              <AudienceStreaming />
+            </div>
+          )}
         </div>
 
         <h2 className="mt-6 text-xl font-bold text-[#000000]">
