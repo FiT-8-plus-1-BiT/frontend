@@ -15,6 +15,7 @@ export default function LiveSessionList({ token }) {
     error: liveError,
     toggleSchedule: toggleLiveSchedule,
   } = useLiveSessionsWithSchedule(token);
+
   const handleSessionClick = (id) => {
     navigate(`/streaming?session_id=${id}`);
   };
@@ -24,34 +25,35 @@ export default function LiveSessionList({ token }) {
       window.alert('로그인 후 이용 가능합니다');
       return;
     }
-
     await toggleLiveSchedule(sessionId);
   };
 
+  // liveSessions 업데이트 시, 새 세션에 대한 기본 혼잡도를 설정합니다.
   useEffect(() => {
     if (!token || liveSessions.length === 0) return;
+    setCongestionMap((prev) => {
+      const newMap = { ...prev };
+      liveSessions.forEach((session) => {
+        // 기존에 없는 세션에 대해서만 기본값('적정') 추가
+        if (newMap[session.id] === undefined) {
+          newMap[session.id] = '적정';
+        }
+      });
+      return newMap;
+    });
+  }, [liveSessions, token]);
 
-    // 💡 초기값 설정: 모든 세션에 대해 기본 혼잡도를 "적정"으로 설정
-    const initialCongestionMap = liveSessions.reduce((acc, session) => {
-      acc[session.id] = '적정'; // 초기값 (원하는 값으로 변경 가능)
-      return acc;
-    }, {});
-
-    setCongestionMap(initialCongestionMap);
+  // STOMP 구독 설정: 새 데이터가 들어올 때마다 setCongestionMap이 호출됩니다.
+  useEffect(() => {
+    if (!token) return;
 
     const client = createCongestionStompClient(token, (data) => {
-      if (!data.congestionLevel) return; // 💡 undefined 방지
-
+      // data 객체 자체가 혼잡도 정보를 담고 있으므로, data.congestionLevel 체크는 필요없습니다.
       setCongestionMap((prev) => {
         const newMap = { ...prev };
-
-        // 혼잡도 데이터가 존재하는 경우에만 처리
-        Object.entries(data.congestionLevel || {}).forEach(
-          ([sessionId, congestion]) => {
-            newMap[sessionId] = congestion.level; // 💡 level 값만 저장
-          },
-        );
-
+        Object.entries(data).forEach(([sessionId, congestion]) => {
+          newMap[sessionId] = congestion.level; // 새로운 혼잡도 level로 업데이트
+        });
         return newMap;
       });
     });
@@ -60,14 +62,18 @@ export default function LiveSessionList({ token }) {
       console.log('🛑 혼잡도 STOMP 연결 해제');
       client.deactivate();
     };
-  }, [token, liveSessions]);
+  }, [token]);
 
-  console.log(congestionMap);
+  // (선택 사항) congestionMap 업데이트 시 추가 작업이 필요한 경우 useEffect로 처리
+  useEffect(() => {
+    console.log('Congestion map updated:', congestionMap);
+  }, [congestionMap]);
+
   if (liveLoading) return <SkeletonLiveSessionList />;
 
   return (
     <>
-      <h2 className="text-[44px] font-bold mb-4">현재 라이브 중인 세션</h2>
+      <h2 className="text-[2vw] font-bold mb-4">현재 라이브 중인 세션</h2>
       {liveSessions.length === 0 ? (
         <div className="text-center text-gray-500 text-lg">
           현재 진행 중인 세션이 없습니다.
@@ -84,7 +90,7 @@ export default function LiveSessionList({ token }) {
               description={session.summary}
               tags={Object.values(session.tags)}
               isScheduled={session.isMySession}
-              congestion={congestionMap[session.id]} // 💡 혼잡도 전달
+              congestion={congestionMap[session.id]} // 혼잡도 전달
               onToggleSchedule={handleToggleSchedule}
               onClick={() => handleSessionClick(session.id)}
             />

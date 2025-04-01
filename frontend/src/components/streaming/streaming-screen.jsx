@@ -11,14 +11,13 @@ const StreamingScreen = () => {
                 const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
                     params: {
                         part: 'id,snippet',
-                        eventType: 'live', // 현재 진행 중인 라이브 스트림만 가져오기
+                        eventType: 'live',
                         type: 'video',
-                        maxResults: 10, // 최대 10개의 결과를 가져옴
-                        key: 'AIzaSyC-ZK40egZfm69Uew16O1fWV4J5CEGgOmg', // API 키 입력
+                        maxResults: 10,
+                        key: 'AIzaSyC-ZK40egZfm69Uew16O1fWV4J5CEGgOmg',
                     },
                 });
 
-                // 랜덤으로 하나의 비디오 ID 선택
                 const items = response.data.items;
                 if (items && items.length > 0) {
                     const randomIndex = Math.floor(Math.random() * items.length);
@@ -34,19 +33,21 @@ const StreamingScreen = () => {
     }, []);
 
     const opts = {
-        height: '655',
-        width: '1275',
+        width: '100%',
+        height: '100%',
         playerVars: {
-            autoplay: 1, // 자동 재생
-            modestbranding: 1, // YouTube 로고 숨김
-            rel: 0, // 관련 동영상 표시 안함
+            autoplay: 1,
+            modestbranding: 1,
+            rel: 0,
         },
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full bg-gray-200 md:h-[42.6vw] h-[79.8vw]">
             {videoId ? (
-                <YouTube videoId={videoId} opts={opts} />
+                <div className="w-full h-full">
+                    <YouTube videoId={videoId} opts={opts} className="w-full h-full" />
+                </div>
             ) : (
                 <p>Loading random live stream...</p>
             )}
@@ -55,4 +56,3 @@ const StreamingScreen = () => {
 };
 
 export { StreamingScreen };
-

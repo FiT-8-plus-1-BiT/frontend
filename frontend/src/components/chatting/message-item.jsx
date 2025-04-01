@@ -14,7 +14,7 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
   const isLiked = !!msg.likedByUser;
 
   return (
-    <div className="w-full flex items-start justify-between">
+    <div className="w-full m-1 flex items-start justify-between">
       {/* 왼쪽: 시간 + 이름 + 내용 */}
       <div className="flex-1 flex gap-2">
         {/* 시간 */}

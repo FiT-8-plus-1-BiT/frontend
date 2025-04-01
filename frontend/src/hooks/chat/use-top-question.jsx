@@ -1,31 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import isEqual from 'lodash.isequal';
 
-const fetchZsetQuestions = async (token, sessionId, page = 0, size = 3) => {
+// ✅ API 호출 함수 (목데이터 제거 + sessionId 필터)
+async function fetchQuestions(sessionId, token, page = 0, size = 6) {
   const url = `https://fit-conf.shop/api/v1/chat/questions/zset/${sessionId}?page=${page}&size=${size}`;
 
   try {
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
 
-    if (!res.ok) {
-      throw new Error(`서버 오류: ${res.status}`);
+    if (!response.ok) {
+      throw new Error(`서버 오류: ${response.status}`);
     }
 
-    const data = await res.json();
-    console.log('data', data);
-    return data;
-  } catch (err) {
-    console.error('질문 불러오기 실패:', err);
-    return null;
-  }
-};
+    const data = await response.json(); // 👈 { response: [...] } 또는 그냥 배열인지 확인
+    console.log('✅ [API 응답]', data);
 
+    const responseData = data || []; // 👈 핵심
+
+    // 🚀 필터링
+    const filtered = responseData.filter((q) => Number(q.sessionId) === Number(sessionId));
+
+    return { response: filtered };
+  } catch (error) {
+    console.error('❌ 질문 불러오기 실패:', error);
+    return { response: [] };
+  }
+}
+
+
+// ✅ 커스텀 훅
 export const useTopQuestions = (sessionId) => {
   const [topQuestions, setTopQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,29 +50,28 @@ export const useTopQuestions = (sessionId) => {
     const fetchAndSet = async () => {
       try {
         setLoading(true);
-        const data = await fetchZsetQuestions(token, sessionId);
-        if (data) {
-          const top3 = data.response
-            ?.filter((q) => q.category === 'QUESTION')
-            .sort((a, b) => b.likes - a.likes)
-            .slice(0, 3);
-          setTopQuestions(top3 || []);
-        } else {
-          setTopQuestions([]);
-          setError('질문 불러오기 실패');
+        const data = await fetchQuestions(sessionId, token);
+        console.log('data',data)
+        const questions = data.response
+          ?.filter((q) => q.category === 'QUESTION')
+          .sort((a, b) => b.likes - a.likes)
+          .slice(0, 6);
+
+        if (!isEqual(questions, topQuestions)) {
+          setTopQuestions(questions || []);
         }
       } catch (err) {
-        setError(err);
+        console.error('에러 발생:', err);
+        setError(err.message || '알 수 없는 에러');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAndSet(); // 최초 1회 실행
-    intervalId = setInterval(fetchAndSet, 10000); // 🔁 10초마다 실행
-
-    return () => clearInterval(intervalId); // 💥 언마운트 시 제거
-  }, [sessionId, token]);
+    fetchAndSet();
+    intervalId = setInterval(fetchAndSet, 10000);
+    return () => clearInterval(intervalId);
+  }, [sessionId, token, topQuestions]); // topQuestions 의존성도 필요
 
   return { topQuestions, loading, error };
 };

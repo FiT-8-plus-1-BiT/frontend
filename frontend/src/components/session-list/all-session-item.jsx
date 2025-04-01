@@ -14,10 +14,10 @@ function AllSessionItem({
   return (
     <div
       onClick={onClick}
-      className="w-[520px] h-[558px] bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
+      className="w-[27.6vw] 2xl:h-[29vw] h-[35vw] bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow cursor-pointer"
     >
       {/* 썸네일 */}
-      <div className="w-full h-[292px] bg-gray-100">
+      <div className="w-full h-[15vw] bg-gray-100">
         {thumbnail ? (
           <img
             src={thumbnail}
@@ -35,7 +35,7 @@ function AllSessionItem({
       <div className="p-5 flex flex-col gap-3">
         {/* 제목 + 담기 버튼 */}
         <div className="flex justify-between items-start gap-4">
-          <div className="text-[24px] !font-black leading-snug text-gray-900">
+          <div className="text-[1.2vw] xl:text-[1.4vw] !font-black leading-snug text-gray-900">
             {title}
           </div>
           <button
