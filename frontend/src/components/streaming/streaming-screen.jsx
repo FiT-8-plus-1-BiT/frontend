@@ -14,6 +14,7 @@ const StreamingScreen = () => {
                         eventType: 'live',
                         type: 'video',
                         maxResults: 10,
+                        channelId: 'FJfwehhzIhw',
                         key: 'AIzaSyCRyXnQeElOoYUdv_Ehs6qrnPBwJDoIVAE',
                     },
                 });
