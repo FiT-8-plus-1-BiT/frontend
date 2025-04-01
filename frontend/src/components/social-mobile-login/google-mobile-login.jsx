@@ -11,7 +11,6 @@ const GoogleMobileLoginComponent = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-
           'https://fit-conference.shop/api/v1/auth/token-exchange', // 백엔드의 토큰 교환 API
           {
             method: 'POST',
