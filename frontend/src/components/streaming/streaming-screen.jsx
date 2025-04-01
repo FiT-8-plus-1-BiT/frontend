@@ -2,7 +2,9 @@ import React from 'react';
 import YouTube from 'react-youtube';
 
 const StreamingScreen = () => {
+
     const videoId = 'FJfwehhzIhw'; // 🔹 특정 라이브 스트림 Video ID 직접 설정
+
 
     const opts = {
         width: '100%',
