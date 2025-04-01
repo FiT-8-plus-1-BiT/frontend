@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LiveSessionItem = React.memo(function LiveSessionItem({
+const LiveSessionItem = function LiveSessionItem({
   sessionId,
   isScheduled,
   thumbnail,
@@ -32,7 +32,7 @@ const LiveSessionItem = React.memo(function LiveSessionItem({
     const level = getCongestionLevel();
     if (index <= level) {
       if (level === 1) return 'bg-green-500'; // 여유 (초록색)
-      if (level === 2) return 'bg-yellow-500'; // 적정ㅇ (노랑색)
+      if (level === 2) return 'bg-yellow-500'; // 적정 (노랑색)
       if (level === 3) return 'bg-red-500'; // 혼잡 (빨간색)
     }
     return 'bg-gray-300'; // 기본 비활성 색상
@@ -123,6 +123,6 @@ const LiveSessionItem = React.memo(function LiveSessionItem({
       </div>
     </div>
   );
-});
+};
 
 export { LiveSessionItem };

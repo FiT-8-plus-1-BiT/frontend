@@ -20,7 +20,7 @@ export function createCongestionStompClient(token, onMessageReceived) {
         try {
           const data = JSON.parse(message.body);
           console.log('📩 혼잡도 수신:', data);
-          onMessageReceived?.(data);
+          onMessageReceived(data);
         } catch (e) {
           console.error('❌ 메시지 파싱 실패:', e);
         }
