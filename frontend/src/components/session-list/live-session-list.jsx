@@ -73,7 +73,7 @@ export default function LiveSessionList({ token }) {
 
   return (
     <>
-      <h2 className="text-[44px] font-bold mb-4">현재 라이브 중인 세션</h2>
+      <h2 className="text-[2vw] font-bold mb-4">현재 라이브 중인 세션</h2>
       {liveSessions.length === 0 ? (
         <div className="text-center text-gray-500 text-lg">
           현재 진행 중인 세션이 없습니다.

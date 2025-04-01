@@ -4,6 +4,9 @@ import SockJS from 'sockjs-client';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Play, Pause } from 'lucide-react'; // Pause 아이콘을 사용
+import muteButton1 from '/public/assets/muteButton1.svg';
+import muteButton2 from '/public/assets/muteButton2.svg';
+
 
 function AudienceStreaming() {
   const [searchParams] = useSearchParams();
@@ -223,14 +226,11 @@ function AudienceStreaming() {
         className="w-10 h-10 rounded-full flex items-center justify-center"
       >
         <img
-          src={
-            muted
-              ? '/public/assets/muteButton1.svg'
-              : '/public/assets/muteButton2.svg'
-          }
+          src={muted ? muteButton1 : muteButton2}
           alt={muted ? '음소거됨' : '음소거 아님'}
           className="w-6 h-6"
         />
+
       </button>
 
       <audio

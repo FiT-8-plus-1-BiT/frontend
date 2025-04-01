@@ -70,7 +70,7 @@ export default function AllSessionList({ token }) {
   if (loading) return <SkeletonAllSessionList />;
   return (
     <>
-      <h2 className="text-[44px] font-bold mb-4">전체 세션</h2>
+      <h2 className="text-[2vw] font-bold mb-4">전체 세션</h2>
 
       <div className="mb-8">
         <SessionFilter onFilterChange={handleFilterChange} token={token} />
