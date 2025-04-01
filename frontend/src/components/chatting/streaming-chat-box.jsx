@@ -6,6 +6,7 @@ import {
   disconnectStompClient,
 } from '~/api/chat/stomp-client';
 import { likeQuestion, unlikeQuestion } from '~/api/chat/chat-like';
+import { fetchRecentMessages } from '~/api/chat/chat-message';
 import DesktopChatBox from './desktop-chat-box';
 import MobileChatBox from './mobile-chat-box';
 
@@ -25,10 +26,21 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   useEffect(() => {
     if (!token || !sessionId) return;
 
-    const client = createStompClient(token, sessionId, (newMessage) =>
-      setMessages((prev) => [...prev, newMessage]),
-    );
+    // ✅ 초기 메시지 불러오기
+    const loadInitialMessages = async () => {
+      const initialMessages = await fetchRecentMessages(sessionId, token);
+      setMessages(initialMessages);
+    };
+    loadInitialMessages();
+
+    const client = createStompClient(token, sessionId, (newMessage) => {
+      setMessages((prev) => {
+        const exists = prev.some((m) => m.messageId === newMessage.messageId);
+        return exists ? prev : [...prev, newMessage];
+      });
+    });
     setStompClient(client);
+
     return () => {
       disconnectStompClient(client);
     };
@@ -82,14 +94,12 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
           onClick={() => setIsMobileChatOpen(true)}
           className="md:hidden fixed bottom-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center"
         >
-          {/* 여기에 MessageSquare 아이콘 등 사용 */}
           <svg
             className="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            {/* 적절한 path 삽입 */}
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
