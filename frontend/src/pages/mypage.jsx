@@ -101,7 +101,7 @@ const EditProfile = ({ onProfileUpdate }) => {
   const fetchUserProfile = async () => {
     try {
       const accessToken = localStorage.getItem('access-token');
-      const response = await axios.get('https://fit-conference.shop/v1/users/profile', {
+      const response = await axios.get('https://fit-conference.shop/api/v1/users/profile', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
