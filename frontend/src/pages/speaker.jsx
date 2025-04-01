@@ -9,7 +9,7 @@ function SpeakerPage() {
     const [sessions, setSessions] = useState([]);
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
-
+console.log('')
     useEffect(() => {
         const fetchSessions = async () => {
             const all = await getAllSessions(token);
