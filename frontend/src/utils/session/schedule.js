@@ -1,4 +1,4 @@
-const BASE_URL = 'https://fit-conf.shop';
+const BASE_URL = 'https://fit-conference.shop/';
 
 // 세션 담기
 export async function addToSchedule(sessionId, token) {

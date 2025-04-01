@@ -10,7 +10,7 @@ const KakaoMobileLogin = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "http://fit-conf.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
+          "https://fit-conference.shop/api/v1/auth/token-exchange", // 백엔드의 토큰 교환 API
           {
             method: "POST",
             headers: {
@@ -48,7 +48,7 @@ const KakaoMobileLogin = () => {
   }, [dispatch]);
 
   const onKakaoMobileLogin = () => {
-    window.location.href = "http://fit-conf.shop/oauth2/authorization/kakao";
+    window.location.href = "https://fit-conference.shop/oauth2/authorization/kakao";
   };
 
   return (

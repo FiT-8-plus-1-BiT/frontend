@@ -1,7 +1,7 @@
 // ~/api/chat/chat-like-check.js
 
 export const fetchLikeStatus = async (sessionId, messageId, token) => {
-    const url = `/api/v1/chat/likes/${sessionId}/${messageId}`;
+    const url = `https://fit-conference.shop/api/v1/chat/likes/${sessionId}/${messageId}`;
   
     try {
       const response = await fetch(url, {

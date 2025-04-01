@@ -1,7 +1,7 @@
 // ~/api/chat/chat-message.js
 
 export const fetchRecentMessages = async (sessionId, token) => {
-    const url = `https://fit-conf.shop/api/v1/chat/${sessionId}/messages`;
+    const url = `https://fit-conference.shop/api/v1/chat/${sessionId}/messages`;
   
     try {
       const response = await fetch(url, {

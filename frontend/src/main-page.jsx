@@ -13,7 +13,7 @@ const MainPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://fit-conf.shop/api/v1/speaker');
+        const response = await axios.get('https://fit-conference.shop/api/v1/speaker');
         if (response.data.success) {
           // 시간 오름차순으로 정렬
           const sortedSessions = response.data.response.sort((a, b) =>

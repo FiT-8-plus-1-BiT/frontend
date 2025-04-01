@@ -6,7 +6,7 @@ const useCreateChatSession = (sessionId, token) => {
       if (!sessionId || !token) return;
 
       try {
-        const response = await fetch(`https://fit-conf.shop/api/v1/chat/session/${sessionId}`, {
+        const response = await fetch(`https://fit-conference.shop/api/v1/chat/session/${sessionId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

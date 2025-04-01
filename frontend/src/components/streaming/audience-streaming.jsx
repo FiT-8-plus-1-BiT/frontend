@@ -26,7 +26,7 @@ function AudienceStreaming() {
 
     const client = new Client({
       brokerURL: '',
-      webSocketFactory: () => new SockJS('https://fit-conf.shop/ws'),
+      webSocketFactory: () => new SockJS('https://fit-conference.shop/ws'),
       connectHeaders: {
         Authorization: `Bearer ${token}`, // ✅ Bearer 포함 필수
       },
@@ -105,9 +105,9 @@ function AudienceStreaming() {
     const pc = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:43.201.28.240:3478' },
+        { urls: 'stun:3.34.130.81:3478' },
         {
-          urls: 'turn:43.201.28.240:3478',
+          urls: 'turn:3.34.130.81:3478',
           username: 'rtcfit',
           credential: 'rtcfit123!',
         },

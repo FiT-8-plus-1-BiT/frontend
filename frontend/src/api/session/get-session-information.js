@@ -2,7 +2,7 @@
 
 export async function getSessionInformation(sessionId, token) {
     try {
-        const response = await fetch(`https://fit-conf.shop/api/v1/session/${sessionId}?sessionId=${sessionId}`, {
+        const response = await fetch(`https://fit-conference.shop/api/v1/session/${sessionId}?sessionId=${sessionId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

@@ -13,7 +13,7 @@ const GoogleLoginComponent = () => {
     const exchangeToken = async () => {
       try {
         const response = await fetch(
-          "https://fit-conf.shop/api/v1/auth/token-exchange",
+          "https://fit-conference.shop/api/v1/auth/token-exchange",
           {
             method: 'POST',
             headers: {
@@ -36,7 +36,7 @@ const GoogleLoginComponent = () => {
 
             // 사용자 정보 가져오기
             const userResponse = await axios.get(
-              "https://fit-conf.shop/api/v1/users/account",
+              "https://fit-conference.shop/api/v1/users/account",
               {
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
@@ -77,7 +77,7 @@ const GoogleLoginComponent = () => {
   }, [dispatch, navigate]);
 
   const onGoogleLogin = () => {
-    window.location.href = "https://fit-conf.shop/oauth2/authorization/google";
+    window.location.href = "https://fit-conference.shop/oauth2/authorization/google";
   };
 
   return (

@@ -101,7 +101,7 @@ const EditProfile = ({ onProfileUpdate }) => {
   const fetchUserProfile = async () => {
     try {
       const accessToken = localStorage.getItem('access-token');
-      const response = await axios.get('https://fit-conf.shop/api/v1/users/profile', {
+      const response = await axios.get('https://fit-conference.shop/v1/users/profile', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -134,7 +134,7 @@ const EditProfile = ({ onProfileUpdate }) => {
   const fetchUserAccount = async () => {
     try {
       const accessToken = localStorage.getItem('access-token');
-      const response = await axios.get('https://fit-conf.shop/api/v1/users/account', {
+      const response = await axios.get('https://fit-conference.shop/api/v1/users/account', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -166,7 +166,7 @@ const EditProfile = ({ onProfileUpdate }) => {
     try {
       const accessToken = localStorage.getItem('access-token');
       const response = await axios.put(
-        'https://fit-conf.shop/api/v1/users/profile/image',
+        'https://fit-conference.shop/api/v1/users/profile/image',
         formData,
         {
           headers: {
@@ -203,7 +203,7 @@ const EditProfile = ({ onProfileUpdate }) => {
     try {
       const accessToken = localStorage.getItem('access-token');
       const response = await axios.put(
-        'https://fit-conf.shop/api/v1/users/profile',
+        'https://fit-conference.shop/api/v1/users/profile',
         profileData,
         {
           headers: {
@@ -491,7 +491,7 @@ const Mypage = () => {
     }
 
     try {
-      const response = await axios.get('https://fit-conf.shop/api/v1/session/recommended', {
+      const response = await axios.get('https://fit-conference.shop/api/v1/session/recommended', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -517,7 +517,7 @@ const Mypage = () => {
     }
 
     try {
-      const response = await axios.get('https://fit-conf.shop/api/v1/users/sessions/like', {
+      const response = await axios.get('https://fit-conference.shop/api/v1/users/sessions/like', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -557,7 +557,7 @@ const Mypage = () => {
     }
 
     try {
-      const response = await axios.get('https://fit-conf.shop/api/v1/users/sessions', {
+      const response = await axios.get('https://fit-conference.shop/api/v1/users/sessions', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -588,7 +588,7 @@ const Mypage = () => {
       }
 
       const response = await axios.get(
-        "https://fit-conf.shop/api/v1/users/account",
+        "https://fit-conference.shop/api/v1/users/account",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
