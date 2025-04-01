@@ -14,7 +14,7 @@ const StreamingScreen = () => {
                         eventType: 'live',
                         type: 'video',
                         maxResults: 10,
-                        key: 'AIzaSyC-ZK40egZfm69Uew16O1fWV4J5CEGgOmg',
+                        key: 'AIzaSyCRyXnQeElOoYUdv_Ehs6qrnPBwJDoIVAE',
                     },
                 });
 
