@@ -7,6 +7,7 @@ export const likeQuestion = async (sessionId, messageId, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  console.log('좋아요')
   if (!res.ok) {
     throw new Error('좋아요 실패');
   }
@@ -19,6 +20,8 @@ export const unlikeQuestion = async (sessionId, messageId, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  console.log('좋아요취소')
+
   if (!res.ok) {
     throw new Error('좋아요 취소 실패');
   }

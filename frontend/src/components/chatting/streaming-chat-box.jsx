@@ -1,20 +1,20 @@
-// StreamingChatBox.jsx
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   createStompClient,
   sendMessage,
   disconnectStompClient,
 } from '~/api/chat/stomp-client';
-import { likeQuestion, unlikeQuestion } from '~/api/chat/chat-like';
 import { fetchRecentMessages } from '~/api/chat/chat-message';
+import { fetchLikes, toggleLike } from '~/redux/question-slice'; // 리덕스 액션
 import DesktopChatBox from './desktop-chat-box';
-import MobileChatBox from './mobile-chat-box';
 
 const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
+  const dispatch = useDispatch();
+  const { likeStatusMap, messages: storedMessages, loading } = useSelector((state) => state.questions); // likeStatusMap과 기존 메시지 가져오기
   const [isChatOpen, setIsChatOpen] = useState(mode);
-  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [stompClient, setStompClient] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(storedMessages);
   const [category, setCategory] = useState('GENERAL');
   const [message, setMessage] = useState('');
   const chatEndRef = useRef(null);
@@ -26,11 +26,24 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
   useEffect(() => {
     if (!token || !sessionId) return;
 
+    // ✅ 리덕스를 통해 좋아요 상태 초기화
+    dispatch(fetchLikes(sessionId));  // 세션 ID로 좋아요 상태 불러오기
+
     // ✅ 초기 메시지 불러오기
     const loadInitialMessages = async () => {
       const initialMessages = await fetchRecentMessages(sessionId, token);
-      setMessages(initialMessages);
+
+      // `likeStatusMap`을 사용하여 각 메시지에 대해 `isLiked` 상태를 결정
+      const likeCheckedMessages = initialMessages.map((s) => {
+        const isLiked = likeStatusMap[s.messageId] ?? false; // 기본값 false
+        return { ...s, isLiked }; // 메시지에 isLiked 추가
+      });
+
+      // `likeCheckedMessages`를 리덕스 상태에 저장
+      dispatch(setMessages(likeCheckedMessages));
+      setMessages(likeCheckedMessages); // 로컬 상태에도 업데이트
     };
+
     loadInitialMessages();
 
     const client = createStompClient(token, sessionId, (newMessage) => {
@@ -44,7 +57,7 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
     return () => {
       disconnectStompClient(client);
     };
-  }, [token, sessionId]);
+  }, [token, sessionId, dispatch, likeStatusMap]); // likeStatusMap을 의존성으로 추가
 
   const handleSendMessage = () => {
     if (!stompClient?.connected || !message.trim()) return;
@@ -63,73 +76,34 @@ const StreamingChatBox = ({ mode, token, sessionId, userId }) => {
     if (!mode) setIsChatOpen((prev) => !prev);
   }, [mode]);
 
-  const toggleMobileChat = useCallback(() => {
-    setIsMobileChatOpen((prev) => !prev);
-  }, []);
-
   const handleLikeToggle = (messageId, likedByUser) => {
-    const action = likedByUser ? unlikeQuestion : likeQuestion;
-    action(sessionId, messageId, token)
+    // `toggleLike` 액션만 호출하고, 로컬 상태는 리덕스 상태에 맞춰 업데이트
+    dispatch(toggleLike({ sessionId, messageId, isLiked: likedByUser }))
       .then(() => {
+        // 리덕스 상태 업데이트 후, 메시지에 대한 좋아요 상태를 로컬 상태에 맞게 반영
         setMessages((prev) =>
           prev.map((msg) =>
             msg.messageId === messageId
               ? {
                   ...msg,
-                  likedByUser: !likedByUser,
-                  likes: likedByUser ? msg.likes - 1 : msg.likes + 1,
+                  likedByUser: likedByUser,
+                  likes: likedByUser ? msg.likes +100 : msg.likes + 1,
                 }
-              : msg,
-          ),
+              : msg
+          )
         );
       })
       .catch((err) => console.error('좋아요 토글 실패:', err));
   };
+  
 
   return (
     <>
-      {/* 모바일 채팅 열기 버튼 */}
-      {!mode && (
-        <button
-          onClick={() => setIsMobileChatOpen(true)}
-          className="md:hidden fixed bottom-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M7 8h10M7 12h4m1 8h2a2 2 0 002-2V7a2 2 0 00-2-2h-2"
-            />
-          </svg>
-        </button>
-      )}
-
       <DesktopChatBox
         mode={mode}
         isChatOpen={isChatOpen}
         toggleDesktopChat={toggleDesktopChat}
-        messages={messages}
-        chatEndRef={chatEndRef}
-        handleSendMessage={handleSendMessage}
-        handleKeyPress={handleKeyPress}
-        category={category}
-        setCategory={setCategory}
-        message={message}
-        setMessage={setMessage}
-        handleLikeToggle={handleLikeToggle}
-        sessionId={sessionId}
-      />
-
-      <MobileChatBox
-        isMobileChatOpen={isMobileChatOpen}
-        toggleMobileChat={toggleMobileChat}
-        messages={messages}
+        messages={messages} // 좋아요 상태가 반영된 메시지 전달
         chatEndRef={chatEndRef}
         handleSendMessage={handleSendMessage}
         handleKeyPress={handleKeyPress}

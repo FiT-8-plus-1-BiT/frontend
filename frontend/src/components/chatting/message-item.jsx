@@ -1,8 +1,21 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 
 const MessageItem = memo(({ msg, onLikeToggle }) => {
-  const handleLikeClick = () => onLikeToggle(msg.messageId, msg.likedByUser);
+  // 좋아요 상태를 리덕스에서 가져오고, 로컬 상태로 관리
+  const [liked, setLiked] = useState(msg.isLiked);
+
+  // `useEffect`를 통해 초기 상태만 설정 (상위 컴포넌트 상태로 관리)
+  useEffect(() => {
+    setLiked(msg.isLiked);  // 리덕스 상태와 동기화 (초기값만 설정)
+  }, [msg.isLiked]);
+
+  // 좋아요 클릭 시 상태를 반전시키는 함수
+  const handleLikeClick = () => {
+    const newLikeStatus = !liked;
+    setLiked(newLikeStatus);  // 로컬 상태 업데이트
+    onLikeToggle(msg.messageId, liked);  // 상위 컴포넌트로 상태 변경 전달
+  };
 
   const formattedTime = new Date(msg.timestamp).toLocaleTimeString([], {
     hour: '2-digit',
@@ -11,7 +24,6 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
   });
 
   const isQuestion = msg.category?.toLowerCase() === 'question';
-  const isLiked = !!msg.likedByUser;
 
   return (
     <div className="w-full m-1 flex items-start justify-between">
@@ -45,12 +57,12 @@ const MessageItem = memo(({ msg, onLikeToggle }) => {
         <button
           onClick={handleLikeClick}
           className={`ml-2 p-1 rounded-full transition-colors ${
-            isLiked ? 'text-blue-600' : 'text-gray-400'
+            liked ? 'text-blue-600' : 'text-gray-400'
           } hover:text-blue-600`}
         >
           <Heart
             size={16}
-            fill={isLiked ? 'currentColor' : 'none'} // ← 이게 핵심
+            fill={liked ? 'currentColor' : 'none'}
             stroke="currentColor"
             strokeWidth={2}
           />

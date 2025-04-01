@@ -226,7 +226,7 @@ function AudienceStreaming() {
         className="w-10 h-10 rounded-full flex items-center justify-center"
       >
         <img
-          src={muted ? muteButton1 : muteButton2}
+          src={muted ? muteButton2 : muteButton1}
           alt={muted ? '음소거됨' : '음소거 아님'}
           className="w-6 h-6"
         />
