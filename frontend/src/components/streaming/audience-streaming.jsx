@@ -105,11 +105,11 @@ function AudienceStreaming() {
     const pc = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:3.34.130.81:3478' },
+        { urls: import.meta.env.VITE_RTC_STUN_URL },
         {
-          urls: 'turn:3.34.130.81:3478',
-          username: 'rtcfit',
-          credential: 'rtcfit123!',
+          urls: import.meta.env.VITE_RTC_TURN_URL,
+          username: import.meta.env.VITE_RTC_TURN_USERNAME,
+          credential: import.meta.env.VITE_RTC_TURN_CREDENTIAL,
         },
       ],
     });
